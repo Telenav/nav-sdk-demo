@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="turnListItem"
+            type="com.telenav.sdk.demo.main.TurnListItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorVivid"
+        android:paddingStart="@dimen/regular_padding"
+        android:paddingEnd="@dimen/regular_padding">
+
+        <View
+            android:id="@+id/line_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/color_vivid_divider"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/next_turn_miles_to_go"
+            style="@style/RegularTextStyle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{turnListItem.lengthMeters}"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/street_to_take_next_turn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line_divider"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="52.2 mi" />
+
+        <TextView
+            android:id="@+id/street_to_take_next_turn"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{turnListItem.streetName}"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/next_turn_miles_to_go"
+            app:layout_constraintTop_toBottomOf="@id/next_turn_miles_to_go"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="Michigan Ave " />
+
+        <ImageView
+            android:id="@+id/turn_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            app:imageResource="@{turnListItem.turnDrawable}"
+
+            app:layout_constraintEnd_toStartOf="@+id/next_turn_miles_to_go"
+            app:layout_constraintHorizontal_bias="0.621"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/next_turn_miles_to_go"
+            app:layout_constraintVertical_bias="1.0"
+            tools:background="@drawable/ic_turn_slight_left_white"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,5562 @@
+//--------------------------------------------------------------------------------------------------------------------------------------------
+//-- ! Preprocessed file, CHANGES WILL BE DISCARDED ! ----------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------
+//-- src: /input/styles/newstyle.tss
+//--------------------------------------------------------------------------------------------------------------------------------------------
+// -> image tag=7
+// -> ci data=job=NavigationNew/atlas-resources/atlas-resources/develop;git=null;id=172
+// -> master version=23
+// -> local version=52
+@icon-color: #ffffff;
+@icon_orange_color_day: #f4961d;
+@icon_orange_color_night: #c87a15;
+@icon_blue_color_day: #2d9ccb;
+@icon_blue_color_night: #1e6e90;
+@icon_red_color_day: #dc373b;
+@icon_red_color_night: #ab2225;
+@rainier_poi_size:[40px,40px];
+@land_day: animated(zoom, [1:#eceef2, 10:#DFE4EC]);
+@land_night: animated(zoom, [0:#141414 , 5:#1b1c21]);
+@land: animated(time-of-day,[0:@land_day,  1:@land_night]);
+@water_day: #bbcef7;
+@water_night: animated(zoom, [0:#21333d, 5:#1b2a32]);
+@water: animated(time-of-day,[0:@water_day,1:@water_night]);
+@ocean_day: @water;
+@ocean_night: @water;
+@ocean: animated(time-of-day,[0:@ocean_day,1:@ocean_night]);
+@river_day: @water;
+@river_night: @water;
+@river: animated(time-of-day,[0:@river_day,1:@river_night]);
+@riverbank_day: @water;
+@riverbank_night: @water;
+@riverbank: animated(time-of-day,[0:@riverbank_day,1:@riverbank_night]);
+@wadi_day: @water;
+@wadi_night: @water;
+@wadi: animated(time-of-day,[0:@wadi_day,1:@wadi_night]);
+@canal_day: @water;
+@canal_night: @water;
+@canal: animated(time-of-day,[0:@canal_day,1:@canal_night]);
+@hospital_day: #FFB8B2;
+@hospital_night: #3c2121;
+@hospital: animated(time-of-day,[0:@hospital_day,1:@hospital_night]);
+@university_day: #e5e0cb;
+@university_night: #2f2d1b;
+@university: animated(time-of-day,[0:@university_day,1:@university_night]);
+@military_day: #dcdce2;
+@military_night: #221e21;
+@military: animated(time-of-day,[0:@military_day,1:@military_night]);
+@shop_day: animated(zoom, [13:@land, 13.5:#d6deeb]);
+@shop_night: animated(zoom, [13:@land, 13.5:#14151a]);
+@shop: animated(time-of-day,[0:@shop_day,1:@shop_night]);
+@building_day: animated(zoom, [14.5:@land, 15:#cdd3df]);
+@building_night: animated(zoom, [14.5:@land, 15:#25272d]);
+@building: animated(time-of-day,[0:@building_day,1:@building_night]);
+@building_outline_day: animated(zoom, [14.5:@land, 15:#b2b7c2]);
+@building_outline_night: animated(zoom, [14.5:@land, 15:#101013]);
+@building_outline: animated(time-of-day,[0:@building_outline_day,1:@building_outline_night]);
+@building_shadow_day: #95979B;
+@building_shadow_night: #141313;
+@building_shadow: animated(time-of-day,[0:@building_shadow_day,1:@building_shadow_night]);
+@amenity_building_day: animated(zoom, [14.5:@land, 15:#c8d0df]);
+@amenity_building_night: animated(zoom, [14.5:@land, 15:#25272d]);
+@amenity_building: animated(time-of-day,[0:@amenity_building_day,1:@amenity_building_night]);
+@amenity_building_outline_day: animated(zoom, [14.5:@land, 15:#acb2c0]);
+@amenity_building_outline_night: animated(zoom, [14.5:@land, 15:#101013]);
+@amenity_building_outline: animated(time-of-day,[0:@amenity_building_outline_day,1:@amenity_building_outline_night]);
+@goverment_building_day: animated(zoom, [14.5:@land, 15:#c2cbde]);
+@goverment_building_night: animated(zoom, [14.5:@land, 15:#262a34]);
+@goverment_building: animated(time-of-day,[0:@goverment_building_day,1:@goverment_building_night]);
+@goverment_building_outline_day: animated(zoom, [14.5:@land, 15:#99a4be]);
+@goverment_building_outline_night: animated(zoom, [14.5:@land, 15:#15151c]);
+@goverment_building_outline: animated(time-of-day,[0:@goverment_building_outline_day,1:@goverment_building_outline_night]);
+@retail_building_day: animated(zoom, [14.5:@land, 15:#ebe1d7]);
+@retail_building_night: animated(zoom, [14.5:@land, 15:#2d2925]);
+@retail_building: animated(time-of-day,[0:@retail_building_day,1:@retail_building_night]);
+@retail_building_outline_day: animated(zoom, [14.5:@land, 15:#ecc8a2]);
+@retail_building_outline_night: animated(zoom, [14.5:@land, 15:#1c1915]);
+@retail_building_outline: animated(time-of-day,[0:@retail_building_outline_day,1:@retail_building_outline_night]);
+@hospital_building_day: #feb3ac;
+@hospital_building_night: #543232;
+@hospital_building: animated(time-of-day,[0:@hospital_building_day,1:@hospital_building_night]);
+@hospital_building_outline_day: #d49592;
+@hospital_building_outline_night: #2c1919;
+@hospital_building_outline: animated(time-of-day,[0:@hospital_building_outline_day,1:@hospital_building_outline_night]);
+@university_building_day: #eee3b6;
+@university_building_night: #47442c ;
+@university_building: animated(time-of-day,[0:@university_building_day,1:@university_building_night]);
+@university_building_outline_day: #eace4a;
+@university_building_outline_night: #242214;
+@university_building_outline: animated(time-of-day,[0:@university_building_outline_day,1:@university_building_outline_night]);
+@school_building_day: #eee3b6;
+@school_building_night: #47442c ;
+@school_building: animated(time-of-day,[0:@school_building_day,1:@school_building_night]);
+@school_building_outline_day: #eace4a;
+@school_building_outline_night: #242214;
+@school_building_outline: animated(time-of-day,[0:@school_building_outline_day,1:@school_building_outline_night]);
+@industrial_building_day: #d3d6dc;
+@industrial_building_night: #16171d;
+@industrial_building: animated(time-of-day,[0:@industrial_building_day,1:@industrial_building_night]);
+@industrial_building_outline_day: #161616;
+@industrial_building_outline_night: @building_outline_day;
+@industrial_building_outline: animated(time-of-day,[0:@industrial_building_outline_day,1:@industrial_building_outline_night]);
+@park_day: animated(zoom, [5:@land, 6:#bad9ac]);
+@park_night: animated(zoom, [5:@land, 6:#1b2924, 9:#1b3225]);
+@park: animated(time-of-day,[0:@park_day,1:@park_night]);
+@forest_day:#bad9ac;
+@forest_night: animated(zoom, [1:@land, 2:#1b2924, 9:#182f22]);
+@forest: animated(time-of-day,[0:@forest_day,1:@forest_night]);
+@nationalpark_day: animated(zoom, [4:@land, 5:#BAD9AC]);
+@nationalpark_night: animated(zoom, [4:@land, 5:#1b2924, 9:#182f22]);
+@nationalpark: animated(time-of-day,[0:@nationalpark_day,1:@nationalpark_night]);
+@cemetery_day: #CEDBD3;
+@cemetery_night: #22372b;
+@cemetery: animated(time-of-day,[0:@cemetery_day,1:@cemetery_night]);
+@rail_day: #c7c8cc;
+@rail_night: #14151c;
+@rail: animated(time-of-day,[0:@rail_day,1:@rail_night]);
+@stateborder_day: animated(zoom, [2:@land, 2.5:#dfb2aa, 14:#df806e]);
+@stateborder_night: animated(zoom,[2:@land, 2.5:#41160e, 12:#5f2216]);
+@stateborder: animated(time-of-day,[0:@stateborder_day,1:@stateborder_night]);
+@countryborder_day: animated(zoom, [ 0:#dfb2aa, 12:#de6149]);
+@countryborder_night: animated(zoom, [ 0:#4d1e15, 12:#732d1f]);
+@countryborder: animated(time-of-day,[0:@countryborder_day,1:@countryborder_night]);
+@ferry_day: animated(zoom, [10:@water, 10.5:#7eaec4]);
+@ferry_night: animated(zoom, [10:@water, 10.5:#334b59]);
+@ferry: animated(time-of-day,[0:@ferry_day,1:@ferry_night]);
+@aerodrome_day: animated(zoom, [8:@land, 8.5:#d0d4e6]);
+@aerodrome_night: animated(zoom, [8:@land, 8.5:#382940]);
+@aerodrome: animated(time-of-day,[0:@aerodrome_day,1:@aerodrome_night]);
+@runway_day: animated(zoom, [9:@aerodrome, 9.5:#b7bdda]);
+@runway_night: animated(zoom, [9:@aerodrome, 9.5:#2d1f35]);
+@runway: animated(time-of-day,[0:@runway_day,1:@runway_night]);
+@beach_day: #EFE9CE;
+@beach_night: #5a553d;
+@beach: animated(time-of-day,[0:@beach_day,1:@beach_night]);
+@motorway_day: animated(zoom, [6:#78849f, 10:#8491AF]);
+@motorway_night: #485269;
+@motorway_color: animated(time-of-day,[0:@motorway_day, 1:@motorway_night]);
+@motorway_outline_day: animated(zoom, [4:#FFFFFF]);
+@motorway_outline_night: #101114;
+@motorway_outline_color: animated(time-of-day,[0:@motorway_outline_day, 1:@motorway_outline_night]);
+@motorway_link_day: animated(zoom, [9:#78849f, 11: #8491AF]);
+@motorway_link_night: #485269;
+@motorway_link_color: animated(time-of-day,[0:@motorway_link_day, 1:@motorway_link_night]);
+@trunk_day: animated(zoom, [8:#8491AF, 11:#97A3BD]);
+@trunk_night: #545E66;
+@trunk_color: animated(time-of-day,[0:@trunk_day, 1:@trunk_night]);
+@trunk_outline_day: #FFFFFF;
+@trunk_outline_night: #101114;
+@trunk_outline_color: animated(time-of-day,[0:@trunk_outline_day, 1:@trunk_outline_night]);
+@primary_day: animated(zoom, [8:@land, 9:#FFFFFF]);
+@primary_night: animated(zoom, [8:@land, 9:#51575b]);
+@primary_color: animated(time-of-day,[0:@primary_day, 1:@primary_night]);
+@primary_outline_day: animated(zoom, [8:#B2BECA]);
+@primary_outline_night: animated(zoom, [8:@land, 9:#101114]);
+@primary_outline_color: animated(time-of-day,[0:@primary_outline_day, 1:@primary_outline_night]);
+@secondary_day: animated(zoom, [9:@land, 10:#ffffff]);
+@secondary_night: animated(zoom, [9:@land, 10:#43484b]);
+@secondary_color: animated(time-of-day,[0:@secondary_day, 1:@secondary_night]);
+@secondary_outline_day: animated(zoom, [9:#B2BECA]);
+@secondary_outline_night: animated(zoom, [9:@land, 10:#101114]);
+@secondary_outline_color: animated(time-of-day,[0:@secondary_outline_day, 1:@secondary_outline_night]);
+@street_day: animated(zoom, [9:@land, 10:#FFFFFF]);
+@street_night: animated(zoom, [9:@land, 10:#35383b]);
+@street_color:animated(time-of-day,[0:@street_day, 1:@street_night]);
+@street_outline_day: #B2BECA;
+@street_outline_night: animated(zoom, [9:@land, 10:#101114]);
+@street_outline_color:animated(time-of-day,[0:@street_outline_day, 1:@street_outline_night]);
+@path_day: #FFFFFF;
+@path_night: #575757;
+@path_color:animated(time-of-day,[0:@path_day, 1:@path_night]);
+@oneway_motorway_day: #ffffff;
+@oneway_motorway_night: #DDDDDD;
+@oneway_motorway_color:animated(time-of-day,[0:@oneway_motorway_day, 1:@oneway_motorway_night]);
+@oneway_day: #636363;
+@oneway_night: #DDDDDD;
+@oneway_color:animated(time-of-day,[0:@oneway_day, 1:@oneway_night]);
+@road_text_day: #191919;
+@road_text_night: #ffffff;
+@road_text_color:animated(time-of-day,[0:@road_text_day, 1:@road_text_night]);
+@road_text_outline_day: #ffffff;
+@road_text_outline_night: #161616;
+@road_text_outline_color:animated(time-of-day,[0:@road_text_outline_day, 1:@road_text_outline_night]);
+@country_text_day: animated(zoom, [0:#5d6a76, 3.9:#5d6a76, 4:#7b8a98]);
+@country_text_night: animated(zoom, [0:#bdc0cb, 3.9:#bdc0cb, 4:#5f626d]);
+@country_text_color: animated(time-of-day,[0:@country_text_day, 1:@country_text_night]);
+@state_text_day: animated(zoom, [0:#7b8a98, 3.9:#7b8a98, 4:#5d6a76]);
+@state_text_night: animated(zoom, [0:#5f626d, 3.9:#5f626d, 4:#bdc0cb]);
+@state_text_color: animated(time-of-day,[0:@state_text_day, 1:@state_text_night]);
+@city_text_day: #46535f;
+@city_text_night: animated(zoom, [11.9:#bdc0cb, 12:#5f626d]);
+@city_text_color: animated(time-of-day,[0:@city_text_day, 1:@city_text_night]);
+@town_text_day: #5d6a76;
+@town_text_night: #a6a8b6;
+@town_text_color: animated(time-of-day,[0:@town_text_day, 1:@town_text_night]);
+@neighbourhood_text_day: animated(zoom, [12:#7b8a98, 13.9:#7b8a98, 14:#5d6a76]);
+@neighbourhood_text_night: animated(zoom, [12:#5f626d, 13.9:#5f626d, 14:#bdc0cb]);
+@neighbourhood_text_color: animated(time-of-day,[0:@neighbourhood_text_day, 1:@neighbourhood_text_night]);
+@traffic_free_day: #45AF17;
+@traffic_free_day_agv: #7DBF60;
+@traffic_free_night: #45AF17;
+@traffic_free_night_agv: #2F8100;
+@traffic_free_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_free_day,
+					 1: @traffic_free_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_free_night,
+		 			 1: @traffic_free_night_agv]
+		 			)]);
+@traffic_free_outline_day: #ffffff;
+@traffic_free_outline_day_agv: #ffffff;
+@traffic_free_outline_night: #161616;
+@traffic_free_outline_night_agv: #161616;
+@traffic_free_outline_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_free_outline_day,
+					 1: @traffic_free_outline_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_free_outline_night,
+		 			 1: @traffic_free_outline_night_agv]
+		 			)]);
+@traffic_slow_day: #F8981D;
+@traffic_slow_day_agv: #F9B75B;
+@traffic_slow_night: #FF7E27;
+@traffic_slow_night_agv: #BB6E00;
+@traffic_slow_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_slow_day,
+					 1: @traffic_slow_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_slow_night,
+		 			 1: @traffic_slow_night_agv]
+		 			)]);
+@traffic_slow_outline_day: #ffffff;
+@traffic_slow_outline_day_agv: #ffffff;
+@traffic_slow_outline_night: #161616;
+@traffic_slow_outline_night_agv: #161616;
+@traffic_slow_outline_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_slow_outline_day,
+					 1: @traffic_slow_outline_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_slow_outline_night,
+		 			 1: @traffic_slow_outline_night_agv]
+		 			)]);
+@traffic_congested_day: #D92011;
+@traffic_congested_day_agv: #DD776B;
+@traffic_congested_night: #F20000;
+@traffic_congested_night_agv: #920E0E;
+@traffic_congested_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_congested_day,
+					 1: @traffic_congested_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_congested_night,
+		 			 1: @traffic_congested_night_agv]
+		 			)]);
+@traffic_congested_outline_day: #ffffff;
+@traffic_congested_outline_day_agv: #ffffff;
+@traffic_congested_outline_night: #161616;
+@traffic_congested_outline_night_agv: #161616;
+@traffic_congested_outline_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_congested_outline_day,
+					 1: @traffic_congested_outline_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_congested_outline_night,
+		 			 1: @traffic_congested_outline_night_agv]
+		 			)]);
+@traffic_closed_day: #000000;
+@traffic_closed_day_agv: #000000;
+@traffic_closed_night: #350000;
+@traffic_closed_night_agv: #350000;
+@traffic_closed_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_closed_day,
+					 1: @traffic_closed_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_closed_night,
+		 			 1: @traffic_closed_night_agv]
+		 			)]);
+@traffic_closed_outline_day: #ffffff;
+@traffic_closed_outline_day_agv: #161616;
+@traffic_closed_outline_night: #161616;
+@traffic_closed_outline_night_agv: @traffic_closed_outline_night;
+@traffic_closed_outline_color: animated(time-of-day,
+		[0: animated(map-traffic-desaturated,
+					[0: @traffic_closed_outline_day,
+					 1: @traffic_closed_outline_day_agv]
+					) ,
+		 1: animated(map-traffic-desaturated,
+		 			[0: @traffic_closed_outline_night,
+		 			 1: @traffic_closed_outline_night_agv]
+		 			)]);
+@green_area_poi_text_day: #226600;
+@green_area_poi_text_night: #529532;
+@green_area_poi_text_color: animated(time-of-day,[0:@green_area_poi_text_day, 1:@green_area_poi_text_night]);
+@green_area_poi_icon_day: #226600;
+@green_area_poi_icon_night: #448723;
+@green_area_poi_icon_color: animated(time-of-day,[0:@green_area_poi_icon_day, 1:@green_area_poi_icon_night]);
+@water_poi_text_day: #547a87;
+@water_poi_text_night: #6ea1b2;
+@water_poi_text_color: animated(time-of-day,[0:@water_poi_text_day, 1:@water_poi_text_night]);
+@water_poi_icon_day: #547a87;
+@water_poi_icon_night: #598999;
+@water_poi_icon_color: animated(time-of-day,[0:@water_poi_icon_day, 1:@water_poi_icon_night]);
+@sand_poi_text_day: #816a3e;
+@sand_poi_text_night: #b89d69;
+@sand_poi_text_color: animated(time-of-day,[0:@sand_poi_text_day, 1:@sand_poi_text_night]);
+@sand_poi_icon_day: #816a3e;
+@sand_poi_icon_night: #a28855;
+@sand_poi_icon_color: animated(time-of-day,[0:@sand_poi_icon_day, 1:@sand_poi_icon_night]);
+@airport_poi_text_day: #8164b7;
+@airport_poi_text_night: #a789dd;
+@airport_poi_text_color: animated(time-of-day,[0:@airport_poi_text_day, 1:@airport_poi_text_night]);
+@airport_poi_icon_day: #8164b7;
+@airport_poi_icon_night: #876bbd;
+@airport_poi_icon_color: animated(time-of-day,[0:@airport_poi_icon_day, 1:@airport_poi_icon_night]);
+@health_poi_text_day: #b76465;
+@health_poi_text_night: #df6e6f;
+@health_poi_text_color: animated(time-of-day,[0:@health_poi_text_day, 1:@health_poi_text_night]);
+@health_poi_icon_day: #b76465;
+@health_poi_icon_night: #ca6465;
+@health_poi_icon_color: animated(time-of-day,[0:@health_poi_icon_day, 1:@health_poi_icon_night]);
+@education_poi_text_day: #b49d43;
+@education_poi_text_night: #d9c05c;
+@education_poi_text_color: animated(time-of-day,[0:@education_poi_text_day, 1:@education_poi_text_night]);
+@education_poi_icon_day: #b49d43;
+@education_poi_icon_night: #bda64a;
+@education_poi_icon_color: animated(time-of-day,[0:@education_poi_icon_day, 1:@education_poi_icon_night]);
+@other_poi_text_day: #6a6c7f;
+@other_poi_text_night: #b6b8c9;
+@other_poi_text_color: animated(time-of-day,[0:@other_poi_text_day, 1:@other_poi_text_night]);
+@other_poi_icon_day: #6a6c7f;
+@other_poi_icon_night: #9395a7;
+@other_poi_icon_color: animated(time-of-day,[0:@other_poi_icon_day, 1:@other_poi_icon_night]);
+@blue_incident_icon_day: #2d9ccb;
+@blue_incident_icon_night: #52a6ca;
+@blue_incident_icon_color: animated(time-of-day,[0:@blue_incident_icon_day, 1:@blue_incident_icon_night]);
+@yellow_incident_icon_day: #f4961d;
+@yellow_incident_icon_night: #ef8e4d;
+@yellow_incident_icon_color: animated(time-of-day,[0:@yellow_incident_icon_day, 1:@yellow_incident_icon_night]);
+@red_incident_icon_day: #db3135;
+@red_incident_icon_night: #d6575a;
+@red_incident_icon_color: animated(time-of-day,[0:@red_incident_icon_day, 1:@red_incident_icon_night]);
+@icon-halo-color: #aaa;
+@icon-halo-opacity: 1.0;
+@icon-halo-width: 0.2;
+@icon-halo-blur: 0.0;
+@route_to_waypoint_day: #3D69B2;
+@route_to_waypoint_night: #3D69B2;
+@route_to_waypoint: animated(time-of-day,[0:@route_to_waypoint_day, 1:@route_to_waypoint_night]);
+@route_to_waypoint_outline_day: #20385F;
+@route_to_waypoint_outline_night: #20385F;
+@route_to_waypoint_outline: animated(time-of-day,[0:@route_to_waypoint_outline_day, 1:@route_to_waypoint_outline_night]);
+@route_A_color_active_day: #4292FF;
+@route_A_color_active_night: #1678fd;
+@route_A_color_active: animated(time-of-day,[0:@route_A_color_active_day, 1:@route_A_color_active_night]);
+@route_ongoing_color_active_day: #FF0000;
+@route_ongoing_color_active_night: #FF0000;
+@route_ongoing_color_active: animated(time-of-day,[0:@route_ongoing_color_active_day, 1:@route_ongoing_color_active_night]);
+@route_B_color_active_day: #6caaff;
+@route_B_color_active_night: #4090fc;
+@route_B_color_active: animated(time-of-day,[0:@route_B_color_active_day, 1:@route_B_color_active_night]);
+@route_C_color_active_day: #8dbdff;
+@route_C_color_active_night: #5ba0ff;
+@route_C_color_active: animated(time-of-day,[0:@route_C_color_active_day, 1:@route_C_color_active_night]);
+@route_outline_color_active_day: #1172f4;
+@route_outline_color_active_night: #0051be;
+@route_outline_color_active: animated(time-of-day,[0:@route_outline_color_active_day, 1:@route_outline_color_active_night]);
+@route_trace_color_day: #C5CDD9;
+@route_trace_color_night: #969ea9;
+@route_trace_color: animated(time-of-day,[0:@route_trace_color_day, 1:@route_trace_color_night]);
+@route_trace_outline_color_day: #99A9C1;
+@route_trace_outline_color_night: #656f7f;
+@route_trace_outline_color: animated(time-of-day,[0:@route_trace_outline_color_day, 1:@route_trace_outline_color_night]);
+@route_traffic_free_active_day: #45AF17;
+@route_traffic_free_active_night: #45AF17;
+@route_traffic_free_active: animated(time-of-day,[0:@route_traffic_free_active_day, 1:@route_traffic_free_active_night]);
+@route_traffic_slow_active_day: #F8981D;
+@route_traffic_slow_active_night: #FF7E27;
+@route_traffic_slow_active: animated(time-of-day,[0:@route_traffic_slow_active_day, 1:@route_traffic_slow_active_night]);
+@route_traffic_congested_active_day: #D92011;
+@route_traffic_congested_active_night: #F20000;
+@route_traffic_congested_active: animated(time-of-day,[0:@route_traffic_congested_active_day, 1:@route_traffic_congested_active_night]);
+@route_traffic_closed_active_day: #000000;
+@route_traffic_closed_active_night: #350000;
+@route_traffic_closed_active: animated(time-of-day, [0:@route_traffic_closed_active_day, 1:@route_traffic_closed_active_night]);
+@route_A_color_inactive_day: #b8d5ff;
+@route_A_color_inactive_night: #405159;
+@route_A_color_inactive: animated(time-of-day,[0:@route_A_color_inactive_day, 1:@route_A_color_inactive_night]);
+@route_ongoing_color_inactive_day: #ff0000;
+@route_ongoing_color_inactive_night: #ff0000;
+@route_ongoing_color_inactive: animated(time-of-day,[0:@route_ongoing_color_inactive_day, 1:@route_ongoing_color_inactive_night]);
+@route_B_color_inactive_day: #b8d5ff;
+@route_B_color_inactive_night: #526872;
+@route_B_color_inactive: animated(time-of-day,[0:@route_B_color_inactive_day, 1:@route_B_color_inactive_night]);
+@route_C_color_inactive_day: #b8d5ff;
+@route_C_color_inactive_night: #69828d;
+@route_C_color_inactive: animated(time-of-day,[0:@route_C_color_inactive_day, 1:@route_C_color_inactive_night]);
+@route_outline_color_inactive_day: #99a2a7;
+@route_outline_color_inactive_night: #1e2a2f;
+@route_outline_color_inactive: animated(time-of-day,[0:@route_outline_color_inactive_day, 1:@route_outline_color_inactive_night]);
+@route_traffic_free_inactive_day: #45AF17;
+@route_traffic_free_inactive_night: #45AF17;
+@route_traffic_free_inactive: animated(time-of-day,[0:@route_traffic_free_inactive_day, 1:@route_traffic_free_inactive_night]);
+@route_traffic_slow_inactive_day: #ba9980;
+@route_traffic_slow_inactive_night: #6d5d50;
+@route_traffic_slow_inactive: animated(time-of-day,[0:@route_traffic_slow_inactive_day, 1:@route_traffic_slow_inactive_night]);
+@route_traffic_congested_inactive_day: #9c898b;
+@route_traffic_congested_inactive_night: #55494a;
+@route_traffic_congested_inactive: animated(time-of-day,[0:@route_traffic_congested_inactive_day, 1:@route_traffic_congested_inactive_night]);
+@route_traffic_closed_inactive_day: #756f6f;
+@route_traffic_closed_inactive_night: #3a3939;
+@route_traffic_closed_inactive: animated(time-of-day, [0:@route_traffic_closed_inactive_day, 1:@route_traffic_closed_inactive_night]);
+@turn_arrow_color_day: #ffffff;
+@turn_arrow_color_night: #f0f6ff;
+@turn_arrow_color: animated(time-of-day, [0:@turn_arrow_color_day, 1:@turn_arrow_color_night]);
+@on_street_parking_regular_color_day: #a450df;
+@on_street_parking_regular_color_night: #a450df;
+@on_street_parking_regular_color: animated(time-of-day, [0:@on_street_parking_regular_color_day, 1:@on_street_parking_regular_color_night]);
+@on_street_parking_regular_outline_color_day: #d9bfe7;
+@on_street_parking_regular_outline_color_night: #d9bfe7;
+@on_street_parking_regular_outline_color: animated(time-of-day, [0:@on_street_parking_regular_outline_color_day, 1:@on_street_parking_regular_outline_color_night]);
+@on_street_parking_highlighted_color_day: #a450df;
+@on_street_parking_highlighted_color_night: #a450df;
+@on_street_parking_highlighted_color: animated(time-of-day, [0:@on_street_parking_highlighted_color_day, 1:@on_street_parking_highlighted_color_night]);
+@on_street_parking_highlighted_outline_color_day: #d9bfe7;
+@on_street_parking_highlighted_outline_color_night: #d9bfe7;
+@on_street_parking_highlighted_outline_color: animated(time-of-day, [0:@on_street_parking_highlighted_outline_color_day, 1:@on_street_parking_highlighted_outline_color_night]);
+@super_cruise_free_flow_color_day: #00aa00;
+@super_cruise_free_flow_color_night: #00aa00;
+@super_cruise_free_flow_color: animated(time-of-day, [0:@super_cruise_free_flow_color_day, 1:@super_cruise_free_flow_color_night]);
+@super_cruise_slow_speed_color_day: #ff9a00;
+@super_cruise_slow_speed_color_night: #ff9a00;
+@super_cruise_slow_speed_color: animated(time-of-day, [0:@super_cruise_slow_speed_color_day, 1:@super_cruise_slow_speed_color_night]);
+@super_cruise_congested_color_day: #de0000;
+@super_cruise_congested_color_night: #de0000;
+@super_cruise_congested_color: animated(time-of-day, [0:@super_cruise_congested_color_day, 1:@super_cruise_congested_color_night]);
+@super_cruise_closed_color_day: #000000;
+@super_cruise_closed_color_night: #000000;
+@super_cruise_closed_color: animated(time-of-day, [0:@super_cruise_congested_color_day, 1:@super_cruise_congested_color_night]);
+@text_regular:  "NotoSans-Regular.ttf,NotoSansArabic-Condensed.ttf,NotoSansCJKkr-Medium.otf,NotoSansCJKsc-Medium.otf";
+@text_italic:   "NotoSans-Italic.ttf,NotoSansArabic-Condensed.ttf,NotoSansCJKkr-Medium.otf,NotoSansCJKsc-Medium.otf";
+@text_medium:   "NotoSans-Medium.ttf,NotoSansArabic-Condensed.ttf,NotoSansCJKkr-Medium.otf,NotoSansCJKsc-Medium.otf";
+@text_bold:     "NotoSans-Bold.ttf,NotoSansArabic-Condensed.ttf,NotoSansCJKkr-Medium.otf,NotoSansCJKsc-Medium.otf";
+@base_width: 3;
+@link_factor: animated (zoom,[2:0.3, 11:0.4,18:0.7]);
+@outline_factor: animated (zoom,[2:2.5, 7:1.5, 8:1.4,10:1.5, 15:1.20,18:1.1]);
+@traffic_width_factor: animated(zoom, [ 3:1, 10:0.6,  15:0.2]);
+@traffic_offset_factor: animated(zoom, [ 3:1.3, 10:1.1,  15:0.6]);
+@traffic_outline_width_factor: 0.9;
+@road_text_size_factor: 1;
+@motorway_relation: animated(zoom,[4:3.8, 10:3.6, 16:3.4]);
+@trunk_relation: animated(zoom,[4:3.6, 10:3.2, 16:2.8]);
+@primary_relation: animated(zoom,[4:3.2, 10:2.8, 16:2.4]);
+@secondary_relation: animated(zoom,[4:2.8, 10:2.4, 16:2.0]);
+@street_relation: 1.4;
+@route_zoom_multiplier:		animated(zoom,[1:0.01, 5:0.1, 8:0.1, 10:0.1, 13:0.3, 15.5:1, 18: 3]);
+@motorway_zoom_multiplier:  animated(zoom,[2:0, 5:0.1, 8:0.1, 10:0.1, 13:0.3, 15.5:1, 18: 3]);
+@trunk_zoom_multiplier:     animated(zoom,[2:0, 5:0.1, 8:0.1, 10:0.1, 13:0.3, 15.5:1, 18: 3]);
+@primary_zoom_multiplier:   animated(zoom,[2:0, 10:0.1, 13:0.3, 15.5:1, 18: 3]);
+@secondary_zoom_multiplier: animated(zoom,[2:0, 10:0.1, 13:0.3, 15.5:1, 18: 3]);
+@street_zoom_multiplier:    animated(zoom,[2:0, 10:0.1, 13:0.3, 15.5:1, 18: 3]);
+@motorway_opacity: 		 animated(zoom, [ 3:0,  3.5:1]);
+@motorway_link_opacity:  animated(zoom, [ 5:0,  5.5:1]);
+@trunk_opacity: 	     animated(zoom, [ 3:0,  3.5:1]);
+@trunk_link_opacity:     animated(zoom, [ 7:0,  7.5:1]);
+@primary_opacity: 		 animated(zoom, [ 9:0,  9.5:1]);
+@primary_link_opacity:   animated(zoom, [10:0, 10.5:1]);
+@secondary_opacity:      animated(zoom, [10:0, 10.5:1]);
+@secondary_link_opacity: animated(zoom, [11:0, 11.5:1]);
+@street_opacity: 		 animated(zoom, [13:0, 13.5:1]);
+@motorway_traffic_opacity:          animated(zoom, [ 5:0,  5.5:1]);
+@motorway_outline_traffic_opacity:  animated(zoom, [ 7:0,  7.5:1]);
+@trunk_traffic_opacity:             animated(zoom, [ 7:0,  7.5:1]);
+@trunk_outline_traffic_opacity:     animated(zoom, [ 8:0,  8.5:1]);
+@primary_traffic_opacity:           animated(zoom, [11:0, 11.5:1]);
+@primary_outline_traffic_opacity:   animated(zoom, [12:0, 12.5:1]);
+@secondary_traffic_opacity:         animated(zoom, [12:0, 12.5:1]);
+@secondary_outline_traffic_opacity: animated(zoom, [12:0, 12.5:1]);
+@street_traffic_opacity:            animated(zoom, [14:0, 14.5:1]);
+@street_outline_traffic_opacity:    animated(zoom, [14:0, 14.5:1]);
+@road_text_size_formula: 10;
+@road_text_size_motorway_formula:  10;
+@road_text_size_trunk_formula:     10;
+@road_text_size_primary_formula:   10;
+@road_text_size_secondary_formula: 10;
+@road_text_size_street_formula:    10;
+@road_text_offset:3;
+@motorway_text_offset_dy:  3;
+@trunk_text_offset_dy: 	   3;
+@primary_text_offset_dy:   3;
+@secondary_text_offset_dy: 3;
+@street_text_offset_dy:    3;
+@country_text_size: 	  11;
+@state_text_size: 		  7;
+@province_text_size: 	  10;
+@city_text_size: 		  9;
+@town_text_size: 		  10;
+@neighbourhood_text_size: 8;
+@village_text_size:       8;
+@hamlet_text_size:        8;
+@traffic_incidents_priority: 2000;
+@point_text_priority:        800;
+@border_lines_priority:      700;
+@turn_arrow_priority: 		 600;
+@badges_priority:            500;
+@pois_polygon_priority:      400;
+@traffic_priority:			 300;
+@road_text_priority:         200;
+@one_way_arrow_priority:     100;
+@rainier_poi_priority_start: 2000;
+@country_text_priority:        10 + @point_text_priority;
+@state_text_priority:           9 + @point_text_priority;
+@province_text_priority:        8 + @point_text_priority;
+@country_capital_text_priority: 7 + @point_text_priority;
+@state_capital_text_priority:   6 + @point_text_priority;
+@city_text_priority:            5 + @point_text_priority;
+@town_text_priority:            4 + @point_text_priority;
+@neighbourhood_text_priority:   3 + @point_text_priority;
+@village_text_priority:         2 + @point_text_priority;
+@hamlet_text_priority:          1 + @point_text_priority;
+@motorway_road_text_priority:    8 + @road_text_priority;
+@trunk_road_text_priority:       7 + @road_text_priority;
+@primary_road_text_priority:     6 + @road_text_priority;
+@secondary_road_text_priority:   5 + @road_text_priority;
+@tertiary_road_text_priority:    4 + @road_text_priority;
+@residential_road_text_priority: 3 + @road_text_priority;
+@service_road_text_priority:     2 + @road_text_priority;
+@road_road_text_priority:        1 + @road_text_priority;
+@one_way_arrow_1st_priority: 3 + @one_way_arrow_priority;
+@one_way_arrow_2nd_priority: 2 + @one_way_arrow_priority;
+@one_way_arrow_3rd_priority: 1 + @one_way_arrow_priority;
+@waterway_poi_priority: 14 + @pois_polygon_priority;
+@place_poi_priority:    13 + @pois_polygon_priority;
+@natural_poi_priority:  12 + @pois_polygon_priority;
+@boundary_poi_priority: 11 + @pois_polygon_priority;
+@landuse_poi_priority:  10 + @pois_polygon_priority;
+@leisure_poi_priority:   9 + @pois_polygon_priority;
+@barrier_poi_priority:   8 + @pois_polygon_priority;
+@aeroway_poi_priority:   7 + @pois_polygon_priority;
+@amenity_poi_priority:   6 + @pois_polygon_priority;
+@office_poi_priority:    5 + @pois_polygon_priority;
+@building_poi_priority:  4 + @pois_polygon_priority;
+@shop_poi_priority:      3 + @pois_polygon_priority;
+@toursim_poi_priority:   2 + @pois_polygon_priority;
+@sport_poi_priority:     1 + @pois_polygon_priority;
+@urgent_message_incident_priority:                23 + @traffic_incidents_priority;
+@road_closure_incident_priority:                  22 + @traffic_incidents_priority;
+@accident_incident_priority:                      21 + @traffic_incidents_priority;
+@road_hazard_incident_priority:                   20 + @traffic_incidents_priority;
+@congestion_critical_billboard_incident_priority: 19 + @traffic_incidents_priority;
+@congestion_major_billboard_incident_priority:    18 + @traffic_incidents_priority;
+@congestion_minor_billboard_incident_priority:    17 + @traffic_incidents_priority;
+@congestion_incident_priority:                    16 + @traffic_incidents_priority;
+@construction_incident_priority:                  15 + @traffic_incidents_priority;
+@event_incident_priority:                         14 + @traffic_incidents_priority;
+@planned_event_incident_priority:                 13 + @traffic_incidents_priority;
+@disabled_vehicle_incident_priority:              12 + @traffic_incidents_priority;
+@difficult_driving_condition_incident_priority:   11 + @traffic_incidents_priority;
+@weather_incident_priority:                       10 + @traffic_incidents_priority;
+@snow_and_ice_incident_priority:                   9 + @traffic_incidents_priority;
+@smog_alerts_incident_priority:                    8 + @traffic_incidents_priority;
+@reduced_visibility_incident_priority:             7 + @traffic_incidents_priority;
+@speed_trap_incident_priority:                     6 + @traffic_incidents_priority;
+@speed_camera_incident_priority:                   5 + @traffic_incidents_priority;
+@police_incident_priority:                         4 + @traffic_incidents_priority;
+@miscellaneous_incident_priority:                  3 + @traffic_incidents_priority;
+@traffic_camera_incident_priority:                 2 + @traffic_incidents_priority;
+@turn_on_radio_incident_priority:                  1 + @traffic_incidents_priority;
+@closed_traffic_priority:    4 + @traffic_priority;
+@congested_traffic_priority: 3 + @traffic_priority;
+@slow_traffic_priority:      2 + @traffic_priority;
+@free_traffic_priority:      1 + @traffic_priority;
+@state_border_priority:   3 + @border_lines_priority;
+@country_border_priority: 2 + @border_lines_priority;
+@other_border_priority:   1 + @border_lines_priority;
+@base_opacity: 1;
+@route_ongoing_opacity: 0.2;
+@motorway_width: @base_width  * @motorway_relation;
+@trunk_width: @base_width     * @trunk_relation;
+@primary_width: @base_width   * @primary_relation;
+@secondary_width: @base_width * @secondary_relation;
+@street_width: @base_width    * @street_relation;
+@motorway_width_formula:  			@motorway_width  * @motorway_zoom_multiplier;
+@route_motorway_width_formula:	  	@motorway_width  * @route_zoom_multiplier;
+@trunk_width_formula:     			@trunk_width     * @trunk_zoom_multiplier;
+@primary_width_formula:   			@primary_width   * @primary_zoom_multiplier;
+@secondary_width_formula: 			@secondary_width * @secondary_zoom_multiplier;
+@street_width_formula:    			@street_width    * @street_zoom_multiplier;
+@motorway_traffic_width:   @motorway_width_formula  * @traffic_width_factor;
+@motorway_traffic_offset:  @motorway_width_formula  * @traffic_offset_factor;
+@trunk_traffic_width:      @trunk_width_formula     * @traffic_width_factor;
+@trunk_traffic_offset:     @trunk_width_formula     * @traffic_offset_factor;
+@primary_traffic_width:    @primary_width_formula   * @traffic_width_factor;
+@primary_traffic_offset:   @primary_width_formula   * @traffic_offset_factor;
+@secondary_traffic_width:  @secondary_width_formula * @traffic_width_factor;
+@secondary_traffic_offset: @secondary_width_formula * @traffic_offset_factor;
+@street_traffic_width:     @street_width_formula    * @traffic_width_factor;
+@street_traffic_offset:    @street_width_formula    * @traffic_offset_factor;
+@road_text_size_common:    @road_text_size_formula * @road_text_size_factor;
+@road_text_size_motorway:  @road_text_size_motorway_formula  * @road_text_size_factor;
+@road_text_size_trunk:     @road_text_size_trunk_formula     * @road_text_size_factor;
+@road_text_size_primary:   @road_text_size_primary_formula   * @road_text_size_factor;
+@road_text_size_secondary: @road_text_size_secondary_formula * @road_text_size_factor;
+@road_text_size_street:    @road_text_size_street_formula    * @road_text_size_factor;
+@route_width_formula: animated(zoom, [1:3, 5:2, 10:1.5, 14:0.5, 16:0.3]);
+@route_width: @route_motorway_width_formula * @route_width_formula;
+@route_ongoing_width_formula: animated(zoom, [2:3, 10:2, 20:1.5, 28:0.5, 32:0.3]);
+@route_ongoing_width: @route_motorway_width_formula * @route_ongoing_width_formula;
+@turn_arrow_tail_width: animated(zoom, [14:0.5, 18:0.3]);
+@turn_arrow_head_size: 0.9;
+@traffic_incidents_size: 12;
+@pois_size:12;
+@simplify-big: stepped(zoom,[8:6, 13:10, 13:5, 15:4, 17: 3]);
+@simplify-big-func: stepped(zoom, [8:mask, 9: dot]);
+@simplify-small: stepped(zoom,[8:20, 13:15, 17:10, 18:0]);
+@simplify-small-func: stepped(zoom, [13:mask, 14: dot]);
+@simplify-line-important: stepped(zoom,[6:8, 13:5, 16: 0]);
+@simplify-line-important-func: stepped(zoom, [13:mask, 14: dot]);
+@simplify-line: stepped(zoom,[8:20, 13:15, 17:10,18:0]);
+@simplify-line-func: stepped(zoom, [13:mask, 14: dot]);
+@simplify-polygon: stepped(zoom, [8:9, 11:7,13:6, 16:5, 17:4]);
+@simplify-polygon-func: mask;
+@simplify-polygon-large: stepped(zoom, [8:9, 11:7,13:6, 16:5, 17:4]);
+@simplify-polygon-large-func: stepped(zoom, [4:mask, 5:polygon-mask]);
+collision_disable
+{
+	rainier-search-dot-annotation: ["rainier-search-dot-annotation"];
+	smart-bubble: 		  		  ["rainier-smart-poi-annotation", "poi-single", "cvp", "pois"];
+	rainier-smart-poi-annotation: ["smart-bubble"];
+};
+collision_enable
+{
+	oneway: ["oneway"];
+};
+layer_order
+{
+  rainier-rgc,
+  pois,
+  rainier-bubble-annotation,
+  rainier-poipopup-annotation,
+  rainier-generic-pin-annotation,
+  poi-length-test,
+  debug-custom-screen-text,
+  kor-speed-cam,
+  kor-speed-cam-shield,
+  rainier-poipin-annotation,
+  flag_screen_annotation,
+  flag_sprite_annotation,
+  custom_flag_screen_annotation,
+  custom-annotation-screen,
+  custom-annotation-viewport,
+  custom-annotation-clustered,
+  custom-annotation,
+  breadcrumb,
+  scene-adi-line-test-layer,
+  scene-breadcrumb-line-test-layer,
+  compass,
+  all-models,
+  smart-bubble,
+  cvp,
+  model-annotation,
+  scalebar,
+  test-screen-space,
+  rainier-destination-waypoint-annotation,
+  rainier-search-pin-annotation,
+  rainier-search-dot-annotation,
+  traffic-incidents-other,
+  traffic-incidents-hazard,
+  traffic-incidents-accident,
+  traffic-incidents-police,
+  traffic-incidents-construction,
+  traffic-incidents-congestion,
+  traffic-incidents-camera,
+  rainier-route-start-annotation,
+  rainier-smart-poi-annotation,
+  rainier-home-work-annotation,
+  rainier-poi-display-zoom8-annotation,
+  rainier-poi-display-zoom7-annotation,
+  rainier-poi-display-zoom6-annotation,
+  rainier-poi-display-zoom5-annotation,
+  rainier-poi-display-zoom4-annotation,
+  rainier-poi-display-zoom3-annotation,
+  custom-text-poi,
+  accuracy-circle,
+  active-fronts,
+  isobars,
+  isobar-pressure,
+  storms,
+  storm-attributes,
+  custom-polygon-layer,
+  custom-worldspace,
+  current-precipitation,
+  test,
+  test2,
+  dong,
+  poi-single,
+  poi-single2,
+  poi-cluster,
+  annotation-poi-cluster,
+  rainier-dot_screen_annotation,
+  turn-arrow-tail,
+  turn-arrow-head,
+  qtarp-adi-line,
+  qtarp-custom-poi-annotations,
+  qtarp-annotation-default,
+  qtarp-annotation-home,
+  qtarp-annotation-predictive-default,
+  qtarp-annotation-nearest-point,
+  qtarp-annotation-alerts,
+  qtarp-annotation-fixed-pin,
+  qtarp-dropped-pin,
+  qtarp-waypoint-annotations,
+  qtarp-search-annotations,
+  qtarp-poi-annotations,
+  text,
+  continent-text,
+  road-badges,
+  road-badges2,
+  road-text,
+  cold_front,
+  cold_front_background,
+  warm_front,
+  warm_front_background,
+  dry_front,
+  dry_front_background,
+  stationary_front,
+  stationary_front_background,
+  occluded_front,
+  occluded_front_background,
+  trough_front,
+  squall_front,
+  equator,
+  onstreetparking-texture-regular,
+  onstreetparking-texture-highlighted,
+  onstreetparking-regular,
+  onstreetparking-highlighted,
+  onstreetparking-regular-outline,
+  onstreetparking-highlighted-outline,
+  pois_polygon,
+  qtarp-routes-4wd,
+  qtarp-routes-gap,
+  qtarp-routes-traffic,
+  qtarp-navigable-route,
+  qtarp-waypoint-route,
+  qtarp-routes,
+  qtarp-routes-traffic-outline,
+  qtarp-navigable-route-outline,
+  qtarp-routes-outline,
+  qtarp-waypoint-route-outline,
+  qtarp-route-trace,
+  qtarp-route-trace-outline,
+  qtarp-routes-inactive,
+  qtarp-routes-traffic-inactive,
+  qtarp-routes-outline-inactive,
+  qtarp-onstreetparking-regular-pattern,
+  qtarp-onstreetparking-regular,
+  qtarp-onstreetparking-regular-outline,
+  active-route-chevrons,
+  active-route,
+  route-trace,
+  route-trace-outline,
+  rainier-routes,
+  rainier-routes-traffic-supercruise-chevrons,
+  rainier-routes-traffic-supercruise,
+  rainier-routes-traffic,
+  rainier-routes-outline,
+  inactive-route,
+  inactive-route-outline,
+  rainier-routes-inactive,
+  rainier-routes-traffic-inactive-supercruise-chevrons,
+  rainier-routes-traffic-inactive-supercruise,
+  rainier-routes-traffic-inactive,
+  rainier-routes-outline-inactive,
+  rainier-route-trace,
+  rainier-route-trace-outline,
+  border-lines,
+  super-cruise,
+  traffic-motorway,
+  traffic-motorway-outline,
+  motorway,
+  motorway-link,
+  motorway-outline,
+  motorway-link-outline,
+  oneway,
+  traffic-trunk,
+  traffic-trunk-outline,
+  trunk,
+  trunk-outline,
+  trunk-link,
+  trunk-link-outline,
+  traffic-primary,
+  traffic-primary-outline,
+  primary,
+  primary-link,
+  traffic-secondary,
+  traffic-secondary-outline,
+  secondary,
+  secondary-link,
+  traffic-other,
+  traffic-other-outline,
+  other,
+  path,
+  primary-outline,
+  primary-link-outline,
+  secondary-outline,
+  secondary-link-outline,
+  other-outline,
+  path-outline,
+  feature-lines,
+  buildings,
+  amenity,
+  shop,
+  runway,
+  runway2,
+  waterway,
+  natural-water,
+  riverbank,
+  beach,
+  leisure,
+  landuse,
+  nationalpark,
+  tourism,
+  place-island-sensitive,
+  place-island,
+  continent
+};
+data
+{
+   	"poi_annotations.default"
+    {
+        icon_name: "";
+        icon_w: 36;
+        icon_h: 36;
+        icon_x: 0.5;
+        icon_y: 0.5;
+        text_x: 0.0;
+        text_y: 0.75;
+        font_size: 32;
+        text_color: #000000;
+        text_alignment: "center";
+        super_group: "";
+    }
+    "screen_annotations.poipin_screen_annotation"
+    {
+        icon_x: 0.5;
+        icon_y: 0.5;
+    }
+    "screen_annotations.flag_screen_annotation"
+    {
+    	icon_x: 0.5;
+        icon_y: 0.0;
+    }
+    "rainier-destination-waypoint-annotation"
+    {
+        icon_x: 0.5;
+        icon_y: 0.0;
+    }
+};
+settings
+{
+  background-color: @land;
+  fog-color: animated(time-of-day,[0:#eee,1:#1a1c23]);
+  fog-density: 5.0;
+  fog-start-distance: 1.0;
+  shadow-density: 0.2;
+  horizon-fog-height: 200.0;
+  horizon-fog-gradient: "exponential";
+  skybox-image: "cloudsky_tex.jpg";
+  badge-data: "badges.csv";
+  global-illumination-factor: 0.8;
+  globe-background-color: #000000;
+  globe-highlight-color: @water;
+};
+layer<annotation> rainier-generic-pin-annotation[annotation-data="rainier-generic-pin-annotation"]
+{
+  icon-image: $texture;
+  icon-size: $custom-size;
+  icon-anchor-position: $custom-anchor-offset;
+  icon-layer-type: "2DImportant";
+  model-layer-type: "2DImportant";
+  text-layer-type: "2DImportant";
+  collision-enabled: disabled;
+};
+layer<annotation> poi-length-test[annotation-data="poi-length-test"]
+{
+  icon-image: "incidents/templates/t_accident_crash_us.png";
+  icon-tint: animated(time, [0: #f00, 1: #0f0]);
+  icon-placement: oriented;
+  collision-enabled: disabled;
+  icon-size: 24pt;
+  fade-time: 0.2;
+  text: $custom-text;
+  text-font: @text_medium;
+  text-position-offset: [0, -20pt];
+  text-size: 16;
+  text-max-width: 20pt;
+};
+layer<annotation> scalebar[annotation-data="scalebar"]
+{
+  collision-enabled: disabled;
+  coordinate-space: screen;
+  icon-image: "scalebar.png";
+  icon-anchor-position: [-1, 1];
+  icon-position-offset: [$offset_x, $offset_y + 12pt];
+  icon-slice-control-points:[0.99,0.01,0.01,0.99];
+  icon-layer-type: "2DImportant";
+  icon-size: $scalebar_size;
+  text: $scalebar_text;
+  text-font: @text_medium;
+  text-size: 8;
+  text-position-offset: [$offset_x, $offset_y + 6pt];
+  text-alignment: "left";
+  text-valignment: "center";
+};
+layer<poi> dong[feature-type="Dong"]["3d-buildings-enabled"=false]
+{
+	text-opacity: animated(fade,[0:0,1:1]);
+	text-color: animated(time-of-day,[0:#918d9a,1:#b8bcd1]);
+	text-font: @text_regular;
+	text-size: 7;
+	priority: 500;
+	selectable: true;
+};
+layer<annotation> poi-single[annotation-data="poi-single"][zoom>10]
+{
+    rounded-corners: [0,1,1,0];
+    rounded-corners-radius: 30;
+    gradient-settings: [0, 0, 1, 1];
+    gradient-type: rectangle;
+    gradient-start-color: animated(time-of-day, [0: #f00, 1: #00f]);
+    gradient-end-color: animated(time-of-day, [0: #0f0, 1: #fff]);
+    icon-halo-width: 1;
+    icon-halo-color: #fff;
+    shape-color: #fff;
+	icon-layer-type: "2DImportant";
+    priority: 10000000;//$my-little-priority;
+    collision-enabled: disabled;
+    shape-size: [100, 50];
+    fade-time: 0.2;
+};
+layer<annotation> poi-single2[annotation-data="poi-single2"][zoom>10]
+{
+    icon-image: "single-poi2.png";
+	icon-layer-type: "2DImportant";
+    priority: 10000000;//$my-little-priority;
+    collision-enabled: disabled;
+    icon-size: [15pt, 15pt];
+    fade-time: 0.2;
+};
+layer<annotation> poi-cluster[cluster-group="poi-cluster"][zoom>10]
+{
+    icon-image: "cluster-poi.png";
+    icon-placement: oriented;
+    collision-enabled: disabled;
+    icon-size: [15pt, 15pt];
+    fade-time: 0.2;
+    text-color: #000000;
+    text-font: @text_regular;
+    text-size: 10;
+    text-alignment: "center";
+    text-valignment: "center";
+};
+layer<annotation> annotation-poi-cluster[cluster-group="annotation-poi-cluster"][zoom>10]
+{
+    icon-image: "cluster-poi.png";
+    collision-enabled: disabled;
+    icon-size: [20pt, 20pt];
+    fade-time: 0.2;
+    text-color: #000000;
+    text-font: @text_regular;
+    text-size: 10;
+    text-alignment: "center";
+    text-valignment: "center";
+};
+layer<annotation> accuracy-circle[annotation-data="accuracy-circle"][zoom > 2]
+{
+  shape: [256.0, 0.0, 0.3, 0.0];
+  shape-size: $shapeSize;
+  shape-scale: $shapeScale;
+  shape-color: #0fa;
+  shape-opacity: 0.5;
+  collision-enabled: disabled;
+  coordinate-space: world;
+  icon-placement: oriented;
+};
+layer<custom-line> active-fronts [custom-line-type="cold"],
+								 [custom-line-type="warm"],
+								 [custom-line-type="stationary"],
+								 [custom-line-type="occluded"],
+								 [custom-line-type="trough"],
+								 [custom-line-type="squall_line"],
+								 [custom-line-type="dry_line"],
+								 [custom-line-type="dissipating_cold"],
+								 [custom-line-type="dissipating_warm"],
+								 [custom-line-type="dissipating_stationary"],
+								 [custom-line-type="dissipating_occluded"],
+								 [custom-line-type="forming_cold"],
+								 [custom-line-type="forming_warm"],
+								 [custom-line-type="forming_stationary"],
+								 [custom-line-type="forming_occluded"]
+{
+	simplify-factor: @simplify-line;
+	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    color: #ff00ff;
+};
+layer<custom-line> isobars [custom-line-type="isobar"]
+{
+	simplify-factor: @simplify-line;
+	simplify-func: @simplify-line-func;
+    width: @route_width * 1.5;
+    opacity: @base_opacity;
+    color: #777;
+};
+layer<annotation> storms[annotation-data-match="(tropical_disturbance|(hurricane_cat_\d+)|tropical_storm|tropical_depression|typhoon|super_typhoon|tropical_cyclone)_(historic|current|forecast)"][zoom > 0]
+{
+    collision-enabled: enabled;
+    icon-size: 20;
+	[annotation-data-match="(.*)_(historic)"]
+	{
+	    icon-image: "storm_historic_pos.png";
+		priority: 2;
+	}
+	[annotation-data-match="(.*)_(current)"]
+	{
+		icon-image: "storm.png";
+		priority: 3;
+	}
+	[annotation-data-match="(.*)_(forecast)"]
+	{
+		icon-image: "storm_forecast_pos.png";
+		priority: 1;
+	}
+};
+layer<annotation> storm-attributes[annotation-data-match="(storm)_(detail|direction)"][zoom > 5]
+{
+    collision-enabled: disabled;
+    priority: 1;
+    [annotation-data="storm_detail"]
+    {
+        icon-image: "storm_detail.png";
+        icon-size: 10;
+        icon-rotation: 180;
+        icon-anchor-position: [0, 0];
+    }
+    [annotation-data="storm_direction"]
+    {
+        icon-image: "storm_direction.png";
+        icon-size: 30;
+        icon-rotation: $custom-rotation;
+        icon-anchor-position: [0, 1.5];
+    }
+};
+layer<annotation> custom-worldspace[annotation-data="custom-worldspace"][zoom > 0]
+{
+  priority: 1000 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, 11];
+  text-max-width: $custom-text-max-width;
+  icon-layer-type: "2D";
+  model-layer-type: "2D";
+  text-layer-type: "2D";
+  icon-rotation: $custom-rotation;
+  model-rotation: $custom-rotation;
+  collision-enabled: disabled;
+  coordinate-space: world;
+  icon-placement: oriented;
+};
+layer<custom-polygon> custom-polygon-layer[custom-polygon-type="custom-polygon"][zoom > 0]
+{
+	simplify-factor: @simplify-polygon;
+  	simplify-func: @simplify-polygon-func;
+	pattern: "asdf";
+	pattern-step: 0;
+};
+layer<annotation> custom-text-poi[annotation-data="custom-text-poi"][zoom > 2]
+{
+  text: $custom-text;
+  circle-size: [4,4];
+  circle: [0.0, 0.25, 0.7, 1.0];
+  text-size: 11;
+  text-outline-width: 0.5;
+  text-outline-fade:0.01;
+  text-shadow-opacity: 0;
+  text-font: @text_medium;
+  text-position-offset: [0, 12];
+  text-alignment: "center";
+  text-valignment: "center";
+  text-color: @city_text_color;
+  collision-enabled: disabled;
+  coordinate-space: world;
+};
+layer<annotation> rainier-poipopup-annotation[annotation-data="screen_annotations.poipopup_screen_annotation"][zoom>1]
+{
+  priority: 10000;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  icon-layer-type: "2DImportant";
+  model-layer-type: "2DImportant";
+  text-layer-type: "2DImportant";
+  icon-anchor-position: $custom-anchor-offset;
+  collision-enabled: disabled;
+};
+layer<annotation> rainier-poipin-annotation[annotation-data="rainier-search-result-pin-annotation"][zoom>1]
+{
+  priority: 490 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  text-max-width: 30;
+  icon-margin: animated(zoom,[1:15, 15:10, 18:0]);
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: disabled;
+};
+layer<annotation> rainier-poipin-annotation2[annotation-data="screen_annotations.poipin_screen_annotation"][zoom>1]
+{
+  priority: 490 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  text-max-width: 30;
+  icon-margin: animated(zoom,[1:15, 15:10, 18:0]);
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: disabled;
+};
+layer<annotation> flag_screen_annotation[annotation-data="screen_annotations.flag_screen_annotation"][zoom>1]
+{
+  priority: 490 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  text-max-width: 30;
+  icon-margin: animated(zoom,[1:15, 15:10, 18:0]);
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: disabled;
+};
+layer<annotation> flag_sprite_annotation[annotation-data = "sprite_annotations.flag_sprite_annotation"]
+{
+  priority: 1000000;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  icon-placement : oriented;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: $custom-text-offset;
+  text-color: $custom-text-color;
+  text-max-width: 30;
+  icon-margin: animated(zoom,[1:15, 15:10, 18:0]);
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collided-max-fade: 0.75;
+};
+layer<annotation> custom_flag_screen_annotation[annotation-data="screen_annotations.custom_flag_screen_annotation"][zoom>1]
+{
+  priority: 490 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: $custom-text-offset;
+  text-color: $custom-text-color;
+  text-max-width: 30;
+  icon-margin: animated(zoom,[1:15, 15:10, 18:0]);
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+layer<annotation> debug-custom-screen-text[annotation-data="custom_screen_text"]
+{
+  collision-enabled: disabled;
+  text: $custom-text;
+  text-color: #FFF;
+  text-outline-color: #000;
+  text-outline-width: 0.5;
+  text-outline-fade:0.01;
+  text-font: @text_medium;
+  text-alignment: $textAlign;
+  text-valignment: $textAlignV;
+  text-size: $custom-text-size;
+  text-position-offset: $posOffset;
+  text-layer-type: "2DImportant";
+  coordinate-space: screen;
+};
+layer<annotation> custom-annotation-screen[annotation-data="custom_screen"]
+{
+  collision-enabled: enabled;
+  priority: 1000 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  text-layer-type: "2DImportant";
+  coordinate-space: screen;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-max-width: $custom-text-max-width;
+  text-position-offset: [0, 2];
+  icon-layer-type: "2DImportant";
+  model-layer-type: "2DImportant";
+  text-layer-type: "2DImportant";
+  icon-rotation: $custom-rotation;
+  model-rotation: $custom-rotation;
+};
+layer<annotation> custom-annotation-viewport[annotation-data="custom_viewport"]
+{
+  collision-enabled: enabled;
+  priority: 1000 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  text-layer-type: "2DImportant";
+  coordinate-space: viewport;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-max-width: $custom-text-max-width;
+  text-position-offset: [0, 2];
+  icon-layer-type: "2DImportant";
+  model-layer-type: "2DImportant";
+  text-layer-type: "2DImportant";
+  icon-rotation: $custom-rotation;
+  model-rotation: $custom-rotation;
+};
+layer<annotation> custom-annotation[annotation-data="custom"]
+{
+  collision-enabled: enabled;
+  priority: 1000 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, 11];
+  text-max-width: $custom-text-max-width;
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  icon-rotation: $custom-rotation;
+  model-rotation: $custom-rotation;
+};
+layer<annotation> custom-annotation-clustered[annotation-data="custom-clustered"]
+{
+  priority: 1000;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-max-width: $custom-text-max-width;
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  cluster-group: $custom-group;
+  collision-enabled: disabled;
+  icon-rotation: $custom-rotation;
+  model-rotation: $custom-rotation;
+};
+@cvp-model-1: $custom_model;
+@cvp-model-2: "black_cvp.obj";
+@cvp-model-3: "vivid_cvp_day.obj";
+layer<annotation> cvp[annotation-data="cvp"]
+{
+  priority: 1000000;
+  model-file: @cvp-model-1;
+  model-size: animated(zoom, [14: 20pt, 18: 40pt]);
+  model-placement: oriented;
+  model-color: @icon-color;
+  model-layer-type: "2DImportant";
+  collided-max-fade: 0.75;
+};
+layer<annotation> compass[annotation-data="compass"]
+{
+  collision-enabled: disabled;
+  icon-image: stepped(time-of-day, [0:"compass.png", 1:"compass_night.png"]);
+  icon-placement: "oriented";
+  icon-layer-type: "2DImportant";
+  icon-size: animated(zoom, [14: 60pt, 18: 60pt]);
+  text-font: @text_regular;
+  text-placement: "oriented";
+  text-layer-type: "2DImportant";
+  text-valignment: "center";
+  text-opacity: 1.0;
+  text-color: #000000;
+  [annotation-data="compass"]
+  {
+    text:"N";
+    text-size: 18;
+    text-color: animated(time-of-day, [0:#000000, 1:#ffffff]);
+    text-position-offset: [0,40];
+  }
+  [annotation-data="compass"]
+  {
+    text: "W";
+    text-size: 13;
+    text-opacity: 0.7;
+    text-color: animated(time-of-day, [0:#000000, 1:#ffffff]);
+    text-position-offset: [-35,0];
+  }
+  [annotation-data="compass"]
+  {
+    text: "E";
+    text-size: 13;
+    text-opacity: 0.7;
+    text-color: animated(time-of-day, [0:#000000, 1:#ffffff]);
+    text-position-offset: [35,0];
+  }
+  [annotation-data="compass"]
+  {
+    text: "S";
+    text-size: 13;
+    text-opacity: 0.7;
+    text-color: animated(time-of-day, [0:#000000, 1:#ffffff]);
+    text-position-offset: [0,-35];
+  }
+};
+layer<annotation> model-annotation[annotation-data="model-annotation"]
+{
+  priority: 100;
+  model-file: $custom_model;
+  model-size: 45pt;
+  model-placement: oriented;
+  model-color: @icon-color;
+  model-layer-type: "3DImportant";
+  collision-enabled: disabled;
+  collided-max-fade: 0.75;
+};
+layer<annotation> current-precipitation[annotation-data="current-precipitation"]
+{
+    model-file: $custom_model;
+    model-size: $custom_size;
+    latitude-correction: false;
+    model-placement: oriented;
+    model-color: @icon-color;
+    model-layer-type: "2D";
+    collision-enabled: disabled;
+    model-opacity: animated(zoom, [9:1 ,11.5:0]);
+};
+layer<annotation> test-screen-space[annotation-data="test-screen-space"]
+{
+  icon-image:"cvp.png";
+  model-layer-type: "3DImportant";
+  icon-placement: billboard;
+  collision-enabled: disabled;
+  icon-size: 40;
+  icon-halo-color: #ffffff;
+  icon-halo-opacity: 1;
+  icon-halo-width: 30;
+  icon-halo-width: @icon-halo-width;
+  icon-halo-blur: @icon-halo-blur;
+  coordinate-space: screen;
+};
+layer<annotation> test[annotation-data="test"][zoom>9]
+{
+  icon-image:"cvp.png";
+  collision-enabled: disabled;
+  icon-size: [40,40];
+  model-scale: 300;
+  collision-enabled: disabled;
+  text: "";
+};
+layer<annotation> test2[annotation-data="test2"][zoom>9]
+{
+  collision-enabled: disabled;
+  icon-image:"US_generic4.png";
+  icon-slice-control-points:[0.2,0.2,0.8,0.8];
+  icon-size: [$textWidth + 10px, $textHeight];
+  text: "Trololol";
+  text-font: @text_medium;
+  text-size: 32;
+  text-alignment: "center";
+  text-valignment: "center";
+  text-position-offset: [0, 4];
+};
+layer<poi> continent-text[feature-type="Continent"][zoom<3]
+{
+  text-color: @country_text_color;
+  text-position-offset: [0, 0];
+  priority: 900000;
+  text-font: @text_medium;
+};
+layer<poi> text[feature-class="Point"]
+{
+  require-text;
+  icon-size: 20;
+  icon-opacity: animated(fade,[0:0,1:1]);
+  text-opacity: animated(fade,[0:0,1:1]);
+  shape-opacity: animated(fade,[0:0,1:1]);
+  icon-halo-width: 0.0;
+  icon-halo-blur: 0.0;
+  icon-halo-opacity: 1;
+  text-size: 10;
+  priority: @point_text_priority + $population / 250000;
+  text-color: @road_text_color;
+  text-outline-color: @road_text_outline_color;
+  [feature-type="Country|State"][zoom>=3]
+  {
+      text-size: 10;
+      text-outline-width: 0.5;
+      text-outline-fade:0.01;
+      text-shadow-opacity: 0;
+      text-font: @text_medium;
+      text-alignment: "center";
+      text-valignment: "center";
+      text-color: @city_text_color;
+      [feature-type="Country"][zoom<=6]
+      {
+          text-size: @country_text_size;
+          text-font: @text_bold;
+          priority: @country_text_priority + $population / 250000;
+      }
+      [feature-type="State"][zoom<=7]
+      {
+          text-size: @state_text_size;
+          text-font: @text_medium;
+          text-transform: upper;
+    	  text-letter-spacing: 1;
+    	  priority: @state_text_priority + $population / 250000;
+      }
+  }
+  [feature-type="Province"][zoom>=2][zoom<=13]
+  {
+      priority: @province_text_priority;
+      text-color:#ff00ff;
+      text-size: @province_text_size + $population / 250000;
+  }
+  [feature-type="City"][zoom>=3][zoom<=13]
+  {
+      circle-size: [3,3];
+      circle: stepped(time-of-day, [0:[0.0, 1.0, 0.0, 0.0] ,1:[0.0, 0.25, 1.0, 1.0] ]);
+      priority: @city_text_priority + $population / 250000;
+      text-size: @city_text_size;
+      text-outline-width: 0.5;
+      text-outline-fade:0.01;
+      text-shadow-opacity: 0;
+      text-font: @text_bold;
+      text-position-offset: [0, 12];
+      text-alignment: "center";
+      text-valignment: "center";
+      text-color: @city_text_color;
+      [capital=true]
+	  {
+	  	priority: @country_capital_text_priority + $population / 250000;
+	  	circle-size: [7,7];
+   		circle: [0.0, 0.25, 1.0, 1.0];
+   		shape: [5.0, 2.0, 0.3, 0.0];
+   		shape-size: [7,7];
+	  }
+	  [state-capital=true]
+	  {
+	  	priority: @state_capital_text_priority + $population / 250000;
+	  	circle-size: [4,4];
+   		circle: [0.0, 0.25, 0.7, 1.0];
+	  }
+  }
+  [feature-type="Town"][zoom>=7][zoom<=13]
+  {
+    shape-color: #6D749A;
+    circle-size: [3,3];
+    circle: stepped(time-of-day, [0:[0.0, 0.25, 1.0, 1.0] ,1:[0.0, 1.0, 0.0, 0.0] ]);
+    priority: @town_text_priority + $population / 250000;
+    text-size: @town_text_size;
+    text-outline-width: 1;
+    text-outline-fade:0.01;
+    text-shadow-opacity: 0;
+    text-font: @text_regular;
+    text-position-offset: [0, 10];
+    text-alignment: "center";
+    text-valignment: "center";
+    text-color: @town_text_color;
+  }
+  [feature-type="Neighbourhood"][zoom>=12][zoom<=14]
+  {
+    priority: @neighbourhood_text_priority + $population / 250000;
+    icon-size: 30;
+    text-size: @neighbourhood_text_size;
+    text-shadow-opacity: 0;
+    text-font: @text_medium;
+    text-outline-width: 1;
+    text-color: @neighbourhood_text_color;
+    text-transform: upper;
+    text-letter-spacing: 1.2;
+    text-opacity: animated(fade,[0:1,1:1]);
+  }
+  [feature-type="Village"][zoom>=10.5][zoom<=14]
+  {
+    priority: @village_text_priority + $population / 250000;
+    icon-size: 30;
+    text-size: @village_text_size;
+    text-shadow-opacity: 0;
+    text-font: @text_medium;
+    text-outline-width: 1;
+    text-color: @neighbourhood_text_color;
+    text-transform: upper;
+    text-letter-spacing: 1.2;
+  }
+  [feature-type="Hamlet"][zoom>=12][zoom<=14]
+  {
+    priority: @hamlet_text_priority + $population / 250000;
+    icon-size: 30;
+    text-size: @hamlet_text_size;
+    text-shadow-opacity: 0;
+    text-font: @text_medium;
+    text-outline-width: 1;
+    text-color: @neighbourhood_text_color;
+    text-transform: upper;
+    text-letter-spacing: 1.2;
+  }
+};
+using "badges.csv"
+layer<road-features> road-badges[road-type="Motorway|Trunk"][zoom>5]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  text-placement: billboard;
+  spacing-text: "WWW";
+  text-font:@text_bold;
+  text-color: stepped(time-of-day, [0:&textcolor-day, 1:&textcolor-night]);
+  text-size: 5;
+  text-shadow-opacity: 0;
+  text-outline-width: 0;
+  text-outline-fade:0.01;
+  text: $roadNumber;
+  text-position-offset: [&text_dx, &text_dy];
+  icon-image: stepped(time-of-day, [0:&icon-day, 1:&icon-night]);
+  icon-size: 14 * &size;
+  spacing-base: 100px;
+  spacing: 1000%;
+  display-limit:3;
+  icon-opacity: animated(fade,[0:0,1:1]);
+  shape-opacity: animated(fade,[0:0,1:1]);
+  text-opacity: animated(fade,[0:0,1:1]);
+};
+using "badges.csv"
+layer<road-features> road-badges2[road-type="Primary"][zoom>11]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  text-placement: billboard;
+  spacing-text: "WWW";
+  text-font:@text_bold;
+  text-color: stepped(time-of-day, [0:&textcolor-day, 1:&textcolor-night]);
+  text-size: 5;
+  text-shadow-opacity: 0;
+  text-outline-width: 0;
+  text-outline-fade:0.01;
+  text: $roadNumber;
+  text-position-offset: [&text_dx, &text_dy];
+  icon-image: stepped(time-of-day, [0:&icon-day, 1:&icon-night]);
+  icon-size: 14 * &size;
+  spacing-base: 100px;
+  spacing: 1000%;
+  display-limit:3;
+  icon-opacity: animated(fade,[0:0,1:1]);
+  shape-opacity: animated(fade,[0:0,1:1]);
+  text-opacity: animated(fade,[0:0,1:1]);
+};
+layer<custom-line> equator[custom-line-type = "equator"][globe=true][zoom<3]
+{
+    width: 0.7;
+    color: #f00;
+    dash-array: [3.0, 6.0];
+};
+layer<road-features> road-text[road-type="Motorway|Primary|Trunk|Secondary|Secondary-link|Tertiary|Tertiary-link|Residential|Road|Service|Trunk-link"][zoom>9]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  text-color: @road_text_color;
+  text-outline-color: @road_text_outline_color;
+  text-placement: "oriented";
+  text-font: @text_medium;
+  text-size: 9;
+  text-shadow-opacity: 0;
+  text-outline-width: 1;
+  text-outline-fade:0.01;
+  text-max-angle: 30.0;
+  icon-opacity: animated(fade,[0:0,1:1]);
+  text-opacity: animated(fade,[0.4:0,1:1]);
+  shape-opacity: animated(fade,[0:0,1:1]);
+  spacing: 100%;
+  spacing-base: 100%;
+  display-limit:3;
+  collision-enabled: enabled;
+  text-placement: animated(declination, [80: billboard, 91: oriented]);
+  icon-placement: animated(declination, [80: billboard, 91: none]);
+  icon-position-offset: [0, 4];
+  text-position-offset: [0, 7];
+  shape-color: #515477;
+  shape-size: [5,4];
+  shape: [3.0, 0.0, 0.3, 0.0];
+    fade-time: 0.3;
+    [road-type="Motorway|Motorway-link|Trunk|Trunk-link|Primary|Primary-link|Secondary|Secondary-link|Tertiary|Tertiary-link"][zoom>10]
+    {
+      priority: @motorway_road_text_priority;
+      text-size:@road_text_size_common;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @road_text_offset]]);
+    }
+    [road-type="Residential|Service|Road"][zoom>14]
+    {
+      priority: @residential_road_text_priority;
+      text-size: @road_text_size_common;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @road_text_offset]]);
+    }
+};
+layer<road-features> oneway[[way-direction="forward"],
+                     [way-direction="backward"],
+                     [road-sub-type="Ramp"]]
+                     [road-type="Primary|Secondary|Secondary-link|Tertiary|Tertiary-link|Residential|Road|Service"][zoom>=14.5]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  text-placement: none;
+  icon-placement: oriented;
+  icon-image: "one_way_arrow.png";
+  text-font: @text_regular;
+  icon-layer-type: "2D";
+  text-size: 10.5;
+  text-shadow-opacity: 0;
+  text-outline-width: 1;
+  text-outline-fade:0.01;
+  text-max-angle: 30.0;
+  collision-enabled: enabled;
+  icon-color: @oneway_color;
+  icon-size: @street_width_formula * 2;
+  icon-opacity: animated(zoom,[14.5:0,15:1]);
+  spacing: 100%;
+  spacing-base: 100%;
+  spacing-behaviour: add;
+  priority: @one_way_arrow_1st_priority;
+  [road-type="Motorway|Motorway-link"][zoom>10]
+    {
+      priority: @motorway_road_text_priority;
+      text-size:@road_text_size_motorway;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @motorway_text_offset_dy]]);
+    }
+    [road-type="Trunk|Trunk-link"][zoom>10]
+    {
+      priority: @trunk_road_text_priority;
+      text-size: @road_text_size_trunk;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @trunk_text_offset_dy]]);
+    }
+    [road-type="Primary|Primary-link"][zoom>10]
+    {
+      priority: @primary_road_text_priority;
+      text-size: @road_text_size_primary;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @primary_text_offset_dy]]);
+    }
+    [road-type="Secondary|Secondary-link"][zoom>12]
+    {
+      priority: @secondary_road_text_priority;
+      text-size: @road_text_size_secondary;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @secondary_text_offset_dy]]);
+    }
+    [road-type="Tertiary|Tertiary-link"][zoom>12]
+    {
+      priority: @tertiary_road_text_priority;
+      text-size: @road_text_size_secondary;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @secondary_text_offset_dy]]);
+    }
+    [road-type="Residential"][zoom>14]
+    {
+      priority: @residential_road_text_priority;
+      text-size: @road_text_size_street;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @street_text_offset_dy]]);
+    }
+    [road-type="Service"][zoom>14]
+    {
+      priority: @service_road_text_priority;
+      text-size: @road_text_size_street;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @street_text_offset_dy]]);
+    }
+    [road-type="Road"][zoom>14]
+    {
+      priority: @road_road_text_priority;
+      text-size: @road_text_size_street;
+      text-position-offset: stepped(declination, [80: [0, 7], 91: [0, @street_text_offset_dy]]);
+    }
+};
+layer<road-features> oneway_motorway[[way-direction="forward"],
+                     [way-direction="backward"],
+                     [road-sub-type="Ramp"]][road-type="Motorway|Motorway-link|Trunk|Trunk-link"][zoom>=11]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  text-placement: none;
+  icon-placement: oriented;
+  text-font: @text_medium;
+  icon-image: "one_way_arrow.png";
+  icon-layer-type: "2D";
+  collision-enabled: disabled;
+  icon-color: @oneway_motorway_color;
+  icon-size: animated(zoom,[10:7,18:15]);
+  icon-opacity: animated(zoom,[11.5:0,12:1]);
+  spacing: 150%;
+};
+layer<poi> pois[feature-type="TollBooth|IC|JC|SubwayExit"]
+{
+	[feature-type="TollBooth"]
+	{
+	  	icon-size: @pois_size;
+		icon-image: stepped(time-of-day, [0:"pois/kr_tg_day.png", 1:"pois/kr_tg_night.png"]);
+		text-size: 10;
+		text-font: @text_regular;
+		text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+		text-outline-width: 1;
+		text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+		text-outline-opacity: 0.5;
+        text-position-offset: [0, -8];
+        text: "";
+	}
+	[feature-type="IC"]
+	{
+		icon-size: @pois_size;
+  		icon-image: stepped(time-of-day, [0:"pois/kr_ic_day.png", 1:"pois/kr_ic_night.png"]);
+  	    text-size: 10;
+        text-font: @text_regular;
+        text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+        text-outline-width: 1;
+        text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+        text-outline-opacity: 0.5;
+        text-position-offset: [0, -8];
+	}
+	[feature-type="JC"]
+	{
+		icon-size: @pois_size;
+  		icon-image: stepped(time-of-day, [0:"pois/kr_jc_day.png", 1:"pois/kr_jc_night.png"]);
+  	    text-size: 10;
+        text-font: @text_regular;
+        text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+        text-outline-width: 1;
+        text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+        text-outline-opacity: 0.5;
+        text-position-offset: [0, -8];
+	}
+	[feature-type="SubwayExit"]
+	{
+		icon-size: @pois_size * 0.9;
+  		text-font: @text_regular;
+  		text-size: 5;
+  		text-color: #000000;
+  		icon-image: "pois/kr_subway_exit.png";
+  		text-position-offset: [0, 0.8];
+	}
+};
+layer<poi> pois_polygon[geometry-type="polygon"][[feature-class="Aeroway"],[feature-class="Amenity"],[feature-class="Boundary"],[feature-class="Barrier"],[feature-class="Building"],[feature-class="Landuse"],[feature-class="Leisure"],[feature-class="Natural"],[feature-class="Office"],[feature-class="Place"],[feature-class="Shop"],[feature-class="Sport"],[feature-class="Tourism"],[feature-class="Waterway"]]
+{
+  require-text;
+  text-opacity: animated(fade,[0.4:0,1:1]);
+  text-size: animated(zoom, [1:7 ,7:9 ,11:10]);
+  text-font: @text_italic;
+  text-color: #474e60;
+  text-position-offset: [0, 14];
+  icon-size: @pois_size;
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  icon-opacity: animated(fade,[0.4:0,1:1]);
+   display-limit: 1;
+  [feature-class="Leisure"][feature-type="Park"][zoom>13]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/park_poi.png";
+    priority: @leisure_poi_priority;
+  }
+  [feature-class="Landuse"][feature-type="Forest"][zoom>11]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/forest_poi.png";
+    priority: @landuse_poi_priority;
+  }
+  [feature-class="Boundary"][feature-type="NationalPark"][zoom>11]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/natural_reserve_poi.png";
+    priority: @boundary_poi_priority;
+  }
+  [feature-class="Landuse"][feature-type="Cemetery"][zoom>14]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/cemetery_poi.png";
+    priority: @landuse_poi_priority;
+  }
+  [feature-class="Leisure"][feature-type="GolfCourse"][zoom>14]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/golf_course_poi.png";
+    priority: @leisure_poi_priority;
+  }
+  [feature-class="Tourism"][feature-type="ThemePark"][zoom>14]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/amusement_theme_parks_poi.png";
+    priority: @toursim_poi_priority;
+  }
+  [feature-class="Tourism"][feature-type="Zoo"][zoom>14]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/zoo_poi.png";
+    priority: @toursim_poi_priority;
+  }
+  [feature-class="Leisure"][feature-type="SportsCentre"][zoom>14]
+  {
+    text-color: @green_area_poi_text_color;
+	icon-tint: @green_area_poi_icon_color;
+	icon-image: "pois/templates/sports_store_poi.png";
+    priority: @leisure_poi_priority;
+  }
+  [feature-class="Natural"][feature-type="Beach"][zoom>14]
+  {
+    label-positioning-algorithm : "ray";
+    text-color: @sand_poi_text_color;
+	icon-tint: @sand_poi_icon_color;
+	icon-image: "pois/templates/beach_poi.png";
+    priority: @natural_poi_priority;
+  }
+  [feature-class="Natural"][feature-type="Water"][zoom>15]
+  {
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @natural_poi_priority;
+    display-limit: 1;
+    polygon-limit: false;
+  }
+  [feature-class="Waterway"][feature-type="RiverBank"][zoom>15]
+  {
+  	label-positioning-algorithm : "ray";
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @waterway_poi_priority;
+    display-limit: 1;
+    polygon-limit: false;
+  }
+  [feature-class="Natural"][feature-type="Bay"][zoom>9]
+  {
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @natural_poi_priority;
+    display-limit: 1;
+    polygon-limit: false;
+  }
+  [feature-class="Waterway"][feature-type="Ocean"][zoom>1]
+  {
+	polygon-limit: true;
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @waterway_poi_priority;
+      	text-transform: upper;
+    text-size: animated(zoom, [1:9 ,18:15]);
+      	text-letter-spacing: 1.1;
+    display-limit: 1;
+  }
+  [feature-class="Waterway"][feature-type="Ocean_WorldMap"][zoom>7]
+  {
+	polygon-limit: true;
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @waterway_poi_priority;
+    display-limit: 1;
+  }
+  [feature-class="Natural"][feature-type="Glacier"][zoom>14]
+  {
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @natural_poi_priority;
+    display-limit: 1;
+  }
+   [feature-class="Landuse"][feature-type="Reservoir"][zoom>15]
+  {
+    text-color: @water_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @landuse_poi_priority;
+    display-limit: 1;
+  }
+  [feature-class="Amenity"][feature-type="A_Hospital"][zoom>15]
+  {
+    text-color: @health_poi_text_color;
+	icon-tint: @health_poi_icon_color;
+	icon-image: "pois/templates/hospital_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Building"][feature-type="B_Hospital"][zoom>15]
+  {
+  	icon-opacity:0;
+    text-color: @health_poi_text_color;
+	icon-tint: @health_poi_icon_color;
+	icon-image: "pois/templates/hospital_poi.png";
+    priority: @building_poi_priority;
+    display-limit: 1;
+  }
+  [feature-class="Amenity"][feature-type="A_University"][zoom>13]
+  {
+    text-color: @education_poi_text_color;
+	icon-tint: @education_poi_icon_color;
+	icon-image: "pois/templates/school_university_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Building"][feature-type="B_University"][zoom>15]
+  {
+  	icon-opacity:0;
+    text-color: @education_poi_text_color;
+	icon-tint: @education_poi_icon_color;
+	icon-image: "pois/templates/school_university_poi.png";
+    priority: @building_poi_priority;
+    display-limit: 1;
+  }
+  [feature-class="Building"][feature-type="School"][zoom>15]
+  {
+  	icon-opacity:0;
+    text-color: @education_poi_text_color;
+	icon-tint: @education_poi_icon_color;
+	icon-image: "pois/templates/school_university_poi.png";
+    priority: @building_poi_priority;
+    display-limit: 1;
+  }
+  [feature-class="Amenity"][feature-type="Library"][zoom>15]
+  {
+    text-color: @education_poi_text_color;
+	icon-tint: @education_poi_icon_color;
+	icon-image: "pois/templates/library_poi.png";
+    priority: @amenity_poi_priority;
+    display-limit: 1;
+  }
+  [feature-class="Aeroway"][feature-type="Aerodrome"][zoom>10]
+  {
+    text-color: @airport_poi_text_color;
+	icon-tint: @airport_poi_icon_color;
+	icon-image: "pois/templates/airport_poi.png";
+    priority: @aeroway_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Bar"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/bars_clubs_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Building"][feature-type="B_Commercial"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/shopping_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Shop"][feature-type="Mall"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/shopping_poi.png";
+    priority: @shop_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Retail"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/shopping_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Cinema"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/tickets_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="CarRental"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/car_rental_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Shop"][feature-type="Car"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/dealer_poi.png";
+    priority: @shop_poi_priority;
+  }
+  [feature-class="Shop"][feature-type="CarRepair"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/car_repair_poi.png";
+    priority: @shop_poi_priority;
+  }
+  [feature-class="Sport"][feature-type="10Pin"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @sport_poi_priority;
+  }
+  [feature-class="Sport"][feature-type="Skating"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @sport_poi_priority;
+  }
+  [feature-class="Landuse"][feature-type="Military"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @landuse_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Bank"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/atm_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="TownHall"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/govt_services_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="CourtHouse"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/govt_services_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Office"][feature-type="Government"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/govt_services_poi.png";
+    priority: @office_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Police"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/siren_police_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="PostOffice"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/post_office_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Embassy"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/govt_services_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="CommunityCentre"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/govt_services_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Church"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Civic"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/govt_services_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Hotel"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/hotel_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="B_Residential"][zoom>14]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/lodging_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Apartments"][zoom>14]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/lodging_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="House"][zoom>14]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/lodging_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Detached"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @building_poi_priority;
+  }
+  [feature-class="Building"][feature-type="B_Industrial"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/factory_poi.png";
+    priority: @building_poi_priority;
+  }
+  [feature-class="Landuse"][feature-type="L_Industrial"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/factory_poi.png";
+    priority: @landuse_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Fuel"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/gas_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="Parking"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/parking_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Landuse"][feature-type="Garages"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/parking_poi.png";
+    priority: @landuse_poi_priority;
+  }
+  [feature-class="Barrier"][feature-type="Gate"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @barrier_poi_priority;
+  }
+  [feature-class="Barrier"][feature-type="TollBooth"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @barrier_poi_priority;
+  }
+  [feature-class="Building"][feature-type="Bridge"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @building_poi_priority;
+  }
+  [feature-class="Amenity"][feature-type="FerryTerminal"][zoom>15]
+  {
+    text-color: @other_poi_text_color;
+	icon-tint: @other_poi_icon_color;
+	icon-image: "pois/templates/ferry_boat_poi.png";
+    priority: @amenity_poi_priority;
+  }
+  [feature-class="Place"][feature-type="Continent"][zoom>1]
+  {
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @place_poi_priority;
+  }
+  [feature-class="Place"][feature-type="Island"][zoom>13]
+  {
+  	text-opacity: 0;
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @place_poi_priority;
+  }
+  [feature-class="Place"][feature-type="SensitiveIsland"][zoom>13]
+  {
+  	text-opacity: 0;
+    text-color: @other_poi_text_color;
+    text-position-offset: [0, 0];
+    priority: @place_poi_priority;
+  }
+};
+layer<poi> pois_line[feature-class="Line"]
+{
+  text-opacity: animated(fade,[0.4:0,1:1]);
+  text-size: 10;
+  text-shadow-opacity: 0;
+  text-font: @text_italic;
+  text-outline-width: 1;
+  text-color: #ff00ff;
+};
+layer<road> motorway [road-type = "Motorway"][zoom >= 3]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  width: @motorway_width_formula;
+  color: @motorway_color;
+  opacity: @motorway_opacity;
+  cap:round;
+};
+layer<road> motorway-outline [road-type = "Motorway"][zoom >= 3]
+{
+  outline;
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  width: @motorway_width_formula * @outline_factor;
+  color: @motorway_outline_color;
+  opacity: @motorway_opacity;
+  cap:none;
+};
+layer<road> motorway-link [road-type = "Motorway-link"][zoom >= 5]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  width: @motorway_width_formula * @link_factor;
+  color: @motorway_link_color;
+  opacity: @motorway_link_opacity;
+};
+layer<road> motorway-link-outline [road-type = "Motorway-link"][zoom >= 5]
+{
+  outline;
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  width: @motorway_width_formula * @link_factor * @outline_factor;
+  color: @motorway_outline_color;
+  opacity: @motorway_link_opacity;
+};
+layer<road> trunk [road-type = "Trunk"][zoom>=4]
+{
+	simplify-factor: @simplify-big;
+	simplify-func: @simplify-big-func;
+    width: @trunk_width_formula;
+    color: @trunk_color;
+    opacity: @trunk_opacity;
+};
+layer<road> trunk-outline [road-type = "Trunk"][zoom>=4]
+{
+    outline;
+    simplify-factor: @simplify-big;
+    simplify-func: @simplify-big-func;
+    width: @trunk_width_formula * @outline_factor;
+    color: @trunk_outline_color;
+    opacity: @trunk_opacity;
+};
+layer<road> trunk-link [road-type = "Trunk-link"][zoom>=6]
+{
+	simplify-factor: @simplify-big;
+	simplify-func: @simplify-big-func;
+    width: @trunk_width_formula * @link_factor;
+    color: @trunk_color;
+    opacity: @trunk_link_opacity;
+};
+layer<road> trunk-link-outline [road-type = "Trunk-link"][zoom>=6]
+{
+    outline;
+    simplify-factor: @simplify-big;
+    simplify-func: @simplify-big-func;
+    width: @trunk_width_formula * @link_factor * @outline_factor;
+    color: @trunk_outline_color;
+    opacity: @trunk_link_opacity;
+};
+layer<road> primary [road-type = "Primary"][zoom>=9]
+{
+	simplify-factor: @simplify-big;
+	simplify-func: @simplify-big-func;
+    width: @primary_width_formula;
+    color: @primary_color;
+    opacity: @primary_opacity;
+    join: square;
+};
+layer<road> primary-outline [road-type = "Primary"][zoom>=9]
+{
+    outline;
+    simplify-factor: @simplify-big;
+    simplify-func: @simplify-big-func;
+    width: @primary_width_formula * @outline_factor;
+    color: @primary_outline_color;
+    opacity: @primary_opacity;
+    join: square;
+};
+layer<road> primary-link [road-type = "Primary-link"][zoom>=10]
+{
+	simplify-factor: @simplify-big;
+	simplify-func: @simplify-big-func;
+    width: @primary_width_formula * @link_factor;
+    color: @primary_color;
+    opacity: @primary_link_opacity;
+    join: square;
+};
+layer<road> primary-link-outline [road-type = "Primary-link"][zoom>=10]
+{
+    outline;
+    simplify-factor: @simplify-big;
+    simplify-func: @simplify-big-func;
+    width: @primary_width_formula * @link_factor * @outline_factor;
+    color: @primary_outline_color;
+    opacity: @primary_link_opacity;
+    join: square;
+};
+layer<road> secondary [road-type = "Secondary|Tertiary"][zoom>10]
+{
+  simplify-factor: @simplify-small;
+  simplify-func: @simplify-small-func;
+  width: @secondary_width_formula;
+    color: @secondary_color;
+    opacity: @secondary_opacity;
+};
+layer<road> secondary-outline [road-type = "Secondary|Tertiary"][zoom>10]
+{
+    outline;
+    simplify-factor: @simplify-small;
+    simplify-func: @simplify-small-func;
+    width: @secondary_width_formula * @outline_factor;
+    color: @secondary_outline_color;
+    opacity: @secondary_opacity;
+};
+layer<road> secondary-link [road-type = "Secondary-link|Tertiary-link"][zoom>11]
+{
+	simplify-factor: @simplify-small;
+	simplify-func: @simplify-small-func;
+    width: @secondary_width_formula * @link_factor;
+    color: @secondary_color;
+    opacity: @secondary_link_opacity;
+};
+layer<road> secondary-link-outline [road-type = "Secondary-link|Tertiary-link"][zoom>11]
+{
+    outline;
+    simplify-factor: @simplify-small;
+    simplify-func: @simplify-small-func;
+    width: @secondary_width_formula * @link_factor * @outline_factor;
+    color: @secondary_outline_color;
+    opacity: @secondary_link_opacity;
+};
+layer<road> other [road-type="Residential|Road|Service"][zoom>13]
+{
+	simplify-factor: @simplify-small;
+	simplify-func: @simplify-small-func;
+    width: @street_width_formula;
+    color: @street_color;
+    opacity: @street_opacity;
+    cap: round;
+};
+layer<road> other-outline [road-type="Residential|Road|Service"][zoom>13]
+{
+    outline;
+    simplify-factor: @simplify-small;
+    simplify-func: @simplify-small-func;
+    width: @street_width_formula * @outline_factor;
+    color: @street_outline_color;
+    opacity: @street_opacity;
+    cap: round;
+};
+layer<road> path [road-type="Footway|Pedestrian|Path|Steps"][zoom>11]
+{
+	simplify-factor: @simplify-small;
+	simplify-func: @simplify-small-func;
+    width: animated(zoom, [12: @base_width * 0.1, 16: @base_width * 0.5, 18: @base_width * 0.5 * 2]);
+    color: @path_color;
+    opacity: animated(zoom, [13:0, 14:1, 18:1]);
+    cap: round;
+    [four-wheel-drive=false]
+    {
+    	dash-array: [0.5, 2.0, 0.5, 2.0];
+    }
+    [four-wheel-drive=true]
+    {
+        opacity: 1;
+        simplify-factor: @simplify-big;
+        simplify-func: @simplify-big-func;
+    }
+};
+layer<road> path-outline [road-type="Footway|Pedestrian|Path|Steps"][zoom>11]
+{
+	simplify-factor: @simplify-small;
+	simplify-func: @simplify-small-func;
+    width: animated(zoom, [12: @base_width * 0.2, 16: @base_width * 1, 18: @base_width * 1 * 2]);
+    color: #ffffff;
+    opacity: animated(zoom, [13:0, 14:1, 18:1]);
+    cap: round;
+    [four-wheel-drive=true]
+    {
+        color  : #110000;
+        opacity: 1;
+        simplify-factor: @simplify-big;
+        simplify-func: @simplify-big-func;
+    }
+};
+layer<polygon> buildings [feature-class="Building"][zoom>11]
+{
+    opacity: animated(zoom, [14.5:0, 15:1]);
+    outline-opacity: animated(zoom, [14.5:0, 15:1]);
+    outline-width: animated(zoom,[14:0.4, 16:0.8]);
+    outline-color: @building_outline;
+    color: @building;
+    default-extrude-height: 4;
+    extrude-factor: animated(extrusion-time,[0:0,0.25:3,0.5:6]);
+    highlight-color: #ffd527;
+    diffuse-factor: 0.30;
+    shadow-color: @building_shadow;
+    ao-settings: [0.2, 1.5, 0.7, 25.0];
+    [feature-type="B_University"]
+    {
+     color: @university_building;
+     outline-color: @university_building_outline;
+    }
+    [feature-type="B_Hospital"]
+    {
+     color: @hospital_building;
+     outline-color: @hospital_building_outline;
+    }
+    [feature-type="School"]
+    {
+     color: @school_building;
+     outline-color: @school_building_outline;
+    }
+    [feature-type="B_Industrial"]
+    {
+     color: @industrial_building;
+     outline-color: @industrial_building_outline;
+    }
+    [feature-type="Hotel|B_Commercial|Retail"]
+    {
+    	opacity: animated(zoom, [14.5:0, 15:1]);
+    	outline-opacity: animated(zoom, [14.5:0, 15:1]);
+    	color: @retail_building;
+    	outline-color:@retail_building_outline;
+    }
+    [feature-type="Civic|Transportation"]
+    {
+    	opacity: animated(zoom, [14.5:0, 15:1]);
+    	outline-opacity: animated(zoom, [14.5:0, 15:1]);
+    }
+};
+layer<line> border-lines[feature-class="Line"][feature-type="US_StateBorder|StateBorder|CountryBorder|CountryBorderDisputed|StateBorderDisputed|SpecialAdministrativeRegion"]
+{
+	simplify-factor: @simplify-line-important;
+	simplify-func: @simplify-line-important-func;
+	color: #aaa;
+    width: 4;
+	[feature-type="US_StateBorder|StateBorder"][zoom>0]
+    {
+        width: animated(zoom, [1:0.3, 18:0.7]);
+        color: @stateborder;
+        dash-array: [3.0, 4.0];
+        priority: @state_border_priority;
+    }
+    [feature-type="CountryBorder"][zoom>0]
+    {
+        color: @countryborder;
+        width: animated(zoom, [1:0.4, 18:1]);
+        priority: @country_border_priority;
+    }
+    [feature-type="CountryBorder"][zoom>0]
+    {
+        color: @countryborder;
+        width: animated(zoom, [1:0, 18:10]);
+        opacity: animated(zoom,[5:0, 6.5:0.2]);
+        priority: @country_border_priority;
+    }
+    [feature-type="CountryBorderDisputed|StateBorderDisputed|SpecialAdministrativeRegion"][zoom>4]
+    {
+        width: animated(zoom, [1:0.3, 18:0.7]);
+        color: #827171;
+        dash-array: [3.0, 4.0];
+        priority: @other_border_priority;
+    }
+ };
+layer<line> feature-lines[feature-class="Line"]
+{
+	simplify-factor: @simplify-line;
+	simplify-func: @simplify-line-func;
+    color: #aaa;
+    width: 4;
+    [feature-type="Subway|Administrative"][zoom>12]
+    {
+    }
+    [feature-type="Rail|LightRail"][zoom>10]
+    {
+        	pattern: "arrow-20.png";
+        	pattern-step: 0.5;
+        	color: @rail;
+        	width: stepped(zoom, [11:0, 14: @base_width * 2, 16: @base_width * 6]);
+    }
+    [feature-type="Rail|LightRail"][zoom>10]
+    {
+        color: @rail;
+        width: stepped(zoom, [11:0, 14: @base_width * 2.0 / 7.0, 16: @base_width * 6.0 / 7.0]);
+    }
+    [feature-type="River"][zoom>6]
+    {
+        color: @river;
+        width: animated(zoom, [6:0, 9: 2, 15: 3, 18: 6]);
+        priority: 50;
+    }
+    [feature-type="Wadi"][zoom>11]
+    {
+        color: @wadi;
+        width: animated(zoom, [7:0, 9: 2, 15: 3, 18: 6]);
+    }
+    [feature-type="Canal"][zoom>6]
+    {
+        color: @canal;
+        width: animated(zoom, [6:0, 9: 2, 15: 3, 18: 6]);
+    }
+    [feature-type="Ferry"][zoom>6]
+    {
+        width: 0.8;
+        dash-array: [2.0, 4.0];
+        color: @ferry;
+    }
+    [feature-type="US_StateBorder|StateBorder"][zoom>0]
+    {
+        width: 0;
+    }
+    [feature-type="CountryBorder"][zoom>0]
+    {
+        width: 0;
+    }
+    [feature-type="CountryBorderDisputed|StateBorderDisputed|SpecialAdministrativeRegion"][zoom>4]
+    {
+        width: 0;
+    }
+};
+layer<polygon> runway [feature-class="Aeroway"][feature-type="Runway"][zoom>8]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+    color: @runway;
+    opacity: 1;
+};
+layer<polygon> runway2 [feature-class="Aeroway"][feature-type="Aerodrome"][zoom>8]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+    color: @aerodrome;
+    opacity: 1;
+};
+layer<polygon> amenity [feature-class="Amenity"][zoom>=8]
+{
+  simplify-factor: @simplify-polygon;
+  simplify-func: @simplify-polygon-func;
+  opacity: animated(zoom, [14.5:0, 15:1]);
+  color: @amenity_building;
+  [feature-type="A_Hospital"]
+    {
+    	opacity: 1;
+        color: @hospital;
+    }
+  [feature-type="A_University"]
+    {
+    	opacity: 1;
+        color: @university;
+    }
+  [feature-type="Fuel|Parking"]
+    {
+        color: @land;
+    }
+  [feature-type="Bar|Bank|Cinema|CourtHouse|Embassy|Police|PostOffice|TownHall|Library|CommunityCentre|CarRental|FerryTerminal"]
+  	{
+  		outline-opacity: animated(zoom, [14.5:0, 15:1]);
+ 		outline-width: animated(zoom,[14:0.4, 16:0.8]);
+  		outline-color: @amenity_building_outline;
+  		default-extrude-height: 4;
+  		extrude-factor: animated(extrusion-time,[0:0,0.5:0,1:6]);
+  		[feature-type="Library"]
+    	{
+        	color: @university;
+        	outline-color: @university_building_outline;
+    	}
+    	[feature-type="CourtHouse|Embassy|Police|PostOffice|TownHall"]
+    	{
+    		outline-opacity: animated(zoom, [14.5:0, 15:1]);
+        	color: @goverment_building;
+        	outline-color: @goverment_building_outline;
+    	}
+    	[feature-type="Bar|Cinema"]
+    	{
+        	color: @retail_building;
+        	outline-color: @retail_building_outline;
+    	}
+  	}
+};
+layer<polygon> shop[feature-class="Shop"][zoom>=13]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+	color: @shop;
+};
+layer<polygon> tourism[feature-class="Tourism"][zoom>=7]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+	color: @park;
+};
+layer<polygon> landuse[feature-class="Landuse"][zoom>=7]
+{
+  simplify-factor: @simplify-polygon;
+  simplify-func: @simplify-polygon-func;
+  color: @land;
+  [feature-type="Cemetery"]
+  {
+    color: @cemetery;
+  }
+  [feature-type="Forest"]
+  {
+  	simplify-factor: @simplify-polygon-large;
+  	simplify-func: @simplify-polygon-large-func;
+    color: @forest;
+  }
+  [feature-type="Reservoir"]
+  {
+    color: @water;
+  }
+  [feature-type="Military"]
+  {
+    color: @military;
+  }
+  [feature-type="L_Industrial"]
+  {
+    color: @industrial_building;
+  }
+};
+layer<polygon> nationalpark[feature-class="Boundary"][zoom>=5]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+  color: @nationalpark;
+};
+layer<polygon> leisure[feature-class="Leisure"][zoom>=5]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+  color: @park;
+};
+layer<polygon> continent[feature-type="Continent"]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+  color: @land;
+};
+layer<polygon> place-island[feature-type="Island"]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+  color: @land;
+};
+layer<polygon> place-island-sensitive[feature-type="SensitiveIsland"]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+  color: @land;
+};
+layer<polygon> natural-water[feature-type="Water|Bay|Glacier"][zoom>=3]
+{
+	simplify-factor: @simplify-polygon-large;
+	simplify-func: @simplify-polygon-large-func;
+	color: @water;
+	[feature-type="Glacier"]
+	{
+		color: lighten(@water, 10%);
+	}
+};
+layer<polygon> beach[feature-type="Beach"][zoom>=3]
+{
+	simplify-factor: @simplify-polygon;
+	simplify-func: @simplify-polygon-func;
+    color: @beach;
+};
+layer<polygon> waterway[feature-type="Ocean|Ocean_WorldMap|Canal"]
+{
+	simplify-factor: @simplify-polygon-large;
+	simplify-func: @simplify-polygon-large-func;
+  	color: @water;
+};
+layer<polygon> riverbank[feature-type="RiverBank"][zoom>3]
+{
+	simplify-factor: @simplify-polygon-large;
+	simplify-func: @simplify-polygon-large-func;
+	color: @riverbank;
+};
+layer<traffic-incident> traffic-incidents-other
+["traffic-incident"="event"],
+["traffic-incident"="miscellaneous"],
+["traffic-incident"="planned_event"],
+["traffic-incident"="weather"],
+["traffic-incident"="road_closure"],
+["traffic-incident"="difficult_driving_condition"],
+["traffic-incident"="snow_and_ice"],
+["traffic-incident"="smog_alerts"],
+["traffic-incident"="reduced_visibility"],
+["traffic-incident"="turn_on_radio"],
+["traffic-incident"="urgent_message"]
+{
+  icon-size: @traffic_incidents_size;
+  priority: 11;
+  ["traffic-incident"="event"][zoom>=9]
+  {
+	icon-image: "incidents/templates/t_caution_us.png";
+	icon-tint: @yellow_incident_icon_color;
+	priority: @event_incident_priority;
+  }
+  ["traffic-incident"="miscellaneous"][zoom>=9]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_unknown.png";
+  	priority: @miscellaneous_incident_priority;
+  }
+  ["traffic-incident"="planned_event"][zoom>=10]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_caution_us.png";
+    priority: @planned_event_incident_priority;
+  }
+  ["traffic-incident"="weather"][zoom>=9]
+  {
+	icon-tint: @blue_incident_icon_color;
+  	icon-image: "incidents/templates/t_weather_us.png";
+  	priority: @weather_incident_priority;
+  }
+  ["traffic-incident"="road_closure"][zoom>=11]
+  {
+	icon-tint: @red_incident_icon_color;
+  	icon-image: "incidents/templates/t_blocked.png";
+	priority: @road_closure_incident_priority;
+  }
+  ["traffic-incident"="difficult_driving_condition"][zoom>=10]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_caution_us.png";
+	priority: @difficult_driving_condition_incident_priority;
+  }
+  ["traffic-incident"="snow_and_ice"][zoom>=9]
+  {
+	icon-tint: @blue_incident_icon_color;
+  	icon-image: "incidents/templates/t_snow_us.png";
+	priority: @snow_and_ice_incident_priority;
+  }
+  ["traffic-incident"="smog_alerts"][zoom>=9]
+  {
+	icon-tint: @blue_incident_icon_color;
+  	icon-image: "incidents/templates/t_smog_us.png";
+	priority: @smog_alerts_incident_priority;
+  }
+  ["traffic-incident"="reduced_visibility"][zoom>=10]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_caution_us.png";
+	priority: @reduced_visibility_incident_priority;
+  }
+  ["traffic-incident"="turn_on_radio"][zoom>=10]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_radio_us.png";
+	priority: @turn_on_radio_incident_priority;
+  }
+  ["traffic-incident"="urgent_message"][zoom>=10]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_caution_us.png";
+	priority: @urgent_message_incident_priority;
+  }
+};
+layer<traffic-incident> traffic-incidents-hazard
+["traffic-incident"="road_hazard"],
+["traffic-incident"="disabled_vehicle"][zoom>=9]
+{
+  icon-size: @traffic_incidents_size;
+  priority: @traffic_incidents_priority;
+  ["traffic-incident"="road_hazard"]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_hazard_us.png";
+  	priority: @road_hazard_incident_priority;
+  }
+  ["traffic-incident"="disabled_vehicle"]
+  {
+	icon-tint: @yellow_incident_icon_color;
+  	icon-image: "incidents/templates/t_vehicle_breakdown_us.png";
+  	priority: @disabled_vehicle_incident_priority;
+  }
+};
+layer<traffic-incident> traffic-incidents-accident["traffic-incident"="accident"][zoom>=10]
+{
+	icon-tint: @red_incident_icon_color;
+	icon-image: "incidents/templates/t_accident_crash_us.png";
+	icon-size: @traffic_incidents_size;
+	priority: @accident_incident_priority;
+};
+layer<traffic-incident> traffic-incidents-police
+["traffic-incident"="police"][zoom>=8]
+{
+	icon-tint: @blue_incident_icon_color;
+	icon-image: "incidents/templates/t_police_sheriff_us.png";
+	icon-size: @traffic_incidents_size;
+	priority: @police_incident_priority;
+};
+layer<traffic-incident> traffic-incidents-construction
+    ["traffic-incident"="construction"]
+  , ["traffic-incident"="scheduled_construction"][zoom>=7]
+{
+	icon-tint: @yellow_incident_icon_color;
+	icon-image: "incidents/templates/t_construction_us.png";
+	icon-size: @traffic_incidents_size;
+	priority: @construction_incident_priority;
+};
+layer<traffic-incident> traffic-incidents-congestion["traffic-incident"="congestion"]
+{
+  [zoom>=10.0]
+  {
+    text-size: 10;
+    text-outline-width: 1;
+    text-outline-fade:0.01;
+    text-shadow-opacity: 0;
+    text-font: @text_regular;
+    text-alignment: "center";
+    text-valignment: "center";
+    text-color: @town_text_color;
+    icon-tint: @red_incident_icon_color;
+    icon-image: "incidents/templates/t_congestion_us.png";
+    icon-size: @traffic_incidents_size;
+    priority: @congestion_incident_priority;
+    collision-enabled: enabled;
+    [traffic-incident-severity="blocker"],
+    [traffic-incident-severity="critical"]
+    {
+	  require-text;
+      icon-image: "speed_icon_billboard_grey.png";
+      icon-tint: #cf1d21;
+      priority: @congestion_critical_billboard_incident_priority;
+    }
+    [traffic-incident-severity="major"]
+    {
+	  require-text;
+      icon-image: "speed_icon_billboard_grey.png";
+      icon-tint: #fbac18;
+      priority: @congestion_major_billboard_incident_priority;
+    }
+    [traffic-incident-severity="minor"],
+    [traffic-incident-severity="low"]
+    {
+	  require-text;
+      icon-image: "speed_icon_billboard_grey.png";
+      priority: @congestion_minor_billboard_incident_priority;
+    }
+  }
+  [zoom >=10.001]
+  {
+    icon-tint: @red_incident_icon_color;
+    icon-image: "incidents/templates/t_congestion_us.png";
+    icon-size: @traffic_incidents_size;
+    priority: @congestion_incident_priority;
+    collision-enabled: enabled;
+    [traffic-incident-severity="blocker"],
+    [traffic-incident-severity="critical"]
+    {
+      priority: @congestion_critical_billboard_incident_priority - 1;
+    }
+    [traffic-incident-severity="major"]
+    {
+      priority: @congestion_major_billboard_incident_priority - 1;
+    }
+    [traffic-incident-severity="minor"],
+    [traffic-incident-severity="low"]
+    {
+      priority: @congestion_minor_billboard_incident_priority - 1;
+    }
+  }
+};
+layer<traffic-incident> traffic-incidents-camera
+["traffic-incident"="speed_camera"],
+["traffic-incident"="traffic_camera"],
+["traffic-incident"="speed_trap"][zoom>=7]
+{
+  icon-size: @traffic_incidents_size;
+  priority: @traffic_incidents_priority;
+  ["traffic-incident"="speed_camera"]
+  {
+	  icon-tint: @blue_incident_icon_color;
+	  icon-image: "incidents/templates/t_speed_camera.png";
+	  priority: @speed_camera_incident_priority;
+  }
+  ["traffic-incident"="traffic_camera"]
+  {
+	  icon-tint: @blue_incident_icon_color;
+	  icon-image: "incidents/templates/t_traffic_camera_us.png";
+	  priority: @traffic_camera_incident_priority;
+  }
+  ["traffic-incident"="speed_trap"]
+  {
+	  icon-tint: @blue_incident_icon_color;
+	  icon-image: "incidents/templates/t_speed_trap_us.png";
+	  priority: @speed_trap_incident_priority;
+  }
+};
+layer<traffic-cruise> super-cruise[zoom>=10]
+{
+	simplify-factor: @simplify-big;
+  	simplify-func: @simplify-big-func;
+    width: @motorway_width_formula;
+    join:round;
+    color: #2AE0E3;
+};
+layer<traffic-flow> traffic-motorway[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Motorway|Motorway-link"][zoom>=5]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  [road-type="Motorway"][zoom>=5]
+    {
+      width: @motorway_traffic_width;
+      offset: @motorway_traffic_offset;
+	  join:round;
+      opacity: @motorway_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Motorway-link"][zoom>=5]
+    {
+      width: @motorway_traffic_width * @link_factor;
+      offset: @motorway_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @motorway_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-motorway-outline[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Motorway|Motorway-link"][zoom>=7]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  [road-type="Motorway"][zoom>=7]
+    {
+      width: @motorway_traffic_width * @traffic_outline_width_factor;
+      offset: @motorway_traffic_offset;
+	  join:round;
+      opacity: @motorway_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Motorway-link"][zoom>=7]
+    {
+      width: @motorway_traffic_width * @link_factor * @traffic_outline_width_factor;
+      offset: @motorway_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @motorway_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-trunk[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Trunk|Trunk-link"][zoom>=7]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  [road-type="Trunk"][zoom>=7]
+    {
+      width: @trunk_traffic_width;
+      offset: @trunk_traffic_offset;
+	  join:round;
+      opacity: @trunk_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Trunk-link"][zoom>=7]
+    {
+      width: @trunk_traffic_width * @link_factor;
+      offset: @trunk_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @trunk_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-trunk-outline[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Trunk|Trunk-link"][zoom>=8]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  [road-type="Trunk"][zoom>=8]
+    {
+      width: @trunk_traffic_width * @traffic_outline_width_factor;
+      offset: @trunk_traffic_offset;
+	  join:round;
+      opacity: @trunk_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Trunk-link"][zoom>=8]
+    {
+      width: @trunk_traffic_width * @link_factor * @traffic_outline_width_factor;
+      offset: @trunk_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @trunk_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-primary[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Primary|Primary-link"][zoom>=10]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  [road-type="Primary"][zoom>=10]
+    {
+      width: @primary_traffic_width;
+      offset: @primary_traffic_offset;
+	  join:round;
+      opacity: @primary_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Primary-link"][zoom>=10]
+    {
+      width: @primary_traffic_width * @link_factor;
+      offset: @primary_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @primary_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-primary-outline[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Primary|Primary-link"][zoom>=10]
+{
+  simplify-factor: @simplify-big;
+  simplify-func: @simplify-big-func;
+  [road-type="Primary"][zoom>=10]
+    {
+      width: @primary_traffic_width * @traffic_outline_width_factor;
+      offset: @primary_traffic_offset;
+	  join:round;
+      opacity: @primary_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Primary-link"][zoom>=10]
+    {
+      width: @primary_traffic_width * @link_factor * @traffic_outline_width_factor;
+      offset: @primary_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @primary_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-secondary[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Secondary|Secondary-link|Tertiary|Tertiary-link"][zoom>=10]
+{
+  simplify-factor: @simplify-small;
+  simplify-func: @simplify-small-func;
+  [road-type="Secondary|Tertiary"][zoom>=10]
+    {
+      width: @secondary_traffic_width;
+      offset: @secondary_traffic_offset;
+	  join:round;
+      opacity: @secondary_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Secondary-link|Tertiary-link"][zoom>=10]
+    {
+      width: @secondary_traffic_width * @link_factor;
+      offset: @secondary_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @secondary_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-secondary-outline[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Secondary|Secondary-link|Tertiary|Tertiary-link"][zoom>=10]
+{
+  simplify-factor: @simplify-small;
+  simplify-func: @simplify-small-func;
+  [road-type="Secondary|Tertiary"][zoom>=10]
+    {
+      width: @secondary_traffic_width * @traffic_outline_width_factor;
+      offset: @secondary_traffic_offset;
+	  join:round;
+      opacity: @secondary_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+  [road-type="Secondary-link|Tertiary-link"][zoom>=10]
+    {
+      width: @secondary_traffic_width * @link_factor * @traffic_outline_width_factor;
+      offset: @secondary_traffic_offset * @link_factor;
+	  join:round;
+      opacity: @secondary_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<custom-line> scene-adi-line-test-layer [custom-line-type = "adi_line_test"]
+{
+	color: #FF0000;
+    width: 5;
+    opacity: 1;
+    simple-dash-array: [10.0, 25.0];
+    line-layer-type: "2DNoReprojection";
+};
+layer<custom-feature> scene-breadcrumb-line-test-layer [custom-line-type = "breadcrumb_line"]
+{
+	model-file: "breadcrumb.obj";
+	model-size: animated(zoom, [14: 20pt, 18: 40pt]);
+	model-texture: "breadcrumb.png";
+	model-size: 5pt;
+	model-color: @icon-color;
+	model-layer-type: "2D";
+};
+layer<traffic-flow> traffic-other[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Residential|Road|Service"][zoom>=10]
+{
+  simplify-factor: @simplify-small;
+  simplify-func: @simplify-small-func;
+  [road-type="Residential|Road|Service"][zoom>=10]
+    {
+      width: @street_traffic_width;
+      offset: @street_traffic_offset;
+	  join:round;
+      opacity: @street_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<traffic-flow> traffic-other-outline[[traffic-level="free_flow"],[traffic-level="slow_speed"],[traffic-level="congested"],[traffic-level="closed"]][road-type="Residential|Road|Service"][zoom>=10]
+{
+  simplify-factor: @simplify-small;
+  simplify-func: @simplify-small-func;
+  [road-type="Residential|Road|Service"][zoom>=10]
+    {
+      width: @street_traffic_width * @traffic_outline_width_factor;
+      offset: @street_traffic_offset;
+	  join:round;
+      opacity: @street_outline_traffic_opacity;
+      [traffic-level="free_flow"]
+      {
+  	  	color:@traffic_free_outline_color;
+  	  	priority: @free_traffic_priority;
+      }
+      [traffic-level="slow_speed"]
+  	  {
+  		color:@traffic_slow_outline_color;
+  		priority: @slow_traffic_priority;
+ 	  }
+ 	  [traffic-level="congested"]
+  	  {
+  		color:@traffic_congested_outline_color;
+  		priority: @congested_traffic_priority;
+ 	  }
+ 	  [traffic-level="closed"]
+  	  {
+ 	 	color:@traffic_closed_outline_color;
+ 	 	priority: @closed_traffic_priority;
+ 	  }
+    }
+};
+layer<custom-line> active-route-texture [custom-line-type = "active_route_1"],[custom-line-type = "active_route_2"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    color: #ff00ff;
+	pattern: "on_street_parking_texture.png";
+	pattern-step: 0.5;
+};
+layer<custom-line> active-route-chevrons [custom-line-type = "active_route_1"],[custom-line-type = "active_route_2"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width* 3;
+    opacity: @base_opacity;
+    enable-route-eating: true;
+    pattern: "chevron.png";
+    pattern-step: 0.8;
+    color: #fff;
+};
+layer<custom-line> active-route [custom-line-type = "active_route_1"],[custom-line-type = "active_route_2"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    cap: square;
+    enable-route-eating: true;
+    [custom-line-type = "active_route_1"]
+    {
+       color: @route_A_color_active;
+       enable-route-eating: true;
+    }
+    [custom-line-type = "active_route_2"]
+    {
+       color: @route_B_color_active;
+       enable-route-eating: true;
+    }
+};
+layer<custom-line> active-route-outline [custom-line-type = "active_route_1"],[custom-line-type = "active_route_2"]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * @outline_factor;
+    color: @route_outline_color_active;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+};
+layer<custom-line> route-trace [custom-line-type = "active_route_1"],[custom-line-type = "active_route_2"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    color: @route_trace_color;
+};
+layer<custom-line> route-trace-outline [custom-line-type = "active_route_1"],[custom-line-type = "active_route_2"]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * @outline_factor;
+    color: @route_trace_outline_color;
+    opacity: @base_opacity;
+    join: round;
+};
+layer<custom-line> inactive-route [custom-line-type = "inactive_route_1"],[custom-line-type = "inactive_route_2"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-type = "inactive_route_1"]
+    {
+        color: @route_A_color_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "inactive_route_2"]
+    {
+        color: @route_B_color_inactive;
+        enable-route-eating: true;
+    }
+};
+layer<custom-line> inactive-route-outline [custom-line-type = "inactive_route_1"],[custom-line-type = "inactive_route_2"]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * @outline_factor;
+    color: @route_outline_color_inactive;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+};
+layer<custom-line> turn-arrow-tail [custom-line-type = "turn_arrow_tail"][zoom>=14.5]
+{
+  simplify-factor: @simplify-line;
+  simplify-func: @simplify-line-func;
+  width: @route_width * @turn_arrow_tail_width;
+  color: @turn_arrow_color;
+  join: round;
+  enable-route-eating:true;
+  collision-enabled: enabled;
+  priority: turn_arrow_priority;
+};
+layer<custom-line> turn-arrow-tail-outline [custom-line-type = "turn_arrow_tail"][zoom>=14.5]
+{
+  simplify-factor: @simplify-line;
+  simplify-func: @simplify-line-func;
+  width: @route_width * @turn_arrow_tail_width * @outline_factor;
+  color: #4292FF;
+  join: round;
+  enable-route-eating:true;
+  collision-enabled: enabled;
+  priority: turn_arrow_priority;
+};
+layer<annotation> turn-arrow-head[annotation-data="turn_arrow_head"][zoom>=14.5]
+{
+  icon-image: "Arrow4_df.png";
+  icon-color: @turn_arrow_color;
+  icon-placement: oriented;
+  collision-enabled: disabled;
+  icon-size: @route_width * @turn_arrow_head_size;
+  priority: turn_arrow_priority;
+  icon-layer-type: "2D";
+};
+layer<custom-line> breadcrumb[[custom-line-type="breadcrumb"]]
+{
+  simplify-factor: @simplify-line;
+  simplify-func: @simplify-line-func;
+  color: #aaa;
+  width: 30;
+  pattern: "breadcrumb.png";
+  pattern-step: 0.8;
+};
+	layer<landmark> all-models[model-name="*"][zoom>=14]
+	{
+    	color: #fff;
+	};
+layer<custom-line> onstreetparking-texture-regular[[custom-line-type = "onstreetparking.regular"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @street_width_formula;
+    opacity: @base_opacity;
+    color: @on_street_parking_regular_outline_color;
+	pattern: "on_street_parking_texture.png";
+	pattern-step: 0.5;
+};
+layer<custom-line> onstreetparking-regular[[custom-line-type = "onstreetparking.regular"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @street_width_formula*0.5;
+    opacity: @base_opacity;
+    color: @on_street_parking_regular_color;
+    join:round;
+};
+layer<custom-line> onstreetparking-regular-outline[[custom-line-type = "onstreetparking.regular"]]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @street_width_formula;
+    color: @on_street_parking_regular_outline_color;
+    opacity: @base_opacity;
+    join:round;
+};
+layer<custom-line> onstreetparking-texture-highlighted[[custom-line-type = "onstreetparking.highlighted"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @street_width_formula;
+    opacity: @base_opacity;
+    color: @on_street_parking_highlighted_outline_color;
+	pattern: "on_street_parking_texture.png";
+	pattern-step: 0.5;
+};
+layer<custom-line> onstreetparking-highlighted[[custom-line-type = "onstreetparking.highlighted"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @street_width_formula*0.5;
+    opacity: @base_opacity;
+    color: @on_street_parking_highlighted_color;
+    join:round;
+};
+layer<custom-line> onstreetparking-highlighted-outline[[custom-line-type = "onstreetparking.highlighted"]]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @street_width_formula;
+    color: @on_street_parking_highlighted_outline_color;
+    opacity: @base_opacity;
+    join:round;
+};
+layer<custom-line> rainier-routes[[custom-line-type = "route.routeA"],[custom-line-type = "route.routeB"],[custom-line-type = "route.routeC"],[custom-line-type = "route.waypoint"],[custom-line-type = "route.ongoing"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-type = "route.routeA"]
+    {
+        color: @route_A_color_active;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.routeB"]
+    {
+        color: @route_B_color_active;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.routeC"]
+    {
+        color: @route_C_color_active;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.waypoint"]
+    {
+        color: @route_to_waypoint;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.ongoing"]
+    {
+        width: @route_ongoing_width;
+        opacity: @route_ongoing_opacity;
+        color: @route_ongoing_color_active;
+        enable-route-eating: true;
+    }
+};
+layer<custom-line> rainier-routes-traffic-supercruise-chevrons[custom-line-match="route\.(FREE_FLOW_EDGE|SLOW_SPEED_EDGE|CONGESTED_EDGE|CLOSED_EDGE)\.WITH_SUPER_CRUISE$"][zoom>=15]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    opacity: @base_opacity;
+    enable-route-eating: true;
+    width: @route_width * 2;
+    join: square;
+    pattern: "chevron.png";
+    pattern-step: 0.05;
+    color: #fff;
+};
+layer<custom-line> rainier-routes-traffic-supercruise[custom-line-match="route\.(FREE_FLOW_EDGE|SLOW_SPEED_EDGE|CONGESTED_EDGE|CLOSED_EDGE)\.WITH_SUPER_CRUISE$"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    color: #ff0;
+    [custom-line-match = ".*FREE_FLOW_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_free_flow_color;
+    }
+    [custom-line-match = ".*SLOW_SPEED_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_slow_speed_color;
+    }
+    [custom-line-match = ".*CONGESTED_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_congested_color;
+    }
+    [custom-line-match = ".*CLOSED_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_closed_color;
+    }
+};
+layer<custom-line> rainier-routes-traffic[[custom-line-type = "route.SLOW_SPEED_EDGE"],[custom-line-type = "route.CONGESTED_EDGE"],[custom-line-type = "route.CLOSED_EDGE"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-type = "route.SLOW_SPEED_EDGE"]
+    {
+        color: @route_traffic_slow_active;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.CONGESTED_EDGE"]
+    {
+        color: @route_traffic_congested_active;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.CLOSED_EDGE"]
+    {
+        color: @route_traffic_closed_active;
+        enable-route-eating: true;
+    }
+};
+layer<custom-line> rainier-routes-outline[[custom-line-type = "route.routeA"],[custom-line-type = "route.routeB"],[custom-line-type = "route.routeC"],[custom-line-type = "route.waypoint"]]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * @outline_factor;
+    color: @route_outline_color_active;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-type = "route.waypoint"]
+    {
+        color: @route_to_waypoint_outline;
+        enable-route-eating: true;
+    }
+};
+layer<custom-line> rainier-route-trace
+[[custom-line-type = "route.trace"],[custom-line-type = "route.trace.inactive"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    color: @route_trace_color;
+    join: round;
+    enable-route-eating: false;
+};
+layer<custom-line> rainier-route-trace-outline
+[[custom-line-type = "route.trace"],[custom-line-type = "route.trace.inactive"]]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * @outline_factor;
+    color: @route_trace_outline_color;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: false;
+};
+layer<custom-line> rainier-routes-inactive
+[[custom-line-type = "route.routeA.inactive"],[custom-line-type = "route.routeB.inactive"],[custom-line-type = "route.routeC.inactive"],[custom-line-type = "route.waypoint.inactive"],[custom-line-type = "route.ongoing.inactive"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-type = "route.routeA.inactive"]
+    {
+        color: @route_A_color_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.routeB.inactive"]
+    {
+        color: @route_B_color_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.routeC.inactive"]
+    {
+        color: @route_C_color_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.waypoint.inactive"]
+    {
+        color: @route_to_waypoint;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.ongoing.inactive"]
+    {
+        width: @route_ongoing_width;
+        opacity: @route_ongoing_opacity;
+        color: @route_ongoing_color_inactive;
+        enable-route-eating: true;
+    }
+};
+layer<custom-line> rainier-routes-traffic-inactive-supercruise-chevrons[custom-line-match="route\.(FREE_FLOW_EDGE|SLOW_SPEED_EDGE|CONGESTED_EDGE|CLOSED_EDGE)\.WITH_SUPER_CRUISE\.inactive$"][zoom>=15]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * 2;
+    opacity: @base_opacity;
+    enable-route-eating: true;
+    color:#fff;
+    join: square;
+    pattern: "chevron.png";
+    pattern-step: 0.05;
+};
+layer<custom-line> rainier-routes-traffic-inactive-supercruise[custom-line-match="route\.(FREE_FLOW_EDGE|SLOW_SPEED_EDGE|CONGESTED_EDGE|CLOSED_EDGE)\.WITH_SUPER_CRUISE\.inactive$"]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-match = ".*FREE_FLOW_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_free_flow_color;
+    }
+    [custom-line-match = ".*SLOW_SPEED_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_slow_speed_color;
+    }
+    [custom-line-match = ".*CONGESTED_EDGE.WITH_SUPER_CRUISE.*"]
+    {
+        color: @super_cruise_congested_color;
+    }
+};
+layer<custom-line> rainier-routes-traffic-inactive[[custom-line-type = "route.FREE_FLOW_EDGE.inactive"],[custom-line-type = "route.SLOW_SPEED_EDGE.inactive"],[custom-line-type = "route.CONGESTED_EDGE.inactive"],[custom-line-type = "route.CLOSED_EDGE.inactive"]]
+{
+	simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+    [custom-line-type = "route.FREE_FLOW_EDGE.inactive"]
+    {
+        color: @route_traffic_free_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.SLOW_SPEED_EDGE.inactive"]
+    {
+        color: @route_traffic_slow_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.CONGESTED_EDGE.inactive"]
+    {
+        color: @route_traffic_congested_inactive;
+        enable-route-eating: true;
+    }
+    [custom-line-type = "route.CLOSED_EDGE.inactive"]
+    {
+        color: @route_traffic_closed_inactive;
+        enable-route-eating: true;
+    }
+};
+layer<custom-line> rainier-routes-outline-inactive
+[[custom-line-type = "route.routeA.inactive"],[custom-line-type = "route.routeB.inactive"],[custom-line-type = "route.routeC.inactive"],[custom-line-type = "route.waypoint.inactive"]]
+{
+    outline;
+    simplify-factor: @simplify-line;
+  	simplify-func: @simplify-line-func;
+    width: @route_width * @outline_factor;
+    color: @route_outline_color_inactive;
+    opacity: @base_opacity;
+    join: round;
+    enable-route-eating: true;
+};
+layer<annotation> rainier-dot_screen_annotation[annotation-data="screen_annotations.dot_screen_annotation"]
+{
+  icon-image:"poi.png";
+  collision-enabled: disabled;
+  icon-size: 40;
+  icon-color: @icon-color;
+  icon-halo-color: @icon-halo-color;
+  icon-halo-opacity: @icon-halo-opacity;
+  icon-halo-width: @icon-halo-width;
+  icon-halo-blur: @icon-halo-blur;
+};
+layer<annotation> rainier-destination-waypoint-annotation[annotation-data="rainier-destination-waypoint-annotation"]
+{
+  priority: @point_text_priority + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+};
+layer<annotation> rainier-route-start-annotation[annotation-data="rainier-route-start-annotation"]
+{
+  icon-image: $texture;
+  icon-size: $custom-size;
+  icon-anchor-position: $custom-anchor-offset;
+  icon-layer-type: "2DImportant";
+  model-layer-type: "2DImportant";
+  text-layer-type: "2DImportant";
+  collision-enabled: disabled;
+};
+layer<annotation> rainier-search-pin-annotation[annotation-data="rainier-search-pin-annotation"]
+{
+  priority: @point_text_priority + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  text-max-width: 30;
+};
+layer<annotation> rainier-search-dot-annotation[annotation-data="rainier-search-dot-annotation"]
+{
+  priority: @rainier_poi_priority_start + 25;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  text: $custom-text;
+  icon-anchor-position: $custom-anchor-offset;
+  text-font: @text_medium;
+  text-size: $custom-text-size;
+  text-position-offset: [0, 11];
+  text-max-width: 30;
+};
+layer<annotation> rainier-smart-poi-annotation[annotation-data="rainier-smart-poi-annotation"]
+{
+  priority: @point_text_priority + 1002 + $custom-priority;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  icon-anchor-position: $custom-anchor-offset;
+  collision-enabled: disabled;
+};
+layer<annotation> rainier-home-work-annotation[annotation-data="rainier-home-work-annotation"]
+{
+  priority: @point_text_priority + 1001;
+  icon-image: $texture;
+  icon-size: $custom-size;
+  icon-anchor-position: $custom-anchor-offset;
+};
+layer<annotation> rainier-poi-display-zoom8-annotation[annotation-data="rainier-poi-display-zoom8-annotation"][zoom>10]
+{
+  priority: @point_text_priority + $custom-priority;
+  text: $custom-text;
+  text-size: 10;
+  text-font: @text_regular;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, -8];
+  icon-image: $texture;
+  icon-size: @rainier_poi_size;
+  icon-anchor-position: [0, 0.5];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+layer<annotation> rainier-poi-display-zoom7-annotation[annotation-data="rainier-poi-display-zoom7-annotation"][zoom>10]
+{
+  priority: @point_text_priority + $custom-priority;
+  text: $custom-text;
+  text-size: 10;
+  text-font: @text_regular;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, -8];
+  icon-image: $texture;
+  icon-size: @rainier_poi_size;
+  icon-anchor-position: [0, 0.5];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+layer<annotation> rainier-poi-display-zoom6-annotation[annotation-data="rainier-poi-display-zoom6-annotation"][zoom>11]
+{
+  priority: @point_text_priority + $custom-priority;
+  text: $custom-text;
+  text-size: 10;
+  text-font: @text_regular;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, -8];
+  icon-image: $texture;
+  icon-size: @rainier_poi_size;
+  icon-anchor-position: [0, 0.5];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+layer<annotation> rainier-poi-display-zoom5-annotation[annotation-data="rainier-poi-display-zoom5-annotation"][zoom>12]
+{
+  priority: @point_text_priority + $custom-priority;
+  text: $custom-text;
+  text-size: 10;
+  text-font: @text_regular;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, -8];
+  icon-image: $texture;
+  icon-size: @rainier_poi_size;
+  icon-anchor-position: [0, 0.5];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+layer<annotation> rainier-poi-display-zoom4-annotation[annotation-data="rainier-poi-display-zoom4-annotation"][zoom>13]
+{
+  priority: @point_text_priority + $custom-priority;
+  text: $custom-text;
+  text-size: 10;
+  text-font: @text_regular;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, -8];
+  icon-image: $texture;
+  icon-size: @rainier_poi_size;
+  icon-anchor-position: [0, 0.5];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+layer<annotation> rainier-poi-display-zoom3-annotation[annotation-data="rainier-poi-display-zoom3-annotation"][zoom>14]
+{
+  priority: @point_text_priority + $custom-priority;
+  text: $custom-text;
+  text-size: 10;
+  text-font: @text_regular;
+  text-color: animated(time-of-day, [0:#161616, 1:#ffffff]);
+  text-outline-width: 1;
+  text-outline-color: animated(time-of-day, [0:#ffffff, 1:#161616]);
+  text-outline-opacity: 0.5;
+  text-position-offset: [0, -8];
+  icon-image: $texture;
+  icon-size: @rainier_poi_size;
+  icon-anchor-position: [0, 0.5];
+  icon-layer-type: "Hud";
+  model-layer-type: "Hud";
+  text-layer-type: "Hud";
+  collision-enabled: enabled;
+};
+@dpi-factor                             : 0.3673;
+@annotation-poi-icon-size               : 74pt * @dpi-factor;
+@annotation-poi-icon-opacity            : animated(fade,[0 : 0  , 0.1 : 1  ]);
+@annotation-poi-collision               : disabled;
+@annotation-poi-text-size               : 12pt;
+@annotation-poi-text-color              : #ffffff;
+@annotation-poi-text-font               : @text_medium;
+@annotation-poi-text-opacity            : animated(fade,[0 : 0  , 0.1 : 1  ]);
+@annotation-poi-text-placement          : billboard;
+@annotation-poi-text-offset             :[-0.4, 0.3 ];
+@annotation-poi-text-offset-waypoint    :[10pt, 18pt];
+@annotation-poi-icon-offset-waypoint    :[0   , 0   ];
+@priority-annotations                   : 1000;
+@priority-annotation-home               : @priority-annotations + 7;
+@priority-annotation-predictive-default : @priority-annotations + 6;
+@priority-annotation-default            : @priority-annotations + 5;
+@priority-annotation-waypoints          : @priority-annotations + 4;
+@priority-annotation-search             : @priority-annotations + 3;
+@priority-annotation-dropped-pin        : @priority-annotations + 2;
+@priority-annotation-pois               : @priority-annotations + 1;
+layer<custom-line> qtarp-navigable-route
+[custom-line-type = "route.NAVIGABLE_ROUTE"]
+{
+  width               : @route_width;
+  color               : @route_A_color_active;
+  opacity             : 1;
+  enable-route-eating : true;
+  join                : round;
+  simplify-factor     : @simplify-line;
+  simplify-func       : @simplify-line-func;
+};
+layer<custom-line> qtarp-navigable-route-outline
+[custom-line-type = "route.NAVIGABLE_ROUTE"]
+{
+  outline             ;
+  width               : @route_width * @outline_factor;
+  color               : @route_outline_color_active;
+  opacity             : 1;
+  enable-route-eating : true;
+  join                : round;
+  simplify-factor     : @simplify-line;
+  simplify-func       : @simplify-line-func;
+};
+layer<custom-line> qtarp-waypoint-route
+[custom-line-type = "route.OVERVIEW_ROUTE_ADD_WAYPOINT"]
+{
+  width               : @route_width;
+  color               : @route_to_waypoint;
+  opacity             : 1;
+  enable-route-eating : true;
+  join                : round;
+  simplify-factor     : @simplify-line;
+  simplify-func       : @simplify-line-func;
+};
+layer<custom-line> qtarp-waypoint-route-outline
+[custom-line-type = "route.OVERVIEW_ROUTE_ADD_WAYPOINT"]
+{
+  outline             ;
+  width               : @route_width * @outline_factor;
+  color               : @route_to_waypoint_outline;
+  opacity             : 1;
+  enable-route-eating : true;
+  join                : round;
+  simplify-factor     : @simplify-line;
+  simplify-func       : @simplify-line-func;
+};
+layer<custom-line> qtarp-routes
+    [[custom-line-type = "route.OVERVIEW_ROUTE_A"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_B"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_C"],
+    [custom-line-type = "active_route_1"],
+    [custom-line-type = "active_route_2"]]
+    {
+    width: @route_width;
+    opacity: 1;
+    enable-route-eating: true;
+    join: round;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+    [custom-line-type = "active_route_1"]
+    {
+        color: @route_A_color_active;
+    }
+    [custom-line-type = "active_route_2"]
+    {
+        color: @route_B_color_active;
+    }
+    [custom-line-type = "route.OVERVIEW_ROUTE_A"]
+    {
+        color: @route_A_color_active;
+    }
+    [custom-line-type = "route.OVERVIEW_ROUTE_B"]
+    {
+        color: @route_B_color_active;
+    }
+    [custom-line-type = "route.OVERVIEW_ROUTE_C"]
+    {
+        color: @route_C_color_active;
+    }
+};
+layer<custom-line> qtarp-routes-outline
+    [[custom-line-type = "route.OVERVIEW_ROUTE_A"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_B"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_C"],
+    [custom-line-type = "active_route_1"],
+    [custom-line-type = "active_route_2"]]
+    {
+    outline;
+    width: @route_width * @outline_factor;
+    color: @route_outline_color_active;
+    opacity: 1;
+    enable-route-eating: true;
+    join: round;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+};
+layer<custom-line> qtarp-route-trace
+    [[custom-line-type = "route.OVERVIEW_ROUTE_A"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_B"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_C"],
+    [custom-line-type = "active_route_1"],
+    [custom-line-type = "active_route_2"]]
+{
+  width: @route_width;
+  opacity: 1;
+  color: @route_trace_color;
+  enable-route-eating: false;
+  join: round;
+  simplify-factor: @simplify-line;
+  simplify-func: @simplify-line-func;
+};
+layer<custom-line> qtarp-route-trace-outline
+    [[custom-line-type = "route.OVERVIEW_ROUTE_A"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_B"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_C"],
+    [custom-line-type = "active_route_1"],
+    [custom-line-type = "active_route_2"]]
+    {
+    outline;
+    width: @route_width * @outline_factor;
+    color: @route_trace_outline_color;
+    opacity: 1;
+    enable-route-eating: false;
+    join: round;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+};
+layer<custom-line> qtarp-routes-inactive
+    [[custom-line-type = "route.OVERVIEW_ROUTE_A.inactive"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_B.inactive"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_C.inactive"],
+    [custom-line-type = "inactive_route_1"],
+    [custom-line-type = "inactive_route_2"]]
+{
+    width: @route_width;
+    opacity: 1;
+    enable-route-eating: true;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+    [custom-line-type = "inactive_route_1"]
+    {
+        color: @route_A_color_inactive;
+    }
+    [custom-line-type = "inactive_route_2"]
+    {
+        color: @route_B_color_inactive;
+    }
+    [custom-line-type = "route.OVERVIEW_ROUTE_A.inactive"]
+    {
+        color: @route_A_color_inactive;
+    }
+    [custom-line-type = "route.OVERVIEW_ROUTE_B.inactive"]
+    {
+        color: @route_B_color_inactive;
+    }
+    [custom-line-type = "route.OVERVIEW_ROUTE_C.inactive"]
+    {
+        color: @route_C_color_inactive;
+    }
+};
+layer<custom-line> qtarp-routes-outline-inactive
+    [[custom-line-type = "route.OVERVIEW_ROUTE_A.inactive"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_B.inactive"],
+    [custom-line-type = "route.OVERVIEW_ROUTE_C.inactive"],
+    [custom-line-type = "inactive_route_1"],
+    [custom-line-type = "inactive_route_2"]]
+{
+    outline;
+    width: @route_width * @outline_factor;
+    color: @route_outline_color_inactive;
+    opacity: 1;
+    enable-route-eating: true;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+};
+layer<custom-line> qtarp-routes-traffic
+    [[custom-line-type = "route.SLOW_SPEED_EDGE"],
+    [custom-line-type = "route.CONGESTED_EDGE"],
+    [custom-line-type = "route.CLOSED_EDGE"]]
+    {
+    width: @route_width;
+    opacity: 1;
+    enable-route-eating: true;
+    color: @route_traffic_free_active;
+    join: round;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+    [custom-line-type = "route.SLOW_SPEED_EDGE"]
+    {
+        color: @route_traffic_slow_active;
+    }
+    [custom-line-type = "route.CONGESTED_EDGE"]
+    {
+        color: @route_traffic_congested_active;
+    }
+    [custom-line-type = "route.CLOSED_EDGE"]
+    {
+        color: @route_traffic_closed_active;
+    }
+};
+layer<custom-line> qtarp-routes-traffic-outline
+    [[custom-line-type = "route.SLOW_SPEED_EDGE"],
+    [custom-line-type = "route.CONGESTED_EDGE"],
+    [custom-line-type = "route.CLOSED_EDGE"]]
+    {
+    width: @route_width * @outline_factor;
+    opacity: 1;
+    enable-route-eating: true;
+    color: @route_outline_color_active;
+    join: round;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+};
+layer<custom-line> qtarp-routes-traffic-inactive
+    [[custom-line-type = "route.FREE_FLOW_EDGE.inactive"],
+    [custom-line-type = "route.SLOW_SPEED_EDGE.inactive"],
+    [custom-line-type = "route.CONGESTED_EDGE.inactive"],
+    [custom-line-type = "route.CLOSED_EDGE.inactive"]]
+    {
+	width: @route_width;
+	opacity: 1;
+    enable-route-eating: true;
+    simplify-factor: @simplify-line;
+    simplify-func: @simplify-line-func;
+    [custom-line-type = "route.FREE_FLOW_EDGE.inactive"]
+    {
+        color: @route_traffic_free_inactive;
+    }
+    [custom-line-type = "route.SLOW_SPEED_EDGE.inactive"]
+    {
+        color: @route_traffic_slow_inactive;
+    }
+    [custom-line-type = "route.CONGESTED_EDGE.inactive"]
+    {
+        color: @route_traffic_congested_inactive;
+    }
+    [custom-line-type = "route.CLOSED_EDGE.inactive"]
+    {
+        color: @route_traffic_closed_inactive;
+    }
+};
+layer<annotation> qtarp-search-annotations[annotation-data-match="search_annotations.*"]
+{
+    text                : $custom-text                   ;
+    collision-enabled   : @annotation-poi-collision      ;
+    icon-size           : @annotation-poi-icon-size      ;
+    icon-opacity        : @annotation-poi-icon-opacity   ;
+    text-font           : @annotation-poi-text-font      ;
+    text-color          : @annotation-poi-text-color     ;
+    text-position-offset: @annotation-poi-text-offset    ;
+    text-opacity        : @annotation-poi-text-opacity   ;
+    text-placement      : @annotation-poi-text-placement ;
+    text-size           : @annotation-poi-text-size      ;
+    priority            : @priority-annotation-search    ;
+    text-alignment      : "center"                       ;
+    text-valignment     : "center"                       ;
+    fade-time           : 0.1                            ;
+    [annotation-data = "search_annotations.default"]
+    {
+        icon-image: "k2/bg-poi-on-map.png";
+        priority: 900 + $custom-priority;
+    }
+    [annotation-data = "search_annotations.dot"]
+    {
+        icon-size: @annotation-poi-icon-size * 0.5;
+        icon-image: "k2/bg-poi-on-map.png";
+        priority: 900;
+    }
+    [annotation-data = "search_annotations.atm"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-atm.png"      , 1: "k2/icon-poi-atm-night.png"]);
+    }
+    [annotation-data = "search_annotations.attraction"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-camera.png"   , 1: "k2/icon-poi-camera-night.png"]);
+    }
+    [annotation-data = "search_annotations.campingsites"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-rest.png"     , 1: "k2/icon-poi-rest-night.png"]);
+    }
+    [annotation-data = "search_annotations.chargingstation"] {
+        icon-image: "k2/icon-poi-charging-station.png";
+    }
+    [annotation-data = "search_annotations.coffee"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-coffee.png"   , 1: "k2/icon-poi-coffee-night.png"]);
+    }
+    [annotation-data = "search_annotations.favorites"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-saved.png"    , 1: "k2/icon-poi-saved-night.png"]);
+    }
+    [annotation-data = "search_annotations.food"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-food.png"     , 1: "k2/icon-poi-food-night.png"]);
+    }
+    [annotation-data = "search_annotations.fuel"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-fuel.png"     , 1: "k2/icon-poi-fuel-night.png"]);
+    }
+    [annotation-data = "search_annotations.health"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-health.png"   , 1: "k2/icon-poi-health-night.png"]);
+    }
+    [annotation-data = "search_annotations.home"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-home.png"     , 1: "k2/icon-poi-home-night.png"]);
+    }
+    [annotation-data = "search_annotations.hotel"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-hotel.png"    , 1: "k2/icon-poi-hotel-night.png"]);
+    }
+    [annotation-data = "search_annotations.parking"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-parking.png"  , 1: "k2/icon-poi-parking-night.png"]);
+    }
+    [annotation-data = "search_annotations.rest"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-rest.png"     , 1: "k2/icon-poi-rest-night.png"]);
+    }
+    [annotation-data = "search_annotations.shopping"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-shopping.png" , 1: "k2/icon-poi-shopping-night.png"]);
+    }
+    [annotation-data = "search_annotations.work"] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-location.png" , 1: "k2/icon-poi-location-night.png"]);
+    }
+};
+layer<annotation> qtarp-custom-poi-annotations[annotation-data="custom_poi_annotation"]
+{
+    icon-image           : $texture;
+    icon-size            : @annotation-poi-icon-size;
+    icon-opacity         : @annotation-poi-icon-opacity;
+    text                 : $custom-text;
+    text-font            : @annotation-poi-text-font;
+    text-color           : @annotation-poi-text-color;
+    text-position-offset : @annotation-poi-text-offset;
+    text-opacity         : @annotation-poi-text-opacity;
+    text-placement       : @annotation-poi-text-placement;
+    text-size            : @annotation-poi-text-size;
+    text-alignment       : "center";
+    text-valignment      : "center";
+    priority             : @priority-annotation-search;
+    collision-enabled    : @annotation-poi-collision;
+    fade-time            : 0.1;
+};
+layer<annotation> qtarp-poi-annotations[annotation-data-match="poi_annotations.*"][zoom>0]
+{
+    icon-size         : @annotation-poi-icon-size;
+    priority          : @priority-annotation-pois;
+    icon-opacity      : animated(fade, [0:0, 1:1]);
+    fade-time         : 0.1;
+    collision-enabled : enabled;
+    [annotation-data = "poi_annotations.default"]
+    {
+        icon-image: stepped(time-of-day, [0: "k2/icon-search-dot.png", 1: "k2/icon-search-dot-night.png"]);
+    }
+    [annotation-data = "poi_annotations.atm"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-atm.png"      , 1: "k2/icon-poi-atm-night.png"]);
+    }
+    [annotation-data = "poi_annotations.attraction"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-camera.png"   , 1: "k2/icon-poi-camera-night.png"]);
+    }
+    [annotation-data = "poi_annotations.campingsites"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-rest.png"     , 1: "k2/icon-poi-rest-night.png"]);
+    }
+    [annotation-data = "poi_annotations.chargingstation"][zoom>=12.995] {
+        icon-image: "k2/icon-poi-charging-station.png";
+    }
+    [annotation-data = "poi_annotations.coffee"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-coffee.png"   , 1: "k2/icon-poi-coffee-night.png"]);
+    }
+    [annotation-data = "poi_annotations.favorites"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-saved.png"    , 1: "k2/icon-poi-saved-night.png"]);
+    }
+    [annotation-data = "poi_annotations.food"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-food.png"     , 1: "k2/icon-poi-food-night.png"]);
+    }
+    [annotation-data = "poi_annotations.fuel"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-fuel.png"     , 1: "k2/icon-poi-fuel-night.png"]);
+    }
+    [annotation-data = "poi_annotations.health"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-health.png"   , 1: "k2/icon-poi-health-night.png"]);
+    }
+    [annotation-data = "poi_annotations.home"][zoom>=1] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-home.png"     , 1: "k2/icon-poi-home-night.png"]);
+    }
+    [annotation-data = "poi_annotations.hotel"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-hotel.png"    , 1: "k2/icon-poi-hotel-night.png"]);
+    }
+    [annotation-data = "poi_annotations.parking"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-parking.png"  , 1: "k2/icon-poi-parking-night.png"]);
+    }
+    [annotation-data = "poi_annotations.rest"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-rest.png"     , 1: "k2/icon-poi-rest-night.png"]);
+    }
+    [annotation-data = "poi_annotations.shopping"][zoom>=12.995] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-shopping.png" , 1: "k2/icon-poi-shopping-night.png"]);
+    }
+    [annotation-data = "poi_annotations.work"][zoom>=1] {
+        icon-image: stepped(time-of-day, [0: "k2/icon-poi-location.png" , 1: "k2/icon-poi-location-night.png"]);
+    }
+};
+layer<annotation> qtarp-waypoint-annotations[annotation-data-match="waypoint.*"][zoom>=0]
+{
+    text                 : $custom-text;
+    icon-size            : 145 * @dpi-factor;
+    icon-position-offset : @annotation-poi-icon-offset-waypoint;
+    text-font            : @annotation-poi-text-font;
+    text-color           : @annotation-poi-text-color;
+    text-position-offset : @annotation-poi-text-offset-waypoint;
+    text-opacity         : @annotation-poi-text-opacity;
+    text-placement       : @annotation-poi-text-placement;
+    text-size            : @annotation-poi-text-size;
+    priority             : @priority-annotation-waypoints + $custom_priority;
+    collision-enabled    : disabled;
+    [annotation-data = "waypoint.candidate"]
+    {
+        icon-image: "k2/waypoint_new_doubled.png";
+        icon-size: 158 * @dpi-factor;
+    }
+    [annotation-data = "waypoint.intermediary"]
+    {
+        icon-image: "k2/waypoint_intermediary_doubled.png";
+    }
+    [annotation-data = "waypoint.final"]
+    {
+        icon-image: "k2/waypoint_final_doubled.png";
+    }
+};
+layer<annotation> qtarp-dropped-pin[annotation-data = "dropped_pin.default"]
+{
+	icon-size  : 90pt * @dpi-factor;
+    priority   : @priority-annotation-dropped-pin;
+    icon-image : stepped(time-of-day, [0: "k2/dropped-pin_doubled.png", 1: "k2/dropped-pin-night_doubled.png"]);
+    icon-position-offset: [0, 0];
+};
+layer<annotation> qtarp-annotation-default[annotation-data = "annotations.default"]
+{
+	icon-size  : @annotation-poi-icon-size;
+    priority   : @priority-annotation-default;
+    icon-image : "k2/dot.png";
+};
+layer<annotation> qtarp-annotation-home[annotation-data = "predictive_card.home"]
+{
+	icon-size  : @annotation-poi-icon-size;
+    priority   : @priority-annotation-home;
+    icon-image : stepped(time-of-day, [0: "k2/icon-poi-home.png", 1: "k2/icon-poi-home-night.png"]);
+};
+layer<annotation> qtarp-annotation-predictive-default[annotation-data = "predictive_card.default"]
+{
+  icon-size  : @annotation-poi-icon-size;
+  icon-image : "k2/icon-poi-location.png";
+  icon-tint  : #0F84EA;
+  priority   : @priority-annotation-predictive-default;
+  icon-color : @annotation-poi-text-color;
+};
+layer<annotation> qtarp-annotation-nearest-point[annotation-data = "nearest_point.default"]
+{
+	icon-size  : @annotation-poi-icon-size;
+    priority   : @priority-annotation-default;
+    icon-image : "k2/icon-60-nearest-point-indicator.png";
+};
+layer<annotation> qtarp-annotation-fixed-pin[annotation-data = "fixed_pin.default"]
+{
+    icon-size  : @annotation-poi-icon-size;
+    priority   : @priority-annotation-default;
+    icon-image : "k2/pin_on_map_save_to_home.png";
+};
+layer<custom-line> qtarp-onstreetparking-regular-pattern[[custom-line-type = "model_shape.onstreet_parking"]][zoom>13]
+{
+    width           : @street_width_formula * 0.65;
+    opacity         : 1;
+    color           : @on_street_parking_regular_outline_color;
+    pattern         : 'k2/on_street_parking_texture.png';
+    pattern-step    : 0.5;
+    simplify-factor : @simplify-line;
+  	simplify-func   : @simplify-line-func;
+};
+layer<custom-line> qtarp-onstreetparking-regular[[custom-line-type = "model_shape.onstreet_parking"]][zoom>13]
+{
+    width           : @street_width_formula * 0.5;
+    opacity         : 1;
+    color           : @on_street_parking_regular_color;
+    simplify-factor : @simplify-line;
+  	simplify-func   : @simplify-line-func;
+};
+layer<custom-line> qtarp-onstreetparking-regular-outline[[custom-line-type = "model_shape.onstreet_parking"]][zoom>13]
+{
+    outline         ;
+    width           : @street_width_formula * 0.7       ;
+    color           : @on_street_parking_regular_outline_color;
+    opacity         : 1;
+    simplify-factor : @simplify-line;
+  	simplify-func   : @simplify-line-func;
+};
+layer<custom-line> qtarp-routes-gap[custom-line-type = "model_shape.gap_line_shape"]
+{
+  width               : animated(zoom, [12 : @route_width, 18 : @route_width * 0.3]) ;
+  opacity             : 1;
+  enable-route-eating : true;
+  color               : @route_A_color_active;
+  pattern             : "k2/offroad_pattern.png" ;
+  pattern-step        : stepped(zoom, [12 : 0.2, 18 : 0.5]) ;
+};
+layer<custom-line> qtarp-routes-4wd[custom-line-type = "route.routeOffroad"]
+{
+  width: @route_width;
+  opacity: 1;
+  color: @route_A_color_active;
+  dash-array: [2, 4];
+};
+layer<annotation> qtarp-annotation-alerts[annotation-data-match = "alert_annotations.*"]
+{
+  icon-size  : @annotation-poi-icon-size;
+  priority   : @priority-annotation-default;
+  [annotation-data = "alert_annotations.Alert_SpeedCamera"]
+  {
+      icon-image: "k2/icon-56-traffic-cam-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_SchoolZone"]
+  {
+      icon-image: "k2/icon-56-traffic-school-zone-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_RailwayCrossing"]
+  {
+      icon-image: "k2/icon-56-traffic-railway-crossing-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_AccessRestriction"]
+  {
+      icon-image: "k2/icon-90-low-overpass-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_AccessRestrictionCritical"]
+  {
+      icon-image: "k2/icon-90-low-overpass-red.png";
+  }
+  [annotation-data = "alert_annotations.Alert_PhysicalRestriction"]
+  {
+      icon-image: "k2/icon-90-low-overpass-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_PhysicalRestrictionCritical"]
+  {
+      icon-image: "k2/icon-90-low-overpass-red.png";
+  }
+  [annotation-data = "alert_annotations.Alert_RoadNarrows"]
+  {
+      icon-image: "k2/icon-90-low-overpass-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_SharpCurveLeft"]
+  {
+      icon-image: "k2/icon-90-low-overpass-orange.png";
+  }
+  [annotation-data = "alert_annotations.Alert_SharpCurveRight"]
+  {
+      icon-image: "k2/icon-90-low-overpass-orange.png";
+  }
+};
+layer<custom-line> qtarp-adi-line[[custom-line-type = "route.ADI_LINE"], [custom-line-type = "scene_lines"]]
+{
+  width: animated(zoom, [12: @route_width, 18: @route_width * 0.6]);
+  opacity: 1;
+  enable-route-eating: false;
+  color: @route_A_color_active;
+  simple-dash-array: [2, 5];
+  line-layer-type: "2DNoReprojection";
+};
+@circle_width: 33pt;
+@cvp_offset: 15pt;
+@panel_height: 36pt;
+@panel_half_height: @panel_height / 2pt;
+@panel_full_width: 81pt;
+@panel_width: @panel_full_width - @circle_width / 2.0pt;
+@panel_half_width: @panel_width / 2.0pt;
+@lower_panel_width: @panel_width;
+@lower_panel_height: 14.85pt;
+@sign_center_x: $horizontal * @panel_height;
+@sign_center_y: 0pt;
+@lower_panel_vertical_bump: empty($average-speed) ? 0pt : @lower_panel_height;
+@horizontal_offset: $horizontal * (@panel_full_width / 2.0pt + @cvp_offset + @panel_half_height);
+@total_h_movement: @cvp_offset * 2pt + @panel_height + @panel_width;
+@panel_content_half_offset: animated(horizontal, [0:0, 1: @panel_half_width]);
+@panel_content_text_half_offset: @horizontal_offset;
+@vertical_offset: $vertical - $vertical_offset * @panel_height + @lower_panel_vertical_bump;
+@kor_icon_color: animated(time-of-day, [0:#fff, 1: #59626e]);
+@kor_text_color: animated(time-of-day, [0:$cur-speed-color-day, 1: $cur-speed-color-night]);
+@circle_animation: animated(time, [0:15, 1: 100]) * $show-warning-anim;
+@circle_opacity: animated(time, [0:0.5, 1:0]) * $show-warning-anim;
+layer<annotation> kor-speed-cam[annotation-data="kor-speed-cam"]
+{
+	state left
+	{
+		horizontal: -1.0, 1.0s out-elastic;
+		vertical: 0.5, 1.0s out-elastic;
+	};
+	state right
+	{
+		horizontal: 1.0, 1.0s out-elastic;
+		vertical: 0.5, 1.0s out-elastic;
+	};
+	behaviour-type: "avoidRoutes";
+	icon-layer-type: "2DImportant";
+	text-layer-type: "2DImportant";
+	collision-enabled: disabled;
+	text-font: @text_medium;
+	icon-placement: billboard;
+	icon-anchor-position:[0,0];
+	animation-duration: 2;
+	icon-opacity: -1;
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 0;
+		circle-size: @circle_animation;
+   		circle: [0.0, 0.0, 1.0, 1.0];
+   		icon-color: #f00;
+   		icon-opacity: @circle_opacity;
+   		icon-position-offset: [@sign_center_x, @sign_center_y + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 1;
+		circle-size: @circle_animation * 1.5;
+   		circle: [0.0, 0.0, 1.0, 1.0];
+   		icon-color: #f00;
+   		icon-opacity: @circle_opacity;
+   		icon-position-offset: [@sign_center_x, @sign_center_y + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 2;
+		circle-size: @circle_animation * 2;
+   		circle: [0.0, 0.0, 1.0, 1.0];
+   		icon-color: #f00;
+   		icon-opacity: @circle_opacity;
+   		icon-position-offset: [@sign_center_x, @sign_center_y + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 3;
+		icon-image: "kor/panel_unoptimized.png";
+		icon-color: @kor_icon_color;
+		icon-anchor-position: [-1,0];
+  		icon-position-offset: [$horizontal * @panel_half_width, @vertical_offset];
+  		icon-size: [@panel_width  * (-1.15 * $horizontal), @panel_height];
+  		icon-opacity: 1;
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 13;
+		circle-size: [@panel_height,@panel_height];
+		circle:[0.0,0.0,1.0,1.0];
+		icon-color: @kor_icon_color;
+		icon-opacity: 1;
+		icon-position-offset: [@sign_center_x, @sign_center_y + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 8;
+		icon-image: "kor/separator.png";
+		icon-color: @kor_text_color;
+		icon-position-offset: [@horizontal_offset + $horizontal * 4pt, @vertical_offset];
+		icon-size: [@panel_width *0.7pt , 1pt];
+		icon-opacity: 0.5;
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		text-alignment: center;
+		priority: 6;
+		text: $current-speed;
+		text-size: 8;
+		text-color: animated(time-of-day, [0:$cur-speed-color-day, 1: $cur-speed-color-night]);
+		text-position-offset: [ @panel_content_text_half_offset, 9pt + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		text-alignment: center;
+		priority: 6;
+		text: $distance;
+		text-size: 8;
+		text-color: animated(time-of-day, [0:#000, 1: #fff]);
+		text-position-offset: [ animated(horizontal, [-1: 0, 1: 12pt]) + @panel_content_text_half_offset, -9pt + @vertical_offset + 0.2pt];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 6;
+		icon-image: "kor/camera.png";
+		icon-position-offset: [2pt + @horizontal_offset - @panel_half_width + 8pt + animated(horizontal, [-1: 0, 1: 12pt])
+							  , -10pt + @vertical_offset];
+		icon-size: [12pt, 6pt];
+		icon-opacity: 1;
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 13+1;
+		circle-size: [@circle_width, @circle_width];
+		circle:[0.0,0.0,1.0,1.0];
+		icon-color: stepped(camera-type, [
+			1:#f00,
+			2:#00f,
+			3:#f00
+			]);
+		icon-opacity: 1;
+		icon-position-offset: [@sign_center_x, @sign_center_y + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 13+2;
+		circle-size: [@circle_width - 4pt, @circle_width -4pt];
+		circle:[0.0,0.0,1.0,1.0];
+		icon-color: #fff;
+		icon-opacity: 1;
+		icon-position-offset: [@sign_center_x, @sign_center_y + @vertical_offset];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 13+7;
+		text: $speed-limit;
+		text-opacity: stepped(camera-type,[2:1, 3:0, 4:1]);
+		text-alignment: center;
+		text-size: 12;
+		text-position-offset:[@sign_center_x, @vertical_offset + 6pt + stepped(camera-type,[3:0, 4:-6pt, 5:0])];
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 13+7;
+		icon-image: stepped(camera-type, [
+			0: "default_texture.png",
+			1: "kor/camera.png",
+			2: "kor/camera2.png",
+			3: "kor/sign1.png",
+			4: "kor/sign2.png",
+			5: "kor/sign3.png",
+			6: "kor/camera.png"
+			]);
+		icon-position-offset: stepped(camera-type,[
+			0: [0pt + @sign_center_x, 0pt + @sign_center_y + @vertical_offset],
+			1: [0pt + @sign_center_x, -9pt + @sign_center_y + @vertical_offset],
+			2: [0pt + @sign_center_x, -9pt + @sign_center_y + @vertical_offset],
+			3: [0pt + @sign_center_x, 0pt + @sign_center_y + @vertical_offset],
+			4: [0pt + @sign_center_x, 9pt + @sign_center_y + @vertical_offset],
+			5: [0pt + @sign_center_x, -9pt + @sign_center_y + @vertical_offset],
+			6: [0pt + @sign_center_x, -8pt + @sign_center_y + @vertical_offset]
+			]);
+		icon-size: stepped(camera-type,[
+			0: 0pt,
+			1: 12pt,
+			2: 12pt,
+			3: 20pt,
+			4: 12pt,
+			5: 12pt,
+			6: 12pt
+			]);
+		icon-opacity: stepped(camera-type, [0: -1, 1: 1]);
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 113+8;
+		icon-opacity: 1.0;
+		icon-image: stepped(camera-type,[
+			5: "default_texture.png",
+			6: "kor/camera_addon.png"
+			]);
+		icon-position-offset: stepped(camera-type,[
+			5: [0pt + @sign_center_x, 0pt + @sign_center_y + @vertical_offset],
+			6: [7pt + @sign_center_x, -8pt + @sign_center_y + @vertical_offset]
+			]);
+		icon-size: stepped(camera-type, [
+			5: [0pt,0pt],
+			6: [3pt, 6pt]
+			]);
+	}
+	[annotation-data="kor-speed-cam"]
+	{
+		priority: 8;
+		icon-image: "kor/lower_panel.png";
+		icon-color: @kor_icon_color;
+		icon-size: [@lower_panel_width, @lower_panel_height];
+		icon-position-offset: [@horizontal_offset, -@panel_half_height + @vertical_offset -1pt];
+		icon-anchor-position: [0,-1];
+		icon-opacity: 1;
+		text: $average-speed;
+		text-opacity: empty($average-speed) ? 0 : 1;
+		icon-opacity: empty($average-speed) ? -1 : 1;
+		text-alignment: right;
+		text-size: 8;
+		text-color: animated(time-of-day, [0: $avg-speed-color-day, 1: $avg-speed-color-night]);
+		text-position-offset: [ @horizontal_offset - $textWidth / 2.0pt, -@panel_half_height + @vertical_offset - @lower_panel_height / 2pt];
+	}
+};
+layer<annotation> kor-speed-cam-shield[annotation-data="kor-speed-cam-shield"][zoom>=11]
+{
+	icon-layer-type: "2DImportant";
+	text-layer-type: "2DImportant";
+	collision-enabled: disabled;
+	icon-placement: billboard;
+	icon-opacity: 1.0;
+   	[annotation-data="kor-speed-cam-shield"]
+   	{
+   		icon-image: stepped(camera-type, [
+			0: "default_texture.png",
+			1: "kor/camera.png",
+			2: "kor/camera2.png",
+			3: "kor/sign1.png",
+			4: "kor/sign2.png",
+			5: "kor/sign3.png",
+			6: "kor/camera.png"
+			]);
+		icon-size: stepped(camera-type,[
+			0: 0pt,
+			1: 12pt,
+			2: 12pt,
+			3: 20pt,
+			4: 12pt,
+			5: 12pt,
+			6: 7pt
+			]) * $custom_size_factor;
+		icon-position-offset: stepped(camera-type,[
+			5: [0pt, 0pt],
+			6: [-1pt, 0pt]
+			]);
+		icon-size: 12pt;
+		priority: 3;
+		icon-opacity: stepped(camera-type, [0: -1, 1: 1]);
+   	}
+   	[annotation-data="kor-speed-cam-shield"]
+   	{
+		priority: 113+8;
+		icon-opacity: 1.0;
+		icon-image: stepped(camera-type,[
+			5: "default_texture.png",
+			6: "kor/camera_addon.png"
+			]);
+		icon-position-offset: stepped(camera-type,[
+			5: [0pt, 0pt],
+			6: [5.58pt, 0pt]
+			]);
+		icon-size: stepped(camera-type, [
+			5: [0pt,0pt],
+			6: [1.75pt, 0pt]
+			]);
+	}
+   	[annotation-data="kor-speed-cam-shield"]
+   	{
+   		circle-size: 17pt * $custom_size_factor;
+   		circle: [0.0, 0.0, 1.0, 1.0];
+   		icon-color: stepped(camera-type, [
+			1:#f00,
+			2:#00f,
+			3:#f00
+			]);
+   		priority: 1;
+   	}
+   	[annotation-data="kor-speed-cam-shield"]
+   	{
+   		circle-size: 15pt * $custom_size_factor;
+   		circle: [0.0, 0.0, 1.0, 1.0];
+   		icon-color: #fff;
+   		priority: 2;
+   	}
+};
+@rgc_width: 159.615 + 66.015;
+@rgc_button_width: 66.015;
+@rgc_height: 51.6812;
+@rgc_pin_height: 15;
+@rgc_offset_height: 25;
+@rgc_button_margin:4;
+@rgc_pin_margin:0;
+@rgc_vertical_offset: @rgc_height / 2 + ($rcg-anim-time * @rgc_offset_height) + $rgc-offset;
+@rgc_opacity: stepped(rgc-opacity, [0: 0, 1: $rgc-opacity]);
+@rgc_pin_vertical_offset: $rcg-pin-time * @rgc_offset_height;
+layer<annotation> rainier-rgc[annotation-data="rainier-rgc"]
+{
+	state fadeout
+	{
+		rcg-pin-time: 1.0, 300ms out-back;
+		rcg-pin-opacity: 0.0, 150ms linear;
+		rcg-small-pin-opacity: 0.00, 100ms linear;
+		rcg-anim-time: 1.0, 500ms out-back;
+		rgc-opacity: -1.0, 500ms linear;
+		rgc-offset: @rgc_offset_height, 0ms linear;
+		rgc-highlight-factor: 0.0, 500ms linear;
+	};
+	state normal
+	{
+		rcg-pin-time: 0.0, 100ms linear;
+		rcg-pin-opacity: 1.0, 100ms linear;
+		rcg-small-pin-opacity: 0.00, 100ms linear;
+		rcg-anim-time : 0.0, 100ms linear;
+		rgc-opacity : 1.0, 100ms linear;
+		rgc-offset: @rgc_offset_height;
+		rgc-highlight-factor: 1.0, 100ms linear;
+	};
+	state normal-nopin
+	{
+		rcg-pin-time: 0.0, 100ms linear;
+		rcg-pin-opacity: 0.0, 100ms linear;
+		rcg-small-pin-opacity: 1.00, 100ms linear;
+		rcg-anim-time : 0.0, 100ms linear;
+		rgc-opacity : 1.0, 100ms linear;
+		rgc-offset: 20.0;
+		rgc-highlight-factor: 1.0, 100ms linear;
+	};
+	state pin-only
+	{
+		rcg-pin-time: 0.0, 100ms linear;
+		rcg-pin-opacity: 1.0, 100ms linear;
+		rcg-small-pin-opacity: 0.00, 100ms linear;
+		rcg-anim-time: 1.0, 500ms linear;
+		rgc-opacity: -1.0, 500ms linear;
+		rgc-offset: @rgc_offset_height;
+		rgc-highlight-factor: 0.0, 500ms linear;
+	};
+	fade-time: 0;
+	icon-opacity: @rgc_opacity;
+	text-opacity: @rgc_opacity;
+	icon-rotation: 0;
+	icon-layer-type: "2DImportant";
+	text-layer-type: "2DImportant";
+	collision-enabled: disabled;
+	text-font: @text_regular;
+	icon-placement: billboard;
+	icon-anchor-position:[0, 0];
+	[annotation-data="rainier-rgc"]
+	{
+		priority:1;
+		rounded-corners: [0,0,0,0];
+		gradient-start-color: #002b5a;
+	    gradient-type: rectangle;
+	    gradient-settings: [0.5, 0.5, 0.5, 0];
+    	gradient-end-color: #001a40;
+		pickable-id: 0;
+		shape-size: [@rgc_width, @rgc_height + 4];
+		icon-position-offset: [0, @rgc_vertical_offset];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority:2;
+		rounded-corners: [0,0,0,0];
+		gradient-start-color: #0000;
+		gradient-end-color: #0000;
+		gradient-type: rectangle;
+		icon-halo-color: #eaf1ff;
+		icon-halo-width: stepped(highlighted_index, [0: 0, 1: 3, 2: 0]) * $rgc-highlight-factor;
+		shape-size: [@rgc_width, @rgc_height + 4];
+		icon-position-offset: [0, @rgc_vertical_offset];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority:0;
+		icon-image: "rgc_pin.png";
+		icon-opacity: $rcg-pin-opacity;
+		icon-size: @rgc_pin_height;
+		icon-anchor-position:[0, 0.9];
+		fade-time: 0.2;
+		pickable-id: 1;
+		icon-position-offset: [0, @rgc_pin_vertical_offset];
+		icon-margin: @rgc_pin_margin;
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority:0;
+		icon-image: "32w.png";
+		icon-opacity: $rcg-small-pin-opacity;
+		icon-size: 16;
+		icon-anchor-position:[0, 0.9];
+		fade-time: 0.2;
+		icon-position-offset: [0, @rgc_pin_vertical_offset + 10];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority:3;
+		icon-image: "loading.png";
+		icon-opacity: stepped(is-loading, [0: 0, 1:@rgc_opacity]);
+		icon-rotation: animated(time, [0: 0, 1: 360]);
+		icon-size: 24;
+		icon-position-offset: [@rgc_width / 2 - 66.015 / 2, @rgc_vertical_offset];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority: 2;
+		rounded-corners: [0,0,0,0];
+		gradient-start-color: stepped(has-failed, [
+		0: stepped(is-loading, [0: #00914d, 1: #494949]),
+		1: #494949
+		]);
+		gradient-end-color: stepped(has-failed, [
+		0: stepped(is-loading, [0: #00522f, 1: #2a2a2a]),
+		1: #2a2a2a
+		]);
+	    gradient-type: radial;
+	    gradient-settings: [0,1, 1,0];
+		pickable-id: 2;
+		icon-position-offset: [@rgc_width / 2 - 66.015 / 2 - 2, @rgc_vertical_offset];
+		shape-size: [66.015, 51.6812];
+		icon-margin: @rgc_button_margin;
+		icon-opacity: @rgc_opacity;
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority: 3;
+		rounded-corners: [0,0,0,0];
+		gradient-start-color: #0000;
+		gradient-end-color: #0000;
+		gradient-type: rectangle;
+		icon-halo-color: #0f0;
+		icon-halo-width: stepped(highlighted_index, [1: 0, 2: 1, 3: 0 ]) * $rgc-highlight-factor;
+		icon-position-offset: [@rgc_width / 2 - 66.015 / 2 - 2, @rgc_vertical_offset];
+		shape-size: [66.015, 51.6812];
+		icon-margin: @rgc_button_margin;
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority: 4;
+		text: $title;
+		text-max-width: @rgc_width - @rgc_button_width - 4;
+		text-width-clamp: "clamp";
+		text-alignment: auto;
+		text-color: #fff;
+		text-size: 15;
+		text-position-offset: [- @rgc_width / 2 + 3,18+@rgc_vertical_offset];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority: 4;
+		text: stepped(is-loading, [0: $content, 1:""]);
+		text-max-width: @rgc_width - @rgc_button_width - 4;
+		text-width-clamp: "clamp";
+		text-alignment: auto;
+		text-color: #758fb7;
+		text-size: 12;
+		text-position-offset: [- @rgc_width / 2 + 3,0+@rgc_vertical_offset];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority: 4;
+		text: stepped(is-loading, [0: $eta, 1:""]);
+		text-max-width: @rgc_width - @rgc_button_width - 4;
+		text-width-clamp: "clamp";
+		text-alignment: auto;
+		text-color: #758fb7;
+		text-size: 12;
+		text-position-offset: [ - @rgc_width / 2 + 3,-12+@rgc_vertical_offset];
+	}
+	[annotation-data="rainier-rgc"]
+	{
+		priority: 4;
+		text: $button-text;
+		text-max-width: @rgc_button_width;
+		text-width-clamp: "resize";
+		text-opacity: stepped(is-loading, [0: @rgc_opacity, 1:0]);
+		text-alignment: center;
+	    text-valignment: center;
+		text-color: #fff;
+		text-size: 13;
+		text-position-offset: [@rgc_width / 2 - 66.015 / 2 - 2,3+@rgc_vertical_offset];
+	}
+};
+@cold_front_color: stepped(weather-contrast, [0:#00f, 1: #4040bf]);
+@warm_front_color: stepped(weather-contrast, [0:#f00, 1: #bf4040]);
+@dry_front_color: stepped(weather-contrast, [0:#c60, 1:#963]);
+@occluded_front_color: stepped(weather-contrast, [0:#9400d3, 1:#7f359e]);
+@trought_front_color: stepped(weather-contrast, [0:#c60, 1:#963]);
+@squall_front_color: stepped(weather-contrast, [0:#f00, 1: #bf4040]);
+@front_line_width: 6px;
+@front_image_width: 256px;
+layer<custom-line> cold_front [custom-line-type = "cold_front"]
+{
+    width: 32px;
+    color: @cold_front_color;
+    pattern: "weather/triangle.png";
+  	pattern-step: 1.0;
+};
+layer<custom-line> cold_front_background [custom-line-type = "cold_front"]
+{
+    width: @front_line_width;
+    color: @cold_front_color;
+};
+layer<custom-line> warm_front [custom-line-type = "warm_front"]
+{
+    width: 32px;
+    color: @warm_front_color;
+    pattern: "weather/semi-circle.png";
+  	pattern-step: 1.0;
+};
+layer<custom-line> warm_front_background [custom-line-type = "warm_front"]
+{
+    width: @front_line_width;
+    color: @warm_front_color;
+};
+layer<custom-line> stationary_front[custom-line-type = "stationary_front"]
+{
+	width: 128px;
+	pattern: stepped(weather-contrast, [0:"weather/stationary.png", 1:"weather/stationary_low_contrast.png"]);
+	color: #fff;
+	pattern-step: 1.0;
+};
+layer<custom-line> stationary_front_background[custom-line-type = "stationary_front"]
+{
+	width: @front_line_width;
+	color: @cold_front_color;
+};
+layer<custom-line> occluded_front[custom-line-type = "occluded_front"]
+{
+	width: 128px;
+	pattern: "weather/occluded.png";
+	color: @occluded_front_color;
+	pattern-step: 1.0;
+};
+layer<custom-line> occluded_front_background[custom-line-type = "occluded_front"]
+{
+	color: @occluded_front_color;
+	width: @front_line_width;
+};
+layer<custom-line> dry_front [custom-line-type = "dry_front"]
+{
+	width: 32px;
+	color: @dry_front_color;
+	pattern: "weather/semi-circle-hollow.png";
+	pattern-step: 1.0;
+};
+layer<custom-line> dry_front_background [custom-line-type = "dry_front"]
+{
+	width: @front_line_width;
+	color: @dry_front_color;
+};
+layer<custom-line> trough_front[custom-line-type = "trough_front"]
+{
+	width: 32px;
+	color: @trought_front_color;
+	pattern: "weather/trough.png";
+	pattern-step: 1.0;
+};
+layer<custom-line> squall_front[custom-line-type = "squall_front"]
+{
+	width: 64px;
+	color: @squall_front_color;
+	pattern: "weather/squall.png";
+	pattern-step: 1.0;
+};
+layer<annotation> isobar-pressure [[annotation-data="high_pressure"],[annotation-data="low_pressure"]][zoom > 0]
+{
+    collision-enabled: disabled;
+    icon-size: 20;
+	[annotation-data="high_pressure"]
+	{
+	    icon-image: "weather/high_pressure.png";
+	    color: stepped(weather-contrast, [0:#00f, 1: #4040bf]);
+	}
+	[annotation-data="low_pressure"]
+	{
+	    icon-image: "weather/low_pressure.png";
+	    color: stepped(weather-contrast, [0:#f00, 1: #bf4040]);
+	}
+};
+@color_default : animated(time-of-day,[0:#142843, 1:#081120]);
+@color_blue_top: #226fff;
+@color_blue_bottom: #1957b6;
+@color_purple: #b41dac;
+@color_red: #b14133;
+@color_text_default: #fff;
+@color_text_off_white: #f3f3f3;
+@color_text_unfocused: #9fb4ca;
+@color_main_top: stepped(smart-bubble-type,[
+	0: @color_default,
+	1: @color_default,
+	2: @color_blue_top,
+	3: @color_default,
+	4: @color_purple,
+	5: @color_red
+]);
+@color_main_bottom: stepped(smart-bubble-type,[
+	0: @color_default,
+	1: @color_default,
+	2: @color_blue_bottom,
+	3: @color_default,
+	4: @color_purple,
+	5: @color_red
+]);
+@color_text: stepped(smart-bubble-type,[
+	0: @color_text_default,
+	1: @color_text_unfocused,
+	2: @color_text_default,
+	3: @color_text_off_white,
+	4: @color_text_off_white,
+	5: @color_text_default
+]);
+@bubble_handle_width: 10;
+@bubble_handle_height: 5;
+@bubble_handle_corner_width: 36 / 2;
+@bubble_handle_corner_height: 36 / 2;
+@bubble_handle_offset: @bubble_handle_height / 2pt;
+@bubble_distance: 8pt * (1.0 - $diag* 0.3);
+@low_battery_icon_width: 15pt;
+@low_battery_icon_height: 15pt;
+@bubble_content_width: stepped(smart-bubble-type, [
+2: $textWidth,
+3: max(computeTextWidth($custom-text), computeTextWidth($custom-secondary-text)),
+4: $textWidth,
+5: @low_battery_icon_width + 5pt
+]);
+@bubble_content_height: stepped(smart-bubble-type, [
+0: $textHeight,
+1: $textHeight,
+2: $textHeight,
+3: $textHeight * 2pt + 2pt,
+4: $textHeight,
+5: @low_battery_icon_height + 5pt
+]);
+@bubble_content_horizontal_padding: 8pt;
+@bubble_content_vertical_padding: 5pt;
+@bubble_width: @bubble_content_horizontal_padding + @bubble_content_width;
+@bubble_height: @bubble_content_vertical_padding + @bubble_content_height;
+@bubble_position_offset_x : $horizontal * (@bubble_width / 2pt + @bubble_handle_offset + @bubble_distance);
+@bubble_position_offset_y: $vertical * (@bubble_height / 2pt + @bubble_handle_offset + @bubble_distance);
+layer<annotation> smart-bubble[annotation-data="smart-bubble"][zoom>=3]
+{
+	state left
+	{
+		horizontal: -1, 150ms out-back;
+		vertical: 0, 150ms out-back;
+		handle:0;
+		diag: 0;
+	};
+	state right
+	{
+		horizontal: 1, 150ms out-back;
+		vertical: 0, 150ms out-back;
+		handle:1;
+		diag: 0;
+	};
+	state _top
+	{
+		horizontal: 0, 150ms out-back;
+		vertical: 1, 150ms out-back;
+		handle:2;
+		diag: 0;
+	};
+	state bottom
+	{
+		horizontal: 0, 150ms out-back;
+		vertical: -1, 150ms out-back;
+		handle: 3;
+		diag: 0;
+	};
+	state top-left
+	{
+		horizontal: -1, 150ms out-back;
+		vertical: 1, 150ms out-back;
+		handle: 4;
+		diag: 1;
+	};
+	state top-right
+	{
+		horizontal: 1, 150ms out-back;
+		vertical: 1, 150ms out-back;
+		handle: 5;
+		diag: 1;
+	};
+	state bottom-left
+	{
+		horizontal: -1, 150ms out-back;
+		vertical: -1, 150ms out-back;
+		handle: 6;
+		diag: 1;
+	};
+	state bottom-right
+	{
+		horizontal: 1, 150ms out-back;
+		vertical: -1, 150ms out-back;
+		handle: 7;
+		diag: 1;
+	};
+	behaviour-settings::
+	{
+		"entries":[
+			{
+				"behaviour-type": "placeInView"
+				"weight": 1
+				"min-requirement": 0.75
+			},
+			{
+				"behaviour-type": "avoidRoutes"
+				"weight": 1
+				"min-requirement": 0.75
+			},
+			{
+				"behaviour-type": "avoidOthers"
+				"weight": 0.66
+				"min-requirement": 0.9
+			},
+			{
+				"behaviour-type": "avoidObstacles"
+				"weight": 0.66
+				"min-requirement": 0.9
+			}
+		]
+		"score-acceptance-threshold": 0.85
+	}
+	icon-layer-type: "2DImportant";
+	text-layer-type: "2DImportant";
+	collision-enabled: disabled;
+	[annotation-data="smart-bubble"]
+	{
+		shape-size: [@bubble_width, @bubble_height];
+		rounded-corners: [2,2,2,2];
+		rounded-corners-radius: 10;
+		gradient-type: rectangle;
+	    gradient-settings: [0.5, 0.5, 0.5, 0];
+		gradient-start-color: @color_main_top;
+		gradient-end-color: @color_main_bottom;
+		icon-opacity: 1;
+    	icon-halo-color: #000;
+    	icon-halo-opacity: 0.1;
+    	icon-halo-width: 0.5;
+    	icon-halo-blur: 0.5;
+    	text: $custom-text;
+    	text-color: @color_text;
+    	text-font: "NotoSans-Medium.ttf";
+    	text-size: 12;
+    	text-alignment: "right";
+    	text-valignment: "center";
+    	text-opacity: stepped(smart-bubble-type,[4:1, 5:0]);
+    	priority: $custom_priority * 2 + 1;
+		pickable-id: 2;
+		icon-position-offset: [ @bubble_position_offset_x, @bubble_position_offset_y];
+		text-position-offset: [ @bubble_position_offset_x - @bubble_content_width / 2pt,
+		stepped(smart-bubble-type, [
+		2:@bubble_position_offset_y,
+		3:@bubble_position_offset_y + 7pt,
+		4:@bubble_position_offset_y
+		])];
+	}
+	[annotation-data="smart-bubble"]
+	{
+		icon-image: stepped(handle, [
+			0: "bubble/handle_1.png",
+			1: "bubble/handle_2.png",
+			2: "bubble/handle_3.png",
+			3: "bubble/handle_4.png",
+			4: "bubble/handle_5.png",
+			5: "bubble/handle_6.png",
+			6: "bubble/handle_7.png",
+			7: "bubble/handle_8.png"
+		]);
+		icon-size: stepped(handle, [
+			0: [@bubble_handle_height,@bubble_handle_width],
+			1: [@bubble_handle_height,@bubble_handle_width],
+			2: [@bubble_handle_width,@bubble_handle_height],
+			3: [@bubble_handle_width,@bubble_handle_height],
+			4: [@bubble_handle_corner_width, @bubble_handle_corner_height],
+			5: [@bubble_handle_corner_height, @bubble_handle_corner_width],
+			6: [@bubble_handle_corner_height, @bubble_handle_corner_width],
+			7: [@bubble_handle_corner_width, @bubble_handle_corner_height]
+		]);
+		icon-color: @color_main_bottom;
+		icon-opacity: 1;
+		icon-position-offset:[
+			$horizontal * (@bubble_distance + 0.2pt + $diag * (@bubble_handle_corner_width / 16 + 0.9pt ) ),
+			$vertical * (@bubble_distance + 0.2pt + $diag * (@bubble_handle_corner_height / 16 + 1.0pt ) )
+		];
+		priority: $custom_priority * 2 + 0;
+		pickable-id: 2;
+	}
+	[annotation-data="smart-bubble"]
+	{
+		text: $custom-secondary-text;
+    	text-color: @color_text_unfocused;
+    	text-font: "NotoSans-Medium.ttf";
+    	text-size: 12;
+    	text-alignment: "center";
+    	text-valignment: "center";
+    	text-opacity: stepped(smart-bubble-type, [2:0,3:1,4:0]);
+    	priority: $custom_priority * 2 + 2;
+		pickable-id: 2;
+		text-position-offset: [ @bubble_position_offset_x, @bubble_position_offset_y - 7pt];
+	}
+	[annotation-data="smart-bubble"]
+	{
+		icon-image: "icon-60-low-battery.png";
+		icon-opacity: stepped(smart-bubble-type, [4:0, 5:1]);
+		icon-size: [@low_battery_icon_width, @low_battery_icon_height];
+		icon-position-offset: [ @bubble_position_offset_x, @bubble_position_offset_y];
+		priority: $custom_priority * 2 + 2;
+		pickable-id: 2;
+	}
+};

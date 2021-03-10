@@ -1,0 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.kotlin_version = "1.4.10"
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        // for release version
+        maven {
+            url "https://telenav.jfrog.io/artifactory/telenav-maven-releases/"
+            credentials {
+                username "${REPO_USER_NAME}"
+                password "${REPO_USER_NAME}"
+            }
+        }
+        //for develop version
+        maven { url "${MAVEN_PUBLIC}" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

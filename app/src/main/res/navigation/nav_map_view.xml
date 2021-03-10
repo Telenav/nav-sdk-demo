@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~ of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~ other countries. Other names may be trademarks of their respective owners.
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_map_view"
+    app:startDestination="@id/mapViewMenuFragment">
+
+    <fragment
+        android:id="@+id/mapViewMenuFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewMenuFragment"
+        android:label="MapViewMenuFragment" >
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewSetUpFragment"
+            app:destination="@id/mapViewSetUpFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewCameraFragment"
+            app:destination="@id/mapViewCameraFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_annotationFragment"
+            app:destination="@id/annotationFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewTuneModeFragment"
+            app:destination="@id/mapViewTuneModeFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewGestureFragment"
+            app:destination="@id/mapViewGestureFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewElementsFragment"
+            app:destination="@id/mapViewElementsFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewThemeFragment"
+            app:destination="@id/mapViewThemeFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewStateFragment"
+            app:destination="@id/mapViewStateFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_vehicleFragment"
+            app:destination="@id/vehicleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapViewSetUpFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewSetUpFragment"
+        android:label="fragment_map_view_set_up"
+        tools:layout="@layout/fragment_map_view_set_up" />
+    <fragment
+        android:id="@+id/mapViewCameraFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewCameraFragment"
+        android:label="fragment_map_view_camera"
+        tools:layout="@layout/fragment_map_view_camera" />
+    <fragment
+        android:id="@+id/annotationFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewAnnotationFragment"
+        android:label="fragment_annotation"
+        tools:layout="@layout/fragment_map_view_annotation" />
+    <fragment
+        android:id="@+id/mapViewTuneModeFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewTuneModeFragment"
+        android:label="fragment_map_view_tune_mode"
+        tools:layout="@layout/fragment_map_view_tune_mode" />
+    <fragment
+        android:id="@+id/mapViewGestureFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewGestureFragment"
+        android:label="fragment_map_view_gesture"
+        tools:layout="@layout/fragment_map_view_gesture" />
+    <fragment
+        android:id="@+id/mapViewElementsFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewElementsFragment"
+        android:label="fragment_map_view_elements"
+        tools:layout="@layout/fragment_map_view_elements" />
+    <fragment
+        android:id="@+id/mapViewThemeFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewThemeFragment"
+        android:label="fragment_map_view_theme"
+        tools:layout="@layout/fragment_map_view_theme" />
+    <fragment
+        android:id="@+id/mapViewStateFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewStateFragment"
+        android:label="fragment_map_view_state"
+        tools:layout="@layout/fragment_map_view_state" />
+    <fragment
+        android:id="@+id/vehicleFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.VehicleFragment"
+        android:label="fragment_map_view_vehicle"
+        tools:layout="@layout/fragment_map_view_vehicle" />
+</navigation>

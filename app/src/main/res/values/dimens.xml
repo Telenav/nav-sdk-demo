@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="regular_text_size">20sp</dimen>
+    <dimen name="dimens_30sp">30sp</dimen>
+    <dimen name="dimens_38sp">38sp</dimen>
+    <dimen name="large_text_size">40sp</dimen>
+
+    <dimen name="regular_padding">20dp</dimen>
+    <dimen name="dimens_5dp">5dp</dimen>
+    <dimen name="dimens_10dp">10dp</dimen>
+    <dimen name="action_bar_height">56dp</dimen>
+</resources>

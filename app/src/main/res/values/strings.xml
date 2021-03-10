@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~  other countries. Other names may be trademarks of their respective owners.
+  -->
+
+<resources>
+    <string name="app_name">tasdk-android-demo</string>
+
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+
+    <string name="commit">commit</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="start_navigation">Start Navigation</string>
+    <string name="get_turnlist">Get Turnlist</string>
+    <string name="stop_navigation">Stop Navigation</string>
+    <string name="search_for_a_dest">Search for a Destination</string>
+    <string name="long_press_to_create_route">Long Press to Create Route</string>
+    <string name="cached_candidate_road">Cached Candidate Road</string>
+    <string name="speed_limit">Speed\nLimit</string>
+    <string name="change_style">Change Style</string>
+    <string name="change_location">Set location</string>
+    <string name="set_location_message">Long press the Map to select new start location</string>
+    <string name="not_available">Not available now!</string>
+    <string name="title_activity_scenario_menu">Scenario Menu</string>
+    <string name="title_activity_map_view_menu">Map View</string>
+    <string name="title_activity_map_view_set_up">Set Up</string>
+    <string name="title_activity_map_view_camera">Camera Position</string>
+    <string name="title_activity_map_view_annotation">Annotation Operation</string>
+    <string name="title_activity_map_view_tune_mode">Tune map mode</string>
+    <string name="title_activity_map_view_elements">Elements Control</string>
+    <string name="title_activity_map_view_gesture">Gesture Operation</string>
+    <string name="title_activity_ota_menu">Ota Menu</string>
+    <string name="title_activity_ota_home_area">HomeArea</string>
+    <string name="title_activity_map_view_theme">Theme Operation</string>
+    <string name="title_activity_map_view_status">Map Diagnosis</string>
+    <string name="title_activity_map_view_vehicle">Vehicle icon</string>
+    <string name="set_vehicle_icon">Set vehicle icon</string>
+    <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>
+    <string name="reset_vehicle_icon">Reset vehicle icon</string>
+    <string name="locate_map_center">Locate map center</string>
+</resources>
