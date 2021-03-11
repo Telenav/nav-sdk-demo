@@ -72,7 +72,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/next_turn_miles_to_go"
             app:layout_constraintVertical_bias="1.0"
-            tools:background="@drawable/ic_turn_slight_left_white"/>
+            tools:background="@drawable/ic_turn_slight_left"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

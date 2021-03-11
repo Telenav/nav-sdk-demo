@@ -368,10 +368,10 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
 
     private fun getTurnDrawable(turnType: Int): Int {
         return when (turnType) {
-            BasicTurn.RIGHT -> R.drawable.ic_turn_right_white
-            BasicTurn.LEFT -> R.drawable.ic_turn_left_white
+            BasicTurn.RIGHT -> R.drawable.ic_turn_right
+            BasicTurn.LEFT -> R.drawable.ic_turn_left
             BasicTurn.CONTINUE -> R.drawable.ic_continue_straight
-            BasicTurn.SLIGHT_LEFT -> R.drawable.ic_turn_slight_left_white
+            BasicTurn.SLIGHT_LEFT -> R.drawable.ic_turn_slight_left
             BasicTurn.SLIGHT_RIGHT -> R.drawable.ic_turn_slight_right
             BasicTurn.STOP_RIGHT -> R.drawable.ic_stop_right
             BasicTurn.STOP_LEFT -> R.drawable.ic_stop_left

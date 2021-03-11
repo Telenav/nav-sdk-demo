@@ -138,7 +138,7 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/next_turn_miles_to_go"
-                tools:src="@drawable/ic_turn_left_white" />
+                tools:src="@drawable/ic_turn_left" />
 
             <TextView
                 android:id="@+id/next_turn_miles_to_go"

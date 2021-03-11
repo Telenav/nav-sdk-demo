@@ -1,0 +1,12 @@
+<!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~  other countries. Other names may be trademarks of their respective owners.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="42dp"
+    android:height="49dp" android:viewportWidth="42" android:viewportHeight="49">
+    <path
+        android:pathData="M7.0268,13.925C11.6968,9.253 17.8858,6.913 24.0068,6.899V0.899L41.9998,9.897L24.0068,18.898V12.899C19.4208,12.913 14.7668,14.667 11.2678,18.167C7.7798,21.656 6.0278,26.222 6.0028,30.794L6.0118,45.897C6.0138,47.555 4.6698,48.899 3.0128,48.899C1.3578,48.899 0.0148,47.558 0.0138,45.903L-0.0002,30.894C-0.0002,24.753 2.3418,18.611 7.0268,13.925Z"
+        android:fillColor="#ffffff" android:fillType="evenOdd" />
+</vector>
