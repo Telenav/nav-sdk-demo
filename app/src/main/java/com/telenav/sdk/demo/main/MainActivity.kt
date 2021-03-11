@@ -10,6 +10,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -110,8 +111,8 @@ class MainActivity : AppCompatActivity() {
 
     private suspend fun initNavSDK(): Boolean {
         // enable tasdk log
-        TaLog.enableWriteLogsToFile(true)
-        TaLog.setLogPath("/sdcard/tasdk.log")
+//        TaLog.enableWriteLogsToFile(true)
+//        TaLog.setLogPath("/sdcard/tasdk.log")
         // TODO set your local writable path
         val sdkCacheDataDir = getCachedDataDir()
         // TODO set your local writable ota path
@@ -128,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         optionsBuilder
             .setDeviceGuid("AndroidDeviceGuid")
             .setUserId("AndroidSampleTest")
-            .setApplicationInfo(ApplicationInfo.builder("demo", "1").build())
+            .setApplicationInfo(ApplicationInfo.builder(packageName, "1").build())
             .setSdkDataDir(otaDataDir)
             .build()
         initDataCollectorService(optionsBuilder.build())
@@ -187,6 +188,15 @@ class MainActivity : AppCompatActivity() {
         checkUserPermission()
 
         setContentView(R.layout.activity_main)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
