@@ -18,8 +18,4 @@ const val SDK_SECRET = "SDK_APP_SECRET"
 
 Screenshots
 -----------
-
-![Scenario menu of navigation](screenshots/scenario_menu_navigation.png)
-![Scenario menu of mapview](screenshots/scenario_menu_map.png)
-![Request route](screenshots/request_route.png)
-![Map annotation](screenshots/map_annotation.png)
+![](screenshots/demo-splash.png)
