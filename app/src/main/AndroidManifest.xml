@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:extractNativeLibs="true"
         android:requestLegacyExternalStorage="true"
+        android:preserveLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
         <activity android:name=".main.MainActivity">
             <intent-filter>

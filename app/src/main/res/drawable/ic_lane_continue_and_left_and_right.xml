@@ -1,11 +1,15 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="39dp"
-    android:height="40dp"
-    android:viewportWidth="39"
-    android:viewportHeight="40">
-  <path
-      android:pathData="M11.5886,26.3998L1.5601,19.9998L11.5886,13.5998V17.4398C13.4153,17.4398 15.1278,17.9385 16.6029,18.8097L16.6029,11.0398H12.8422L19.1101,0.7998L25.3779,11.0398H21.6172L21.6172,18.8097C23.0923,17.9385 24.8049,17.4398 26.6315,17.4398V13.5998L36.6601,19.9998L26.6315,26.3998V22.5598C23.8622,22.5598 21.6172,24.8521 21.6172,27.6798V39.1998H16.6029V27.6798C16.6029,24.8521 14.3579,22.5598 11.5886,22.5598V26.3998Z"
-      android:fillColor="#ffffff"
+<!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~  other countries. Other names may be trademarks of their respective owners.
+  -->
 
-      android:fillType="evenOdd"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="60dp"
+    android:height="55dp" android:viewportWidth="60" android:viewportHeight="55">
+    <path
+        android:pathData="M15.3846,35.3846V30.7692H20C23.3987,30.7692 26.1538,33.5244 26.1538,36.9231V54.6154V54.6155H33.8462V54.6154V36.9232C33.8462,33.5245 36.6013,30.7694 40,30.7694H44.6154V35.3847L60,26.9232L44.6154,18.4617V23.077H38.4615C35.184,23.077 32.2057,24.3582 30.0001,26.447C27.7944,24.3581 24.8161,23.0769 21.5385,23.0769L15.3846,23.0769V18.4615L0,26.9231L15.3846,35.3846Z"
+        android:fillColor="#ffffff" android:fillType="evenOdd" />
+    <path
+        android:pathData="M26.154,15.3846H21.5386L30.0001,0L38.4617,15.3846H33.8463V54.6155H26.154V15.3846Z"
+        android:fillColor="#ffffff" />
 </vector>

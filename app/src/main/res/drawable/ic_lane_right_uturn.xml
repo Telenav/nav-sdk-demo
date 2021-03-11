@@ -1,15 +1,15 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="39dp"
-    android:height="40dp"
-    android:viewportWidth="39"
-    android:viewportHeight="40">
-  <path
-      android:pathData="M17.2248,17.6001C22.4301,17.6001 26.6498,21.8666 26.6498,27.1295L26.6493,29.0353L30.4198,29.0354L24.1365,39.2001L17.8531,29.0354L21.623,29.0353L21.6231,27.1295C21.6231,24.7319 19.7466,22.7775 17.3975,22.6858L17.2248,22.6825C14.7957,22.6825 12.8265,24.6735 12.8265,27.1295V39.2001H7.7998V27.1295C7.7998,21.8666 12.0195,17.6001 17.2248,17.6001Z"
-      android:fillColor="#ffffff"
-      android:fillAlpha="1"
-      android:fillType="evenOdd"/>
-  <path
-      android:pathData="M24.9618,0.7998L22.3294,12.6331L19.6968,9.9022L16.4,13.3225C14.1479,15.6588 12.8509,18.8006 12.7695,22.0951L12.7654,22.4251V39.1978H7.8018V22.4251C7.8018,17.6453 9.6321,13.0613 12.8902,9.6815L16.1868,6.2606L13.5547,3.5306L24.9618,0.7998Z"
-      android:fillColor="#ffffff"
-      android:fillType="evenOdd"/>
+<!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~  other countries. Other names may be trademarks of their respective owners.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="35dp"
+    android:height="57dp" android:viewportWidth="35" android:viewportHeight="57">
+    <path
+        android:pathData="M6.8794,35.8062C6.8794,32.7421 9.2243,30.2582 12.2884,30.2582C15.3524,30.2582 17.8363,31.9919 17.8363,39.9671H13.6754L21.3038,53.8371L28.9323,39.9671H24.7713V34.4192C24.7713,28.2911 19.8035,23.3232 13.6754,23.3232H10.9014C4.7733,23.3232 0,28.2911 0,34.4192V56.9995H6.8794V35.8062Z"
+        android:fillColor="#ffffff" />
+    <path
+        android:pathData="M25.3768,15.3916L34.8655,1.7255L17.7026,0L19.6877,3.9813C18.4131,4.7059 17.274,5.3405 16.2469,5.9128C10.3401,9.2036 8.1368,10.4311 5.1596,14.8636C-0,22.5446 -0,26.8921 0,38.8982V57H6.8794V38.9415C6.8794,29.0524 7.6259,25.093 11.609,19.1632C13.9445,15.6857 16.154,14.1304 23.1718,10.9692L25.3768,15.3916Z"
+        android:fillColor="#ffffff" />
 </vector>
