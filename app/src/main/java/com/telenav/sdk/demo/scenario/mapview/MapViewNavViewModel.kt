@@ -17,6 +17,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.demo.util.DemoLocationProvider
+import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 
@@ -59,6 +60,9 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
     }
 
     override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
+    }
+
+    override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
 
     fun requestDirection(begin: Location = startLocation, end: Location = stopLocation) {

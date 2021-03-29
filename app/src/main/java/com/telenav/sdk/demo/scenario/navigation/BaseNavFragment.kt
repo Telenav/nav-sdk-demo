@@ -240,6 +240,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
         Log.i(TAG, "current street: $curStreetInfo")
     }
 
+    override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
+    }
+
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {
         navEvent.travelEstToDestination?.let {
             println(it.distanceToStop)

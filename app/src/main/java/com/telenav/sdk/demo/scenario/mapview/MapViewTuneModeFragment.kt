@@ -24,6 +24,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.demo.util.DemoLocationProvider
+import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.fragment_map_view_tune_mode.*
@@ -99,6 +100,9 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     }
 
     override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
+    }
+
+    override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
 
     /**
@@ -258,6 +262,9 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
      * This function shows how to show region of routes.
      */
     private fun showRegion(){
+        if (route == null){
+            return
+        }
         val routeIds = mapView.routesController().add(listOf(route))
         val region = mapView.routesController().region(routeIds)
         mapView.cameraController().showRegion(region)

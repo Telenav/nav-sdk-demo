@@ -19,7 +19,7 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.views.TnMapView
 import com.telenav.sdk.demo.R
 import com.telenav.sdk.demo.databinding.FragmentMapViewStateBinding
-import kotlinx.android.synthetic.main.fragment_map_view_camera.*
+import kotlinx.android.synthetic.main.fragment_map_view_state.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
 

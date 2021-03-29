@@ -53,6 +53,9 @@ class NavMainActivity : AppCompatActivity() {
         },
         MenuData("adas messages") {
             showFragment(AdasMessageFragment())
+        },
+        MenuData("Jump road") {
+            showFragment(JumpRoadFragment())
         }
     )
 

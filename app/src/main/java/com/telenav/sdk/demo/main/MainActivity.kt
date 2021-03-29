@@ -202,6 +202,8 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         Log.i(LOG_TAG, "Begin onDestroy ...")
         SDK.getInstance().dispose()
+        DataCollectorService.shutdown()
+        OtaService.shutdown()
         Log.i(LOG_TAG, "Telenav SDK disposed")
         super.onDestroy()
     }

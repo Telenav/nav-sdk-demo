@@ -19,8 +19,6 @@ import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.factories.AnnotationFactory
 import com.telenav.sdk.demo.R
-import kotlinx.android.synthetic.main.fragment_map_view_camera.*
-import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
 import kotlinx.android.synthetic.main.fragment_map_view_vehicle.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 

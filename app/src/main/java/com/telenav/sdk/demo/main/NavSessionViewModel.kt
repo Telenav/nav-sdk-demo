@@ -173,6 +173,9 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
         curStreetInfo.speedLimit?.let { speedLimitLiveData.postValue(it.speedLimit.toString()) }
     }
 
+    override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
+    }
+
     override fun onLocationUpdated(vehicleLocationIn: Location) {
         vehicleLocationIn?.let {
             vehicleLocation.postValue(it)
@@ -297,26 +300,6 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
     fun disableCameraFollow() {
         lastFollowVehicleMode = currentFollowVehicleMode.value
         currentFollowVehicleMode.postValue(null)
-    }
-
-    /**
-     * Show all cached candidate roads
-     */
-    fun showAllCandidateRoads(){
-        candidateRoadsLiveData.postValue(driveSession?.roadCalibrator?.allCandidateRoads)
-    }
-
-    fun selectCandidateRoad(road : CandidateRoadInfo){
-        if (road.uuid != null) {
-            viewModelScope.launch(Dispatchers.Unconfined){
-                val result = driveSession?.roadCalibrator?.setRoad(road.uuid!!)
-                if (result != null && result){
-                    toast.postValue("Selected edged id: ${road.uuid}")
-                }else{
-                    toast.postValue("Select fail")
-                }
-            }
-        }
     }
 
     /**
