@@ -60,21 +60,21 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        map_view.initialize(savedInstanceState, null)
+        map_view.initialize(savedInstanceState) {
         // Enable all of the MapView features
-        map_view.featuresController().traffic().setEnabled()
-        map_view.featuresController().landmarks().setEnabled()
-        map_view.featuresController().buildings().setEnabled()
-        map_view.featuresController().terrain().setEnabled()
-        map_view.featuresController().globe().setDisabled()
-        map_view.featuresController().compass().setEnabled()
-        map_view.featuresController().scaleBar().setEnabled()
-        map_view.featuresController().adiLine().setEnabled()
-        map_view.layoutController().setVerticalOffset(-0.5)
+            map_view.featuresController().traffic().setEnabled()
+            map_view.featuresController().landmarks().setEnabled()
+            map_view.featuresController().buildings().setEnabled()
+            map_view.featuresController().terrain().setEnabled()
+            map_view.featuresController().globe().setDisabled()
+            map_view.featuresController().compass().setEnabled()
+            map_view.featuresController().scaleBar().setEnabled()
+            map_view.layoutController().setVerticalOffset(-0.5)
 
-        // recenter to vehicle position
-        map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
-
+            // recenter to vehicle position
+            map_view.cameraController().position =
+                Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
+        }
         setupButtons()
 
         map_view.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
@@ -172,7 +172,6 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
         iv_camera_fix.setOnClickListener {
             val newPosition = Camera.Position.Builder().setLocation(vehicleLocation).build()
             map_view.cameraController().position = newPosition
-            map_view.cameraController().resumeAutoZoom()
             iv_camera_fix.setImageResource(R.drawable.ic_gps_fixed_24)
         }
 

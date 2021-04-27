@@ -56,14 +56,15 @@ class VehicleFragment : Fragment() {
         }
         mapViewInit(savedInstanceState)
         setOnClickListener()
-        setLocationAnnotations()
-        moveCameraToLocation(location)
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
-        annotationsController = mapView.annotationsController()
-        factory = annotationsController.factory()
+        mapView.initialize(savedInstanceState){
+            setLocationAnnotations()
+            moveCameraToLocation(location)
+            annotationsController = mapView.annotationsController()
+            factory = annotationsController.factory()
+        }
     }
 
     private fun setOnClickListener() {

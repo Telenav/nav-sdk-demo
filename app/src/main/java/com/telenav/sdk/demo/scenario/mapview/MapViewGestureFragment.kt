@@ -60,9 +60,11 @@ class MapViewGestureFragment : Fragment() {
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
-        mapView.vehicleController().setLocation(location)
-        mapView.cameraController().position = Camera.Position.Builder().setLocation(location).build()
+        mapView.initialize(savedInstanceState){
+            mapView.vehicleController().setLocation(location)
+            mapView.cameraController().position = Camera.Position.Builder().setLocation(location).build()
+        }
+
     }
 
     private fun operationInit() {

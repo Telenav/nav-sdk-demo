@@ -19,6 +19,7 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.views.TnMapView
 import com.telenav.sdk.demo.R
 import com.telenav.sdk.demo.databinding.FragmentMapViewStateBinding
+import com.telenav.sdk.demo.util.LocationUtils
 import kotlinx.android.synthetic.main.fragment_map_view_state.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
@@ -69,8 +70,7 @@ class MapViewStateFragment : Fragment() {
         mapViewInit(savedInstanceState)
         setCameraUpdateListener()
 
-        moveCameraToLocation(locationA)
-        setLocationAnnotations()
+
         mapView.mapDiagnosis().addMapViewListener {
             mapView.mapDiagnosis().mapViewStatus?.let {
                 binding.tvTitlePositionSet.post(Runnable {
@@ -113,7 +113,11 @@ class MapViewStateFragment : Fragment() {
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
+        mapView.initialize(savedInstanceState){
+            mapView.vehicleController().setLocation(LocationUtils.getLocationByRegion())
+            moveCameraToLocation(locationA)
+            setLocationAnnotations()
+        }
     }
 
     private fun setLocationAnnotations() {

@@ -44,6 +44,10 @@
         <activity
             android:name=".scenario.ota.OtaActivity"
             android:theme="@style/MapViewActivityStyle"/>
+
+        <activity
+            android:name=".scenario.search.SearchActivity"
+            android:theme="@style/MapViewActivityStyle"/>
     </application>
 
 </manifest>

@@ -22,7 +22,9 @@ import com.telenav.map.api.touch.TouchType
 import com.telenav.map.api.touch.TouchedAnnotation
 import com.telenav.map.api.touch.listeners.TouchListener
 import com.telenav.sdk.demo.R
+import com.telenav.sdk.demo.util.LocationUtils
 import kotlinx.android.synthetic.main.fragment_map_view_annotation.*
+import kotlinx.android.synthetic.main.fragment_map_view_annotation.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
 /**
@@ -56,7 +58,9 @@ class MapViewAnnotationFragment : Fragment() {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
+        mapView.initialize(savedInstanceState){
+            mapView.vehicleController().setLocation(LocationUtils.getLocationByRegion())
+        }
     }
 
     /**

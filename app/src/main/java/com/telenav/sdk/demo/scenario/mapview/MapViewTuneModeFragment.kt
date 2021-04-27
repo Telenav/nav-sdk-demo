@@ -111,7 +111,6 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     private fun mapViewInit(savedInstanceState: Bundle?) {
         mapView.initialize(savedInstanceState, null)
         mapView.cameraController().position = Camera.Position.Builder().setLocation(startLocation).build()
-        mapView.cameraController().isEnableAutoZoom = false
 
         setCameraUpdateListener()
     }
@@ -127,10 +126,6 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
                 tv_title_enable_follow_vehicle.text = "Follow Vehicle Off"
                 disableFollowVehicle()
             }
-        }
-
-        sc_auto_zoom.setOnCheckedChangeListener { _, isChecked ->
-            mapView.cameraController().isEnableAutoZoom = isChecked
         }
 
         rg_follow_model.setOnCheckedChangeListener { _, _ ->

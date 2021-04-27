@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         val optionsBuilder = SDKOptions.builder()
             .setApiKey(SDK_KEY)
             .setApiSecret(SDK_SECRET)
+            .setUserId("AndroidSampleTest")
             .setSdkCacheDataDir(sdkCacheDataDir)
             .setCloudEndPoint(URL_NA)
             .setLocale(Locale.EN_US)
@@ -128,7 +129,6 @@ class MainActivity : AppCompatActivity() {
         initEntityService(optionsBuilder.build())
         optionsBuilder
             .setDeviceGuid("AndroidDeviceGuid")
-            .setUserId("AndroidSampleTest")
             .setApplicationInfo(ApplicationInfo.builder(packageName, "1").build())
             .setSdkDataDir(otaDataDir)
             .build()

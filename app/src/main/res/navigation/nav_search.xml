@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_search"
+    app:startDestination="@id/searchMenuFragment">
+
+    <fragment
+        android:id="@+id/searchMenuFragment"
+        android:name="com.telenav.sdk.demo.scenario.search.SearchMenuFragment"
+        tools:layout="@layout/fragment_scenario_menu"
+        android:label="SearchMenuFragment" >
+        <action
+            android:id="@+id/action_searchMenuFragment_to_searchShowPoiFragment"
+            app:destination="@id/searchShowPoiFragment" />
+        <action
+            android:id="@+id/action_searchMenuFragment_to_searchAlongRouteFragment"
+            app:destination="@id/searchAlongRouteFragment" />
+        <action
+            android:id="@+id/action_searchMenuFragment_to_showPoiInCameraFragment"
+            app:destination="@id/showPoiInCameraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchShowPoiFragment"
+        android:name="com.telenav.sdk.demo.scenario.search.SearchShowPoiFragment"
+        android:label="SearchShowPoiFragment"
+        tools:layout="@layout/fragment_search_show_poi" />
+    <fragment
+        android:id="@+id/searchAlongRouteFragment"
+        android:name="com.telenav.sdk.demo.scenario.search.SearchAlongRouteFragment"
+        android:label="fragment_search_along_route"
+        tools:layout="@layout/fragment_search_along_route" />
+    <fragment
+        android:id="@+id/showPoiInCameraFragment"
+        android:name="com.telenav.sdk.demo.scenario.search.ShowPoiInCameraFragment"
+        tools:layout="@layout/fragment_show_poi_in_camera"
+        android:label="ShowPoiInCameraFragment" />
+</navigation>

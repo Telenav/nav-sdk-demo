@@ -13,11 +13,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.sdk.common.model.DayNightMode
+import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.demo.R
+import com.telenav.sdk.demo.util.LocationUtils
 import com.telenav.sdk.map.SDK
+import kotlinx.android.synthetic.main.fragment_map_view_set_up.*
 import kotlinx.android.synthetic.main.fragment_map_view_theme.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map.*
+import kotlinx.android.synthetic.main.layout_content_map.mapView
 import kotlinx.android.synthetic.main.layout_operation_theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +42,9 @@ class MapViewThemeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tv_title.text = getString(R.string.title_activity_map_view_theme)
-        mapView.initialize(savedInstanceState, null)
+        mapView.initialize(savedInstanceState){
+            mapView.vehicleController().setLocation(LocationUtils.getLocationByRegion())
+        }
         iv_back.setOnClickListener {
             findNavController().navigateUp()
         }

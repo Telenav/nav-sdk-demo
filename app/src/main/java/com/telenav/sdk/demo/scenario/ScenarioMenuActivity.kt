@@ -18,6 +18,7 @@ import com.telenav.sdk.demo.R
 import com.telenav.sdk.demo.scenario.mapview.MapViewActivity
 import com.telenav.sdk.demo.scenario.navigation.NavMainActivity
 import com.telenav.sdk.demo.scenario.ota.OtaActivity
+import com.telenav.sdk.demo.scenario.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_scenario_menu.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
@@ -35,6 +36,9 @@ class ScenarioMenuActivity : AppCompatActivity() {
         },
         MenuData("Ota") {
             startActivity(OtaActivity.getCallingIntent(this))
+        },
+        MenuData("Search") {
+            startActivity(SearchActivity.getCallingIntent(this))
         },
     )
 

@@ -67,21 +67,17 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
         viewModel.selectedRoad.observe(owner = viewLifecycleOwner) {
             selectCandidateRoad(it)
         }
-        map_view.initialize(savedInstanceState, null)
-        // Enable all of the MapView features
-        map_view.featuresController().traffic().setEnabled()
-        map_view.featuresController().landmarks().setEnabled()
-        map_view.featuresController().buildings().setEnabled()
-        map_view.featuresController().terrain().setEnabled()
-        map_view.featuresController().globe().setDisabled()
-        map_view.featuresController().compass().setEnabled()
-        map_view.featuresController().scaleBar().setEnabled()
-        map_view.featuresController().adiLine().setEnabled()
-        map_view.layoutController().setVerticalOffset(-0.5)
-
-        // recenter to vehicle position
-        map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
-
+        map_view.initialize(savedInstanceState){
+            map_view.featuresController().traffic().setEnabled()
+            map_view.featuresController().landmarks().setEnabled()
+            map_view.featuresController().buildings().setEnabled()
+            map_view.featuresController().terrain().setEnabled()
+            map_view.featuresController().globe().setDisabled()
+            map_view.featuresController().compass().setEnabled()
+            map_view.featuresController().scaleBar().setEnabled()
+            map_view.layoutController().setVerticalOffset(-0.5)
+            map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
+        }
         setupButtons()
         startNavButton.isEnabled = true
     }
@@ -150,7 +146,6 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
         iv_camera_fix.setOnClickListener {
             val newPosition = Camera.Position.Builder().setLocation(vehicleLocation).build()
             map_view.cameraController().position = newPosition
-            map_view.cameraController().resumeAutoZoom()
             iv_camera_fix.setImageResource(R.drawable.ic_gps_fixed_24)
         }
 

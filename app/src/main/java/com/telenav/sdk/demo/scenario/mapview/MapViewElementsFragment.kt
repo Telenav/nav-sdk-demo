@@ -155,7 +155,7 @@ class MapViewElementsFragment : Fragment() {
      * Notice: routesController().updateRouteProgress should also be called if adi line
      */
     private fun setADILine(on : Boolean){
-        setFeature(mapView.featuresController().adiLine(), on)
+//        setFeature(mapView.featuresController().adiLine(), on)
     }
 
     /**

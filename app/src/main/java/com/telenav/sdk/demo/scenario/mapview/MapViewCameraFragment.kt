@@ -15,7 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.sdk.demo.R
+import com.telenav.sdk.demo.util.LocationUtils
 import kotlinx.android.synthetic.main.fragment_map_view_camera.*
+import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
 
@@ -72,13 +74,15 @@ class MapViewCameraFragment : Fragment() {
         }
         mapViewInit(savedInstanceState)
         setOnClickListener()
-        setCameraUpdateListener()
-        setLocationAnnotations()
-        moveCameraToLocation(locationA)
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
+        mapView.initialize(savedInstanceState){
+            mapView.vehicleController().setLocation(locationA)
+            setCameraUpdateListener()
+            setLocationAnnotations()
+            moveCameraToLocation(locationA)
+        }
     }
 
     private fun setOnClickListener() {
