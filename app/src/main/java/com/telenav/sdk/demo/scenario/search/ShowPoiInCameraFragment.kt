@@ -24,10 +24,10 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.DayNightMode
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.search.*
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.fragment_show_poi_in_camera.*
 import kotlinx.android.synthetic.main.layout_action_bar.*

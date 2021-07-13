@@ -1,9 +1,3 @@
-/*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
- */
-
 package com.telenav.sdk.demo.util
 
 import com.telenav.sdk.drivesession.model.SpeedLimitType
@@ -421,8 +415,7 @@ open class BaseMessage(val content: Long) {
      * position's offset, it doesn't mean its behind, the actual offset is current value + 8192
      */
     fun getActualOffset(currentOffset: Int, vehicleOffset: Int): Int = if (currentOffset < vehicleOffset &&
-            currentOffset + MAX_OFFSET < vehicleOffset + MAX_DETECT_DISTANCE
-    ) {
+            currentOffset + MAX_OFFSET < vehicleOffset + MAX_DETECT_DISTANCE) {
         currentOffset + MAX_OFFSET
     } else {
         currentOffset

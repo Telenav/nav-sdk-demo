@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.main
@@ -11,32 +11,34 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.telenav.map.api.controllers.Camera
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.util.AndroidThreadUtils
-import com.telenav.sdk.demo.util.DemoLocationProvider
-import com.telenav.sdk.demo.util.ImageItems
-import com.telenav.sdk.demo.util.SingleLiveEvent
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.*
 import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.adas.AdasMessage
 import com.telenav.sdk.drivesession.model.alert.ExitInfo
-import com.telenav.sdk.map.direction.model.BasicTurn
-import com.telenav.sdk.map.direction.model.GuidanceLaneInfo
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.main.SecondFragment
+import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.demo.util.AndroidThreadUtils
+import com.telenav.sdk.demo.util.SingleLiveEvent
+import com.telenav.sdk.map.direction.model.Action
+import com.telenav.sdk.map.direction.model.LaneInfo
 import com.telenav.sdk.map.direction.model.Route
+import com.telenav.sdk.ui.ImageItems
+import com.telenav.sdk.ui.turn.TnTurnListItem
+import com.telenav.sdk.ui.turn.TnTurnListRecyclerViewAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val context: Fragment) : ViewModel(),
+class NavSessionViewModel(private val turnListAdapter: TnTurnListRecyclerViewAdapter, val context: SecondFragment) : ViewModel(),
     NavigationEventListener, PositionEventListener, AlertEventListener, ADASEventListener,
     AudioInstructionEventListener,TextToSpeech.OnInitListener {
     val timeToArrival = MutableLiveData<String>()
@@ -47,6 +49,7 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
     val turnDirectionDrawable = MutableLiveData<Int>()
     val nextTurnStreetName = MutableLiveData<String>()
     val turnListVisibility = MutableLiveData<Boolean>(false)
+
     val currentStreetName = MutableLiveData<String>()
     val compassDirectionLiveData = MutableLiveData<String>()
     val speedLimitLiveData = MutableLiveData<String>()
@@ -59,19 +62,22 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
     var toast = SingleLiveEvent<String>()
     val betterRouteLiveData = MutableLiveData<Route>()
     val lanePatternCustomImages = MutableLiveData<List<ImageItems>>(listOf())
-    val laneInfo = MutableLiveData<List<GuidanceLaneInfo>>(listOf())
+    val laneInfo = MutableLiveData<List<LaneInfo>>(listOf())
+    val alongRouteTrafficLiveData = MutableLiveData<AlongRouteTraffic>()
+    val traveledDistance = MutableLiveData<Double>()
+    var roadCalibrator : RoadCalibrator? = null
 
     private val TAG = "NavSessionViewModel"
     private var currentStepIndex = 0
     private var navigationSession: NavigationSession? = null
-    private val locationProvider : DemoLocationProvider
+    private var locationProvider : DemoLocationProvider
     private var driveSession: DriveSession? = DriveSession.Factory.createInstance()
     private val tts: TextToSpeech
 
     init {
         driveSession?.enableAlert(true)
         driveSession?.enableADAS(true)
-        locationProvider = DemoLocationProvider()
+        locationProvider = DemoLocationProvider.Factory.createProvider(context.requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
         driveSession?.injectLocationProvider(locationProvider)
         tts  = TextToSpeech(context.context,this)
         driveSession?.eventHub?.let {
@@ -81,6 +87,18 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
             it.addADASEventListener(this)
             it.addAudioInstructionEventListener(this)
         }
+        locationProvider.start()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationProvider.stop()
+    }
+
+    fun setLocationProvider(type : DemoLocationProvider.ProviderType){
+        locationProvider = DemoLocationProvider.Factory.createProvider(context.requireContext(), type)
+        driveSession?.injectLocationProvider(locationProvider)
+        locationProvider.start()
     }
 
     fun shutdown() {
@@ -103,6 +121,7 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
             alongRouteTraffic.alongRouteTrafficCollectDistance,
             alongRouteTraffic.alongRouteTrafficFlow?.size)
         Log.i("Navigation", logString)
+        alongRouteTrafficLiveData.postValue(alongRouteTraffic)
     }
 
     override fun onJunctionViewUpdated(junctionViewInfo: JunctionViewInfo) {
@@ -135,11 +154,20 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
         updateTurnListItem(navEvent)
         distanceRemainingToNextTurn.postValue(getMilesOrFeet(navEvent.distanceToTurn))
         navEvent.currentManeuver?.let {
-            turnDirectionDrawable.postValue(getTurnDrawable(it.turnType))
-            nextTurnStreetName.postValue(it.streetName)
+            it.turnAction?.let { it->
+                turnDirectionDrawable.postValue(getTurnDrawable(it))
+            }
+
+            it.streetName?.let { it ->
+                nextTurnStreetName.postValue(it)
+            }
+
             it.laneInfo?.let { laneInfoList ->
-                laneInfo.postValue(laneInfoList) } ?: laneInfo.postValue(listOf())
+                laneInfo.postValue(laneInfoList)
+            } ?: laneInfo.postValue(listOf())
         }
+
+        traveledDistance.postValue(navEvent.traveledDistance)
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
@@ -174,6 +202,8 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
+        this.roadCalibrator = roadCalibrator
+        candidateRoadsLiveData.postValue(roadCalibrator.getCandidateRoads())
     }
 
     override fun onLocationUpdated(vehicleLocationIn: Location) {
@@ -247,6 +277,9 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
         navigationOn.postValue(true)
         navigationSession = driveSession?.startNavigation(route, true, 40.0)
         showNavigationDetails.postValue(true)
+
+        val turnList = navigationSession!!.maneuverList?.let { getTurnListItem(it) }
+        turnListAdapter.setupData(turnList)
         return true
     }
     fun stopTTS(){
@@ -266,13 +299,19 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
             turnListVisibility.value?.let {
                 if (it) {
                     turnListVisibility.postValue(false)
+
                 } else {
-                    val turnList = getTurnListItem(navSession.maneuverList)
+                    val turnList = navSession.maneuverList?.let { it1 -> getTurnListItem(it1) }
                     turnListAdapter.setupData(turnList)
-                    turnListVisibility.postValue(turnList.isNotEmpty())
+                    turnListVisibility.postValue(turnList?.isNotEmpty())
+
                 }
             }
         }
+    }
+
+    fun enablePrefetchData(enabled : Boolean){
+        driveSession?.settings?.enablePrefetch(enabled)
     }
 
     /**
@@ -289,7 +328,7 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
         val mode = if (lastFollowVehicleMode != null) {
             lastFollowVehicleMode
         } else {
-            Camera.FollowVehicleMode.Enhanced
+            SecondViewModel.DEFAULT_FOLLOW_VEHICLE_MODE
         }
         currentFollowVehicleMode.postValue(mode)
     }
@@ -300,6 +339,28 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
     fun disableCameraFollow() {
         lastFollowVehicleMode = currentFollowVehicleMode.value
         currentFollowVehicleMode.postValue(null)
+    }
+
+    /**
+     * Show all cached candidate roads
+     */
+    fun showAllCandidateRoads(){
+        roadCalibrator?.let{
+            candidateRoadsLiveData.postValue(it.getCandidateRoads())
+        }
+    }
+
+    fun selectCandidateRoad(road : CandidateRoadInfo){
+        if (road.uuid != null) {
+            viewModelScope.launch(Dispatchers.Unconfined){
+                val result = roadCalibrator?.setRoad(road.uuid!!)
+                if (result != null && result){
+                    toast.postValue("Selected edged id: ${road.uuid}")
+                }else{
+                    toast.postValue("Select fail")
+                }
+            }
+        }
     }
 
     /**
@@ -318,17 +379,15 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
 
     //private methods
     private fun updateTurnListItem(navEvent: NavigationEvent) {
-        turnListVisibility.value?.let { visibility ->
-            if (currentStepIndex != navEvent.stepIndex && visibility) {
-                currentStepIndex = navEvent.stepIndex
-                AndroidThreadUtils.runOnUiThread(Runnable {
-                    navigationSession?.let { navSession ->
-                        val turnList = getTurnListItem(navSession.maneuverList)
-                        turnListAdapter.setupData(turnList)
-                        turnListVisibility.postValue(turnList.isNotEmpty())
-                    }
-                })
-            }
+        if (currentStepIndex != navEvent.stepIndex) {
+            currentStepIndex = navEvent.stepIndex
+            AndroidThreadUtils.runOnUiThread(Runnable {
+                navigationSession?.let { navSession ->
+                    val turnList = navSession.maneuverList?.let { getTurnListItem(it) }
+                    turnListAdapter.setupData(turnList)
+                    turnListVisibility.postValue(turnList?.isNotEmpty())
+                }
+            })
         }
     }
 
@@ -349,27 +408,27 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
         }
     }
 
-    private fun getTurnDrawable(turnType: Int): Int {
+    private fun getTurnDrawable(@Action turnType: Int): Int {
         return when (turnType) {
-            BasicTurn.RIGHT -> R.drawable.ic_turn_right
-            BasicTurn.LEFT -> R.drawable.ic_turn_left
-            BasicTurn.CONTINUE -> R.drawable.ic_continue_straight
-            BasicTurn.SLIGHT_LEFT -> R.drawable.ic_turn_slight_left
-            BasicTurn.SLIGHT_RIGHT -> R.drawable.ic_turn_slight_right
-            BasicTurn.STOP_RIGHT -> R.drawable.ic_stop_right
-            BasicTurn.STOP_LEFT -> R.drawable.ic_stop_left
+            Action.TURN_RIGHT -> R.drawable.ic_turn_right_white
+            Action.TURN_LEFT -> R.drawable.ic_turn_left_white
+            Action.CONTINUE -> R.drawable.ic_continue_straight
+            Action.TURN_SLIGHT_LEFT -> R.drawable.ic_turn_slight_left_white
+            Action.TURN_SLIGHT_RIGHT -> R.drawable.ic_turn_slight_right
+            Action.STOP_RIGHT -> R.drawable.ic_stop_right
+            Action.STOP_LEFT -> R.drawable.ic_stop_left
             else -> R.drawable.ic_continue_straight
         }
     }
 
-    private fun getTurnListItem(maneuverList: List<ManeuverInfo>): List<TurnListItem> =
+    private fun getTurnListItem(maneuverList: List<ManeuverInfo>): List<TnTurnListItem> =
         maneuverList
             .filter { it.stepIndex > currentStepIndex }
             .map {
-                TurnListItem(
+                TnTurnListItem(
                     it.streetName,
                     getMilesOrFeet(it.lengthMeters),
-                    getTurnDrawable(it.turnType)
+                    getTurnDrawable(it.turnAction)
                 )
             }
 
@@ -404,7 +463,8 @@ class NavSessionViewModel(val turnListAdapter: TurnListRecyclerViewAdapter, val 
         return when (currentMode) {
             Camera.FollowVehicleMode.Enhanced -> Camera.FollowVehicleMode.HeadingUp
             Camera.FollowVehicleMode.HeadingUp -> Camera.FollowVehicleMode.NorthUp
-            Camera.FollowVehicleMode.NorthUp -> Camera.FollowVehicleMode.Enhanced
+            Camera.FollowVehicleMode.NorthUp -> Camera.FollowVehicleMode.Static
+            Camera.FollowVehicleMode.Static -> Camera.FollowVehicleMode.Enhanced
             else -> Camera.FollowVehicleMode.Enhanced
         }
     }

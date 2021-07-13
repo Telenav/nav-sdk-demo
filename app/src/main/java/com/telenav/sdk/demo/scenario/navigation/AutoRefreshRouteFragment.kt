@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+ *  Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
  *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  *  other countries. Other names may be trademarks of their respective owners.
  */
@@ -16,9 +16,9 @@ import androidx.fragment.app.Fragment
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.Margins
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.model.BetterRouteCandidate
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
@@ -42,9 +42,12 @@ class AutoRefreshRouteFragment : BaseNavFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // add button to manual update route
         btn_update_route.setOnClickListener {
-            if (stopNavButton.isEnabled) {// is routing
+            //@TODO: Need to update logic here to determine when routing
+            var isRouting = false
+            if (isRouting) {//subViewButton.isEnabled) {// is routing
                 vehicleLocation?.let {
                     val location = Location("test")
                     location.latitude = 37.403193176493275
@@ -58,7 +61,7 @@ class AutoRefreshRouteFragment : BaseNavFragment() {
                     }
 
                     val request: RouteRequest = RouteRequest.Builder(
-                            GeoLocation(LatLon(it.latitude, it.longitude)),
+                            GeoLocation(it),
                             GeoLocation(LatLon(location.latitude, location.longitude))
                     ).contentLevel(ContentLevel.FULL)
                             .routeCount(1)

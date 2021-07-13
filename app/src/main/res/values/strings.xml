@@ -1,14 +1,17 @@
-<!--
-  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
-  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
-  ~  other countries. Other names may be trademarks of their respective owners.
-  -->
-
 <resources>
-    <string name="app_name">tasdk-android-demo</string>
-
+    <string name="app_name">android-sdk-demo</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
+    <string name="search_result_fragment_label">Search Result Fragment</string>
+    <string name="next">Next</string>
+    <string name="go_to_scenario_menu">Go To Scenario Menu</string>
+    <string name="automation_menu">Automation Test Menu</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="commit">commit</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

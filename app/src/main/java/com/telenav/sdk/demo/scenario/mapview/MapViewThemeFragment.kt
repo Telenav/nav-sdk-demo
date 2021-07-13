@@ -1,23 +1,21 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.sdk.common.model.DayNightMode
-import com.telenav.sdk.common.model.Region
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.util.LocationUtils
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.SDK
-import kotlinx.android.synthetic.main.fragment_map_view_set_up.*
 import kotlinx.android.synthetic.main.fragment_map_view_theme.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map.*
@@ -33,6 +31,8 @@ import kotlinx.coroutines.launch
  */
 class MapViewThemeFragment : Fragment() {
 
+    lateinit var locationProvider : DemoLocationProvider
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -41,9 +41,11 @@ class MapViewThemeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
+        locationProvider.start()
         tv_title.text = getString(R.string.title_activity_map_view_theme)
         mapView.initialize(savedInstanceState){
-            mapView.vehicleController().setLocation(LocationUtils.getLocationByRegion())
+            mapView.vehicleController().setLocation(locationProvider.lastKnownLocation)
         }
         iv_back.setOnClickListener {
             findNavController().navigateUp()
@@ -103,5 +105,10 @@ class MapViewThemeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        locationProvider.stop()
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".scenario.navigation.AdasMessageFragment">
+    tools:context="com.telenav.sdk.demo.scenario.navigation.AdasMessageFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/action_bar"
@@ -94,5 +94,6 @@
         android:text="Enable ADAS"
         android:theme="@style/MapViewActivityStyle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_width2" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline_width2"
+        app:layout_constraintTop_toBottomOf="@+id/btnReset" />
 </androidx.constraintlayout.widget.ConstraintLayout>

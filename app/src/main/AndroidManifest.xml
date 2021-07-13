@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
-  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
-  ~  other countries. Other names may be trademarks of their respective owners.
-  -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.telenav.sdk.demo">
-
+    package="com.telenav.sdk.examples">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,30 +15,39 @@
         android:requestLegacyExternalStorage="true"
         android:preserveLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity
+            android:name="com.telenav.sdk.demo.main.MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".scenario.ScenarioMenuActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_scenario_menu"/>
-        <activity
-            android:name=".scenario.navigation.NavMainActivity"
-            android:label="scenario of navigation"/>
-        <activity
-            android:name=".scenario.mapview.MapViewActivity"
-            android:theme="@style/MapViewActivityStyle"
-            android:label="@string/title_activity_map_view_menu"/>
-        <activity
-            android:name=".scenario.ota.OtaActivity"
-            android:theme="@style/MapViewActivityStyle"/>
 
         <activity
-            android:name=".scenario.search.SearchActivity"
+            android:name="com.telenav.sdk.demo.scenario.navigation.NavMainActivity"
+            android:label="scenario of navigation"/>
+        <activity
+            android:name="com.telenav.sdk.demo.automation.AutomationMainActivity"
+            android:label="Automation UI test"/>
+        <activity
+            android:name="com.telenav.sdk.demo.scenario.ScenarioMenuActivity"
+            android:label="@string/title_activity_scenario_menu"/>
+
+        <activity
+            android:name="com.telenav.sdk.demo.scenario.mapview.MapViewActivity"
+            android:theme="@style/MapViewActivityStyle"
+            android:label="@string/title_activity_map_view_menu"/>
+
+        <activity
+            android:name="com.telenav.sdk.demo.scenario.ota.OtaActivity"
+            android:theme="@style/MapViewActivityStyle" />
+
+        <activity
+            android:name="com.telenav.sdk.demo.scenario.search.SearchActivity"
             android:theme="@style/MapViewActivityStyle"/>
     </application>
 

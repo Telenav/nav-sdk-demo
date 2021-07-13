@@ -6,15 +6,16 @@
 
 package com.telenav.sdk.demo.util
 
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.model.LanePattern
+import com.telenav.sdk.ui.ImageItems
 
 class TurnImageUtil {
     companion object Factory {
         fun getTurnImageRes(guideLaneList: Int, items: List<ImageItems>): Int {
 
             when (guideLaneList) {
-                LanePattern.CONTINUE -> return checkImagesFound(LanePattern.CONTINUE,items,R.drawable.ic_lane_continue)
+                LanePattern.CONTINUE -> return checkImagesFound(LanePattern.CONTINUE,items, R.drawable.ic_lane_continue)
                 LanePattern.CONTINUE_AND_LEFT -> return checkImagesFound(LanePattern.CONTINUE_AND_LEFT,items,R.drawable.ic_lane_continue_and_left)
                 LanePattern.CONTINUE_AND_RIGHT ->return checkImagesFound(LanePattern.CONTINUE_AND_RIGHT,items,R.drawable.ic_lane_continue_and_right)
                 LanePattern.LEFT -> return checkImagesFound(LanePattern.LEFT,items,R.drawable.ic_lane_left)

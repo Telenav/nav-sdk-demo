@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.navigation
@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 
 /**
  * show route option dialog

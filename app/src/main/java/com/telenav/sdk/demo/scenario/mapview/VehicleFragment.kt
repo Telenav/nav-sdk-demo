@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
@@ -18,7 +18,8 @@ import com.telenav.map.api.Annotation
 import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.factories.AnnotationFactory
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
+import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
 import kotlinx.android.synthetic.main.fragment_map_view_vehicle.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
@@ -56,14 +57,15 @@ class VehicleFragment : Fragment() {
         }
         mapViewInit(savedInstanceState)
         setOnClickListener()
+
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState){
-            setLocationAnnotations()
-            moveCameraToLocation(location)
+        mapView.initialize(savedInstanceState) {
             annotationsController = mapView.annotationsController()
             factory = annotationsController.factory()
+            setLocationAnnotations()
+            moveCameraToLocation(location)
         }
     }
 

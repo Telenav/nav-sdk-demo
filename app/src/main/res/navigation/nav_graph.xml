@@ -11,6 +11,23 @@
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.telenav.sdk.examples.main.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
 
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/SearchResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SearchResultFragment"
+        android:name="com.telenav.sdk.demo.SearchResultFragment"
+        android:label="@string/search_result_fragment_label"
+        tools:layout="@layout/fragment_search_result" />
 </navigation>

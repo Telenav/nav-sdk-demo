@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+ *  Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
  *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  *  other countries. Other names may be trademarks of their respective owners.
  */
@@ -18,8 +18,9 @@ import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.demo.R
-import kotlinx.android.synthetic.main.activity_scenario_menu.*
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.scenario.navigation.*
+import kotlinx.android.synthetic.main.activity_nav_main.*
 
 /**
  * @author tang.hui on 2021/1/11
@@ -30,33 +31,36 @@ class NavMainActivity : AppCompatActivity() {
      * add menu and click function here
      */
     private val menuList = listOf(
-        MenuData("request route") {
-            showFragment(RequestRouteFragment())
-        },
-        MenuData("auto refresh route") {
-            showFragment(AutoRefreshRouteFragment())
-        },
-        MenuData("turn by turn list") {
-            showFragment(TurnbyturnListFragment())
-        },
-        MenuData("whereami and location provider") {
-            showFragment(WhereamiFragment())
-        },
-        MenuData("stop point") {
-            showFragment(StopPointFragment())
-        },
-        MenuData("prompt voice") {
-            Toast.makeText(applicationContext, "todo", Toast.LENGTH_SHORT).show()
-        },
-        MenuData("get alter info") {
-            showFragment(AlertInfoFragment())
-        },
-        MenuData("adas messages") {
-            showFragment(AdasMessageFragment())
-        },
-        MenuData("Jump road") {
-            showFragment(JumpRoadFragment())
-        }
+            MenuData("request route") {
+                showFragment(RequestRouteFragment())
+            },
+            MenuData("auto refresh route") {
+                showFragment(AutoRefreshRouteFragment())
+            },
+            MenuData("turn by turn list") {
+                showFragment(TurnByTurnListFragment())
+            },
+            MenuData("whereami and location provider") {
+                showFragment(WhereamiFragment())
+            },
+            MenuData("stop point") {
+                showFragment(StopPointFragment())
+            },
+            MenuData("prompt voice") {
+                Toast.makeText(applicationContext, "todo", Toast.LENGTH_SHORT).show()
+            },
+            MenuData("get alter info") {
+                showFragment(AlertInfoFragment())
+            },
+            MenuData("adas messages") {
+                showFragment(AdasMessageFragment())
+            },
+            MenuData("traffic bar") {
+                showFragment(TrafficBarFragment())
+            },
+            MenuData("jump road") {
+                showFragment(JumpRoadFragment())
+            }
     )
 
     private fun showFragment(fragment: Fragment) {
@@ -80,7 +84,7 @@ class NavMainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (supportFragmentManager.backStackEntryCount != 0) {
+        if (supportFragmentManager.backStackEntryCount!=0) {
             supportFragmentManager.popBackStack()
         } else {
             finish()
@@ -89,18 +93,14 @@ class NavMainActivity : AppCompatActivity() {
     }
 
     private class MenuAdapter(
-        val recyclerView: RecyclerView,
-        val menuList: List<MenuData>
+            val recyclerView: RecyclerView,
+            val menuList: List<MenuData>
     ) : RecyclerView.Adapter<MenuViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
-            MenuViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.layout_scenario_menu_item,
-                    parent, false
-                )
-            ).apply {
-                this.root.setOnClickListener(onClickListener)
-            }
+                MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
+                        parent, false)).apply {
+                    this.layoutRoot.setOnClickListener(onClickListener)
+                }
 
         override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
             holder.tvTitle.text = menuList[position].text
@@ -119,7 +119,7 @@ class NavMainActivity : AppCompatActivity() {
     }
 
     private class MenuViewHolder(root: View) : RecyclerView.ViewHolder(root) {
-        val root: View = root.findViewById(R.id.root)
+        val layoutRoot: View = root.findViewById(R.id.root)
         val tvTitle: TextView = root.findViewById(R.id.tv_title)
         val tvIndex: TextView = root.findViewById(R.id.tv_index)
     }

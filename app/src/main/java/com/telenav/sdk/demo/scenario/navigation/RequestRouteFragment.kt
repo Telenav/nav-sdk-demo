@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+ *  Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
  *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  *  other countries. Other names may be trademarks of their respective owners.
  */
@@ -17,7 +17,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
 import com.telenav.map.api.Margins
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
@@ -76,14 +76,14 @@ class RequestRouteFragment : BaseNavFragment(), RadioGroup.OnCheckedChangeListen
 
         btn_commit.setOnClickListener {
             drawer_layout.close()
-            stopNavButton.performClick()
+            navButton.performClick()
         }
     }
 
     override fun requestDirection(begin: Location, end: Location, wayPointList: MutableList<Location>?) {
         Log.d("MapLogsForTestData", "MapLogsForTestData >>>> requestDirection begin: $begin + end $end")
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(LatLon(begin.latitude, begin.longitude)),
+                GeoLocation(begin),
                 GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(contentLevel)
                 .routeStyle(routeStyle)
@@ -114,13 +114,13 @@ class RequestRouteFragment : BaseNavFragment(), RadioGroup.OnCheckedChangeListen
                 val region = map_view.routesController().region(routeIds)
                 map_view.cameraController().showRegion(region, Margins.Percentages(0.20, 0.20))
                 activity?.runOnUiThread {
-                    startNavButton.isEnabled = true
+                    navButton.isEnabled = true
                     showRouteOptionDialog()
                 }
 
             } else {
                 activity?.runOnUiThread {
-                    startNavButton.isEnabled = false
+                    navButton.isEnabled = false
                 }
             }
             task.dispose()

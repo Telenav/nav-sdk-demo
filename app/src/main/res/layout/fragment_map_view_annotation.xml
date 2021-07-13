@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenario.mapview.MapViewAnnotationFragment">
+    tools:context="com.telenav.sdk.demo.scenario.mapview.MapViewAnnotationFragment">
 
     <include
         android:id="@+id/action_bar"
@@ -150,6 +150,14 @@
                         android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/rb_style_ScreenAnnotationPopupGrouping"
+                        android:theme="@style/MapViewActivityStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Screen PopUp Grouping"
+                        android:textSize="14sp" />
+
+                    <RadioButton
                         android:id="@+id/rb_style_ScreenAnnotationPin"
                         android:theme="@style/MapViewActivityStyle"
                         android:layout_width="match_parent"
@@ -166,6 +174,14 @@
                         android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/rb_style_ScreenAnnotationFlagGrouping"
+                        android:theme="@style/MapViewActivityStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Screen Flag Grouping"
+                        android:textSize="14sp" />
+
+                    <RadioButton
                         android:id="@+id/rb_style_SpriteAnnotationFlag"
                         android:theme="@style/MapViewActivityStyle"
                         android:layout_width="match_parent"
@@ -179,6 +195,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Sprite Incident"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/rb_style_SpriteAnnotationFlagGrouping"
+                        android:theme="@style/MapViewActivityStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="43dp"
+                        android:text="Sprite Flag Grouping"
                         android:textSize="14sp" />
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -347,6 +371,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_clear_A" />
+            <Button
+                android:id="@+id/btn_update"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Update Annotation"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_clear_B" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

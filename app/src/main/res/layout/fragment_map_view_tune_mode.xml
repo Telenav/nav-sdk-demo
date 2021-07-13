@@ -11,14 +11,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenario.mapview.MapViewTuneModeFragment">
+    tools:context="com.telenav.sdk.demo.scenario.mapview.MapViewTuneModeFragment">
 
     <include
         android:id="@+id/action_bar"
         layout="@layout/layout_action_bar" />
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+        android:id="@+id/drawer_layout_map_view_tune"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

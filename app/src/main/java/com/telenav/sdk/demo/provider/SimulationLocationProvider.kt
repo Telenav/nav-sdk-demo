@@ -10,6 +10,7 @@ import android.content.Context
 import android.location.Location
 import com.telenav.sdk.common.model.LocationProvider
 import com.telenav.sdk.common.model.Region
+import com.telenav.sdk.demo.main.RegionCachedHelper
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,7 +27,7 @@ class SimulationLocationProvider(val context: Context) : DemoLocationProvider {
     }
 
     init {
-        setLocationByRegion(Region.EU)
+        setLocationByRegion(RegionCachedHelper.getRegion(context))
     }
 
     override fun start() {

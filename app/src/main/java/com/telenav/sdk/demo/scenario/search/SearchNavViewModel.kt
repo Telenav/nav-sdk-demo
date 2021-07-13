@@ -18,7 +18,6 @@ import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.demo.provider.DemoLocationProvider
-import com.telenav.sdk.demo.util.LocationUtils
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 
@@ -37,9 +36,8 @@ class SearchNavViewModel(app: Application) : AndroidViewModel(app), PositionEven
     private var navigationOn = false
 
     init {
-        initLocation = LocationUtils.getLocationByRegion()
-        locationProvider.setLocation(initLocation)
         locationProvider.start()
+        initLocation = locationProvider.lastKnownLocation
         driveSession.eventHub?.addPositionEventListener(this)
         driveSession.injectLocationProvider(locationProvider)
     }
@@ -63,7 +61,7 @@ class SearchNavViewModel(app: Application) : AndroidViewModel(app), PositionEven
 
     fun requestDirection(begin: Location , end: Location) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(LatLon(begin.latitude, begin.longitude)),
+                GeoLocation(begin),
                 GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
                 .routeCount(1)

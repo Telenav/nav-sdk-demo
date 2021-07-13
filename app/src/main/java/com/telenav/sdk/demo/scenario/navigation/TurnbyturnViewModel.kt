@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.navigation
@@ -11,17 +11,17 @@ import androidx.lifecycle.ViewModel
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.model.ManeuverInfo
 import com.telenav.sdk.drivesession.model.NavigationEvent
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.main.TurnListItem
-import com.telenav.sdk.demo.main.TurnListRecyclerViewAdapter
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.util.AndroidThreadUtils
-import com.telenav.sdk.demo.util.ImageItems
-import com.telenav.sdk.map.direction.model.BasicTurn
-import com.telenav.sdk.map.direction.model.GuidanceLaneInfo
+import com.telenav.sdk.map.direction.model.Action
+import com.telenav.sdk.map.direction.model.LaneInfo
+import com.telenav.sdk.ui.ImageItems
+import com.telenav.sdk.ui.turn.TnTurnListItem
+import com.telenav.sdk.ui.turn.TnTurnListRecyclerViewAdapter
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : ViewModel() {
+class TurnbyturnViewModel(val tnTurnListAdapter: TnTurnListRecyclerViewAdapter) : ViewModel() {
 
     val timeToArrival = MutableLiveData<String>()
     val showNavigationDetails = MutableLiveData(false)
@@ -32,8 +32,8 @@ class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : Vi
     val nextTurnStreetName = MutableLiveData<String>()
     val turnListVisibility = MutableLiveData(false)
 
-    val lanePatternCustomImages = MutableLiveData<List<ImageItems>>(listOf())
-    val laneInfo = MutableLiveData<List<GuidanceLaneInfo>>(listOf())
+    val LaneAssets = MutableLiveData<List<ImageItems>>(listOf())
+    val laneInfo = MutableLiveData<List<LaneInfo>>(listOf())
 
     private var currentStepIndex = 0
 
@@ -52,7 +52,7 @@ class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : Vi
         updateTurnListItem(navEvent)
         distanceRemainingToNextTurn.postValue(getMilesOrFeet(navEvent.distanceToTurn))
         navEvent.currentManeuver?.let {
-            turnDirectionDrawable.postValue(getTurnDrawable(it.turnType))
+            turnDirectionDrawable.postValue(getTurnDrawable(it.turnAction))
             nextTurnStreetName.postValue(it.streetName)
             it.laneInfo?.let { laneInfoList -> laneInfo.postValue(laneInfoList) }
                     ?: laneInfo.postValue(listOf())
@@ -65,8 +65,8 @@ class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : Vi
         this.navigationSession = navigationSession
         navigationSession?.let { navSession ->
             navSession.maneuverList?.let {
-                val turnList = getTurnListItem(navSession.maneuverList)
-                turnListAdapter.setupData(turnList)
+                val turnList = getTurnListItem(it)
+                tnTurnListAdapter.setupData(turnList)
                 turnListVisibility.postValue(turnList.isNotEmpty())
             }
         }
@@ -79,8 +79,8 @@ class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : Vi
             AndroidThreadUtils.runOnUiThread(Runnable {
                 navigationSession?.let { navSession ->
                     navSession.maneuverList?.let {
-                        val turnList = getTurnListItem(navSession.maneuverList)
-                        turnListAdapter.setupData(turnList)
+                        val turnList = getTurnListItem(it)
+                        tnTurnListAdapter.setupData(turnList)
                         turnListVisibility.postValue(turnList.isNotEmpty())
                     }
                 }
@@ -88,14 +88,14 @@ class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : Vi
         }
     }
 
-    private fun getTurnListItem(maneuverList: List<ManeuverInfo>): List<TurnListItem> =
+    private fun getTurnListItem(maneuverList: List<ManeuverInfo>): List<TnTurnListItem> =
             maneuverList
                     .filter { it.stepIndex > currentStepIndex }
                     .map {
-                        TurnListItem(
-                                it.streetName,
-                                getMilesOrFeet(it.lengthMeters),
-                                getTurnDrawable(it.turnType)
+                        TnTurnListItem(
+                            it.streetName,
+                            getMilesOrFeet(it.lengthMeters),
+                            getTurnDrawable(it.turnAction)
                         )
                     }
 
@@ -116,15 +116,15 @@ class TurnbyturnViewModel(val turnListAdapter: TurnListRecyclerViewAdapter) : Vi
         }
     }
 
-    private fun getTurnDrawable(turnType: Int): Int {
+    private fun getTurnDrawable(@Action turnType: Int): Int {
         return when (turnType) {
-            BasicTurn.RIGHT -> R.drawable.ic_turn_right
-            BasicTurn.LEFT -> R.drawable.ic_turn_left
-            BasicTurn.CONTINUE -> R.drawable.ic_continue_straight
-            BasicTurn.SLIGHT_LEFT -> R.drawable.ic_turn_slight_left
-            BasicTurn.SLIGHT_RIGHT -> R.drawable.ic_turn_slight_right
-            BasicTurn.STOP_RIGHT -> R.drawable.ic_stop_right
-            BasicTurn.STOP_LEFT -> R.drawable.ic_stop_left
+            Action.TURN_RIGHT -> R.drawable.ic_turn_right_white
+            Action.TURN_LEFT -> R.drawable.ic_turn_left_white
+            Action.CONTINUE -> R.drawable.ic_continue_straight
+            Action.TURN_SLIGHT_LEFT -> R.drawable.ic_turn_slight_left_white
+            Action.TURN_SLIGHT_RIGHT -> R.drawable.ic_turn_slight_right
+            Action.STOP_RIGHT -> R.drawable.ic_stop_right
+            Action.STOP_LEFT -> R.drawable.ic_stop_left
             else -> R.drawable.ic_continue_straight
         }
     }

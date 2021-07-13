@@ -12,8 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.drivesession.model.CandidateRoadInfo
+import com.telenav.sdk.examples.R
 
 class CandidateRoadAdapter(private val recyclerView: RecyclerView,private val onClick : (CandidateRoadInfo)->Unit) : RecyclerView.Adapter<CandidateRoadViewHolder>() {
     var dataList = ArrayList<CandidateRoadInfo>()

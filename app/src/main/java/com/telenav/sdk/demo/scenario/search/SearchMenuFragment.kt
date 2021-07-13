@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_scenario_menu.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 

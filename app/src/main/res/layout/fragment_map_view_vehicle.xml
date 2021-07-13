@@ -11,7 +11,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenario.mapview.MapViewCameraFragment">
+    tools:context="com.telenav.sdk.demo.scenario.mapview.MapViewCameraFragment">
 
     <include
         android:id="@+id/action_bar"

@@ -1,9 +1,3 @@
-/*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
- */
-
 package com.telenav.sdk.demo.scenario.mapview
 
 import android.app.Application
@@ -15,9 +9,9 @@ import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
-import com.telenav.sdk.drivesession.model.StreetInfo
-import com.telenav.sdk.demo.util.DemoLocationProvider
 import com.telenav.sdk.drivesession.model.RoadCalibrator
+import com.telenav.sdk.drivesession.model.StreetInfo
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 
@@ -26,32 +20,32 @@ import com.telenav.sdk.map.direction.model.*
  * @author zhai.xiang on 2021/1/28
  */
 class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEventListener {
-    val startLocation = Location("MapView").apply {
-        this.latitude = 37.398762
-        this.longitude = -121.977216
-        this.bearing = 45.0f
-    }
+    val startLocation : Location
+    val stopLocation : Location
 
-    val stopLocation = Location("MapView").apply {
-        this.latitude = 37.40835858
-        this.longitude = -121.967860455
-    }
-
-    private val driveSession: DriveSession = DriveSession.Factory.createInstance()
+    val driveSession: DriveSession = DriveSession.Factory.createInstance()
     private var navigationSession: NavigationSession? = null
-    var currentVehicleLocation = MutableLiveData<Location>(startLocation)
+    var currentVehicleLocation : MutableLiveData<Location>
     var route = MutableLiveData<Route?>()
-    private val locationProvider = DemoLocationProvider()
+    private val locationProvider = DemoLocationProvider.Factory.createProvider(app, DemoLocationProvider.ProviderType.SIMULATION)
+    private var navigationOn = false
 
     init {
         driveSession.eventHub?.addPositionEventListener(this)
-        locationProvider.setLocation(startLocation)
         driveSession.injectLocationProvider(locationProvider)
+        startLocation = locationProvider.lastKnownLocation
+        stopLocation = Location("").apply {
+            this.longitude = startLocation.longitude + 0.1
+            this.latitude = startLocation.latitude + 0.1
+        }
+        currentVehicleLocation = MutableLiveData<Location>(startLocation)
+        locationProvider.start()
     }
 
     override fun onCleared() {
         driveSession.eventHub?.removePositionEventListener(this)
         driveSession.dispose()
+        locationProvider.stop()
         super.onCleared()
     }
 
@@ -65,19 +59,21 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
 
-    fun requestDirection(begin: Location = startLocation, end: Location = stopLocation) {
+    fun requestDirection(begin: Location = startLocation, end: Location = stopLocation, result : ((Boolean)->Unit)? = null ) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(LatLon(begin.latitude, begin.longitude)),
+                GeoLocation(begin),
                 GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
                 .routeCount(1)
                 .build()
-        val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
+        val task = DirectionClient.Factory.hybridClient().createRoutingTask(request)
         task.runAsync { response ->
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
                 route.postValue(response.response.result[0]!!)
+                result?.invoke(true)
             } else {
                 route.postValue(null)
+                result?.invoke(false)
             }
             task.dispose()
         }
@@ -89,12 +85,18 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
             val routeIds = map.routesController().add(listOf(route.value))
             map.routesController().highlight(routeIds[0])
             navigationSession = driveSession.startNavigation(route.value!!, true, 40.0)
+            navigationOn = true
             map.routesController().updateRouteProgress(routeIds[0])
         }
     }
 
     fun stopNavigation(map: MapView) {
+        navigationOn = false
         navigationSession?.stopNavigation()
         map.routesController().clear()
+    }
+
+    fun isNavigationOn() : Boolean{
+        return navigationOn
     }
 }

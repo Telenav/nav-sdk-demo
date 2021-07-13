@@ -68,7 +68,7 @@
             tools:itemCount="10"
             app:layout_constraintVertical_bias="0"
             app:layout_constrainedHeight="true"
-            app:adapter="@{viewModel.turnListAdapter}"
+            app:adapter="@{viewModel.tnTurnListAdapter}"
             android:layout_marginBottom="100dp"
             app:layout_constraintVertical_chainStyle="packed"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -77,24 +77,14 @@
             app:layout_constraintStart_toStartOf="@id/next_direction_container"
             app:layout_constraintTop_toBottomOf="@id/next_direction_container" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_junction"
+        <com.telenav.sdk.ui.TnJunctionView
+            android:id="@+id/junction_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_junction"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="This is a junction view"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_line_navigation_details"

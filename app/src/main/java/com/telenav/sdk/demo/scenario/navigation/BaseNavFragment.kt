@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+ *  Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
  *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  *  other countries. Other names may be trademarks of their respective owners.
  */
@@ -18,16 +18,19 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
-import com.telenav.sdk.demo.util.DemoLocationProvider
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
+import kotlinx.android.synthetic.main.content_basic_navigation.iv_camera_fix
+import kotlinx.android.synthetic.main.content_basic_navigation.map_view
+import kotlinx.android.synthetic.main.content_basic_navigation.navButton
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -44,14 +47,13 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
     val driveSession: DriveSession = DriveSession.Factory.createInstance()
     var navigationSession: NavigationSession? = null
     var vehicleLocation: Location? = null
-    val locationProvider: DemoLocationProvider = DemoLocationProvider()
+    lateinit var locationProvider: DemoLocationProvider
 
     var highlightedRouteId: String? = null
 
     val navigationOn = MutableLiveData(false)
 
     init {
-        driveSession.injectLocationProvider(locationProvider)
         driveSession.eventHub?.let {
             it.addNavigationEventListener(this)
             it.addPositionEventListener(this)
@@ -60,8 +62,11 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        map_view.initialize(savedInstanceState) {
-        // Enable all of the MapView features
+        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
+        locationProvider.start()
+        driveSession.injectLocationProvider(locationProvider)
+        map_view.initialize(savedInstanceState, {
+            // Enable all of the MapView features
             map_view.featuresController().traffic().setEnabled()
             map_view.featuresController().landmarks().setEnabled()
             map_view.featuresController().buildings().setEnabled()
@@ -72,9 +77,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             map_view.layoutController().setVerticalOffset(-0.5)
 
             // recenter to vehicle position
-            map_view.cameraController().position =
-                Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
-        }
+            map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
+        })
+
         setupButtons()
 
         map_view.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
@@ -123,6 +128,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
         driveSession.eventHub?.removePositionEventListener(this)
         driveSession.eventHub?.removeNavigationEventListener(this)
         driveSession.dispose()
+        locationProvider.stop()
         super.onDestroyView()
     }
 
@@ -133,7 +139,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             wayPoints.add(GeoLocation(LatLon(it.latitude, it.longitude)))
         }
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(LatLon(begin.latitude, begin.longitude)),
+                GeoLocation(begin),
                 GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
                 .routeCount(2)
@@ -151,12 +157,12 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
                 map_view.cameraController().showRegion(region, Margins.Percentages(0.20, 0.20))
                 highlightedRouteId = routeIds[0]
                 activity?.runOnUiThread {
-                    startNavButton.isEnabled = true
+                    navButton.isEnabled = true
                 }
 
             } else {
                 activity?.runOnUiThread {
-                    startNavButton.isEnabled = false
+                    navButton.isEnabled = false
                 }
             }
             task.dispose()
@@ -185,42 +191,44 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             setZoomLevel(currentLevel + 1)
         }
 
-        startNavButton.setOnClickListener {
-            navigationSession?.stopNavigation()
-            startNavButton.isEnabled = false
-            stopNavButton.isEnabled = true
+        var navigating = false
+        navButton.setOnClickListener {
 
-            var pickedRouteIndex = 0 // default route first
-            if (!highlightedRouteId.isNullOrEmpty()) {
-                routes.forEachIndexed { index, route ->
-                    if (route.id == highlightedRouteId) {
-                        pickedRouteIndex = index
+            navigating = !navigating
+            if (navigating) {
+                navigationSession?.stopNavigation()
+
+                var pickedRouteIndex = 0 // default route first
+                if (!highlightedRouteId.isNullOrEmpty()) {
+                    routes.forEachIndexed { index, route ->
+                        if (route.id == highlightedRouteId) {
+                            pickedRouteIndex = index
+                        }
                     }
                 }
-            }
-            val pickedRoute = routes[pickedRouteIndex]
-            navigationSession = driveSession.startNavigation(pickedRoute, true, getDemonstrateSpeed())
-            navigationOn.postValue(true)
-            routeIds.forEachIndexed { index, element ->
-                if (index != pickedRouteIndex) {
-                    map_view.routesController().remove(element)
+                val pickedRoute = routes[pickedRouteIndex]
+                navigationSession = driveSession.startNavigation(pickedRoute, true, getDemonstrateSpeed())
+                navigationOn.postValue(true)
+                routeIds.forEachIndexed { index, element ->
+                    if (index != pickedRouteIndex) {
+                        map_view.routesController().remove(element)
+                    }
                 }
-            }
-            map_view.routesController().updateRouteProgress(pickedRoute.id)
-            // enableFollowVehicleMode
-            map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp)
+                map_view.routesController().updateRouteProgress(pickedRoute.id)
+                // enableFollowVehicleMode
+                map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp)
 
-        }
-
-        stopNavButton.setOnClickListener {
-            navigationSession?.stopNavigation()
-            navigationOn.postValue(false)
-            map_view.annotationsController().clear()
-            map_view.routesController().clear()
-            map_view.cameraController().disableFollowVehicle()
-            activity?.runOnUiThread {
-                startNavButton.isEnabled = false
-                stopNavButton.isEnabled = false
+                navButton.setText(R.string.stop_navigation)
+            } else {
+                navigationSession?.stopNavigation()
+                navigationOn.postValue(false)
+                map_view.annotationsController().clear()
+                map_view.routesController().clear()
+                map_view.cameraController().disableFollowVehicle()
+                activity?.runOnUiThread {
+                    navButton.isEnabled = false
+                }
+                navButton.setText(R.string.start_navigation)
             }
         }
 
@@ -240,6 +248,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
+        Log.i(TAG, "onCandidateRoadDetected: ")
     }
 
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {
@@ -264,8 +273,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             map_view.cameraController().disableFollowVehicle()
             navigationOn.postValue(false)
             activity?.runOnUiThread {
-                startNavButton.isEnabled = false
-                stopNavButton.isEnabled = false
+                navButton.isEnabled = false
             }
         }
     }

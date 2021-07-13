@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
@@ -16,8 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.demo.R
-import kotlinx.android.synthetic.main.activity_scenario_menu.*
+import com.telenav.sdk.examples.R
+import kotlinx.android.synthetic.main.fragment_scenario_menu.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
 /**
@@ -80,6 +80,9 @@ class MapViewMenuFragment : Fragment() {
                 },
                 MenuData(getString(R.string.title_activity_map_view_vehicle)) {
                     findNavController().navigate(R.id.action_mapViewMenuFragment_to_vehicleFragment)
+                },
+                MenuData(getString(R.string.title_activity_map_view_traffic_bubble)) {
+                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewTrafficBubbleFragment)
                 }
         )
     }

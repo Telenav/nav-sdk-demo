@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
@@ -18,13 +18,14 @@ import com.telenav.map.api.MapView
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.diagnosis.RenderMode
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
-import com.telenav.sdk.drivesession.model.StreetInfo
-import com.telenav.sdk.demo.util.DemoLocationProvider
 import com.telenav.sdk.drivesession.model.RoadCalibrator
+import com.telenav.sdk.drivesession.model.StreetInfo
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.demo.provider.SimulationLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.fragment_map_view_tune_mode.*
@@ -35,6 +36,7 @@ import kotlinx.android.synthetic.main.layout_content_map_with_text.mapView
 import kotlinx.android.synthetic.main.layout_content_map_with_text.tv_state
 import kotlinx.android.synthetic.main.layout_operation_tune_mode.*
 import kotlinx.android.synthetic.main.layout_operation_tune_mode.btn_offset_down
+import kotlinx.android.synthetic.main.layout_operation_tune_mode.navButton
 
 /**
  * This fragment shows how to change the map mode
@@ -58,17 +60,17 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     private var navigationSession: NavigationSession? = null
     private var currentVerticalOffset = 0.0
     private var currentVehicleLocation: Location? = null
-    private val locationProvider = DemoLocationProvider()
+    private lateinit var locationProvider : DemoLocationProvider
 
     init {
         driveSession.eventHub?.addPositionEventListener(this)
-        locationProvider.setLocation(startLocation)
         driveSession.injectLocationProvider(locationProvider)
     }
 
     override fun onDestroyView() {
         driveSession.eventHub?.removePositionEventListener(this)
         driveSession.dispose()
+        locationProvider.stop()
         super.onDestroyView()
     }
 
@@ -79,18 +81,20 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
+        (locationProvider as SimulationLocationProvider).setLocation(startLocation)
+        locationProvider.start()
         tv_title.text = getString(R.string.title_activity_map_view_tune_mode)
         iv_back.setOnClickListener {
             findNavController().navigateUp()
         }
         btn_show_menu.setOnClickListener {
-            drawer_layout.open()
+            drawer_layout_map_view_tune.open()
         }
         mapViewInit(savedInstanceState)
         setupDrawerOperations()
         requestDirection(startLocation, stopLocation) {
-            startNavButton.isEnabled = it
-            stopNavButton.isEnabled = false
+            navButton.isEnabled = it
         }
     }
 
@@ -109,8 +113,9 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
-        mapView.cameraController().position = Camera.Position.Builder().setLocation(startLocation).build()
+        mapView.initialize(savedInstanceState) {
+            mapView.cameraController().position = Camera.Position.Builder().setLocation(startLocation).build()
+        }
 
         setCameraUpdateListener()
     }
@@ -136,16 +141,16 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
             moveToVehiclePosition()
         }
 
-        startNavButton.setOnClickListener {
-            startNavigation(mapView, driveSession)
-            startNavButton.isEnabled = false
-            stopNavButton.isEnabled = true
-        }
-
-        stopNavButton.setOnClickListener {
-            stopNavigation(mapView)
-            startNavButton.isEnabled = true
-            stopNavButton.isEnabled = false
+        var navigating = false
+        navButton.setOnClickListener {
+            navigating = !navigating
+            if (navigating) {
+                startNavigation(mapView, driveSession)
+                navButton.setText(R.string.stop_navigation)
+            } else {
+                stopNavigation(mapView)
+                navButton.setText(R.string.start_navigation)
+            }
         }
 
         btn_offset_top.setOnClickListener {
@@ -257,9 +262,6 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
      * This function shows how to show region of routes.
      */
     private fun showRegion(){
-        if (route == null){
-            return
-        }
         val routeIds = mapView.routesController().add(listOf(route))
         val region = mapView.routesController().region(routeIds)
         mapView.cameraController().showRegion(region)
@@ -268,7 +270,7 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
 
     private fun requestDirection(begin: Location, end: Location, result: (Boolean) -> Unit) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(LatLon(begin.latitude, begin.longitude)),
+                GeoLocation(begin),
                 GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
                 .routeCount(1)

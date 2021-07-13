@@ -1,30 +1,27 @@
-/*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
- */
-
 package com.telenav.sdk.demo.scenario.mapview
 
+import android.location.Location
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.map.api.controllers.Feature
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_elements.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map.*
 import kotlinx.android.synthetic.main.layout_operation_elements.*
+import kotlinx.android.synthetic.main.layout_operation_elements.navButton
 
 /**
  * This fragment shows how to show and hide elements.
@@ -52,7 +49,8 @@ class MapViewElementsFragment : Fragment() {
                 setCompass(it)
             },
             ElementOperationItem("ADI Line"){
-                setADILine(it)
+                //@TODO: Requires location value to enable
+                //setADILine(it)
             },
             ElementOperationItem("Scale Bar"){
                 setScaleBar(it)
@@ -68,23 +66,28 @@ class MapViewElementsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
                 .get(MapViewNavViewModel::class.java)
-        viewModel.route.observe(viewLifecycleOwner){
-            if (it != null){
-                startNavButton.isEnabled = true
-                stopNavButton.isEnabled = false
+        tv_title.text = getString(R.string.title_activity_map_view_elements)
+
+        mapView.initialize(savedInstanceState) {
+            activity?.runOnUiThread {
+                viewModel.route.observe(owner = viewLifecycleOwner) {
+                    if (it != null) {
+                        navButton.isEnabled = true
+                    }
+                }
+                viewModel.currentVehicleLocation.observe(owner = viewLifecycleOwner) {
+                    mapView.vehicleController().setLocation(it)
+                }
+
+                viewModel.requestDirection()
             }
         }
-        viewModel.currentVehicleLocation.observe(viewLifecycleOwner){
-            mapView.vehicleController().setLocation(it)
-        }
-        tv_title.text = getString(R.string.title_activity_map_view_elements)
-        mapView.initialize(savedInstanceState, null)
-        viewModel.requestDirection()
+
         iv_back.setOnClickListener {
             findNavController().navigateUp()
         }
         btn_show_menu.setOnClickListener {
-            drawer_layout.open()
+            drawer_layout_elements.open()
         }
         setupDrawerOperations()
     }
@@ -94,18 +97,17 @@ class MapViewElementsFragment : Fragment() {
         recyclerElements.layoutManager = LinearLayoutManager(activity)
         recyclerElements.addItemDecoration(DividerItemDecoration(activity,LinearLayoutManager.VERTICAL))
 
-        startNavButton.setOnClickListener {
-            viewModel.startNavigation(mapView)
-            startNavButton.isEnabled = false
-            stopNavButton.isEnabled = true
+        var navigating = false
+        navButton.setOnClickListener {
+            navigating = !navigating
+            if (navigating) {
+                viewModel.startNavigation(mapView)
+                navButton.setText(R.string.stop_navigation)
+            } else {
+                viewModel.stopNavigation(mapView)
+                navButton.setText(R.string.start_navigation)
+            }
         }
-
-        stopNavButton.setOnClickListener {
-            viewModel.stopNavigation(mapView)
-            startNavButton.isEnabled = true
-            stopNavButton.isEnabled = false
-        }
-
     }
 
     /**
@@ -154,8 +156,12 @@ class MapViewElementsFragment : Fragment() {
      * this method show or hide adi line
      * Notice: routesController().updateRouteProgress should also be called if adi line
      */
-    private fun setADILine(on : Boolean){
-//        setFeature(mapView.featuresController().adiLine(), on)
+    private fun setADILine(on : Boolean, endPoint : Location) {
+        if (on) {
+            mapView.featuresController().adiLine().setEnabled(endPoint)
+        } else {
+            mapView.featuresController().adiLine().setDisabled()
+        }
     }
 
     /**

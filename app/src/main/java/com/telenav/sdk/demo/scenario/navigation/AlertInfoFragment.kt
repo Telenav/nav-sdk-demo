@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+ *  Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
  *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  *  other countries. Other names may be trademarks of their respective owners.
  */
@@ -16,12 +16,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.telenav.sdk.common.model.DayNightMode
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.databinding.FragmentNavAlertInfoBinding
 import com.telenav.sdk.drivesession.listener.AlertEventListener
 import com.telenav.sdk.drivesession.model.AlertEvent
 import com.telenav.sdk.drivesession.model.alert.ExitInfo
 import com.telenav.sdk.drivesession.model.alert.ExitType
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.databinding.FragmentNavAlertInfoBinding
 import com.telenav.sdk.map.SDK
 
 /**

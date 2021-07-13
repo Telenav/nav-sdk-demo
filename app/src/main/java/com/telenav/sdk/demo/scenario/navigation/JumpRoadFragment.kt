@@ -17,13 +17,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.telenav.map.api.controllers.Camera
 import com.telenav.sdk.common.model.DayNightMode
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.demo.util.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.CandidateRoadInfo
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.drivesession.model.StreetInfo
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.coroutines.*
@@ -79,7 +79,7 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
             map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
         }
         setupButtons()
-        startNavButton.isEnabled = true
+        navButton.isEnabled = true
     }
 
     override fun onLocationUpdated(vehicleLocation: Location) {
@@ -159,13 +159,13 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
             setZoomLevel(currentLevel + 1)
         }
 
-        startNavButton.setOnClickListener {
+        navButton.setOnClickListener {
             // enableFollowVehicleMode
             map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp)
 
             activity?.runOnUiThread {
-                startNavButton.isEnabled = false
-                stopNavButton.isEnabled = true
+                navButton.isEnabled = false
+                navButton.isEnabled = true
             }
 
             job = CoroutineScope(Dispatchers.IO).launch {
@@ -173,14 +173,14 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
             }
         }
 
-        stopNavButton.setOnClickListener {
+        navButton.setOnClickListener {
             map_view.cameraController().disableFollowVehicle()
             CoroutineScope(Dispatchers.IO).launch {
                 job?.cancelAndJoin()
             }
             activity?.runOnUiThread {
-                startNavButton.isEnabled = true
-                stopNavButton.isEnabled = false
+                navButton.isEnabled = true
+                navButton.isEnabled = false
             }
         }
 

@@ -10,7 +10,7 @@ import android.content.Context
 import android.location.Location
 import androidx.annotation.RawRes
 import com.telenav.sdk.common.model.LocationProvider
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.util.KmlParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

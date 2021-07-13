@@ -26,15 +26,13 @@ import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.core.Callback
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.search.EntitySearchResponse
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.map.SDK
-import kotlinx.android.synthetic.main.fragment_search_along_route.*
 import kotlinx.android.synthetic.main.fragment_search_show_poi.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
-import kotlinx.android.synthetic.main.layout_content_map_nav.*
 import kotlinx.android.synthetic.main.layout_content_map_nav.btnStartNav
 import kotlinx.android.synthetic.main.layout_content_map_nav.btnStopNav
 import kotlinx.android.synthetic.main.layout_content_map_nav.btn_show_menu
@@ -112,13 +110,13 @@ class SearchShowPoiFragment : Fragment() {
             searchList()
         }
 
-        mapView.setOnAnnotationTouchListener { touchType, position, touchedAnnotation ->
+        mapView.setOnAnnotationTouchListener { touchType, position, touchedAnnotations ->
             if (viewModel.isNavigationOn()){
                 return@setOnAnnotationTouchListener
             }
             if (touchType == TouchType.Click || touchType == TouchType.LongClick){
                 mapView.routesController().clear()
-                val bundle = touchedAnnotation.annotation.extraInfo
+                val bundle = touchedAnnotations[0].annotation.extraInfo
                 if (bundle == null || bundle.getInt(INDEX, -1) == -1){
                     return@setOnAnnotationTouchListener
                 }

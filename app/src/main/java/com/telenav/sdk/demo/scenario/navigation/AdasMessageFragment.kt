@@ -1,25 +1,20 @@
-/*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
- */
-
 package com.telenav.sdk.demo.scenario.navigation
 
 import android.location.Location
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.telenav.sdk.common.model.DayNightMode
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.drivesession.listener.ADASEventListener
 import com.telenav.sdk.drivesession.listener.AlertEventListener
 import com.telenav.sdk.drivesession.model.AlertEvent
 import com.telenav.sdk.drivesession.model.SpeedLimitType
 import com.telenav.sdk.drivesession.model.adas.AdasMessage
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.util.AdasMessageDecoder
 import com.telenav.sdk.demo.util.SpeedLimitPoint
 import com.telenav.sdk.map.SDK
@@ -87,6 +82,7 @@ class AdasMessageFragment : BaseNavFragment(), AlertEventListener, ADASEventList
     }
 
     override fun onADASEventUpdated(adasMessageList: MutableList<AdasMessage>) {
+        Log.i(TAG, "onADASEventUpdated: " + adasMessageList.size)
         activity?.runOnUiThread {
             viewModel.adasList.clear()
             viewModel.adasList.add("adas info")

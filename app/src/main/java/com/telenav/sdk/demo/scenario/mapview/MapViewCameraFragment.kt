@@ -1,21 +1,20 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
 
 import android.location.Location
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.controllers.Camera
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.util.LocationUtils
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_camera.*
 import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
@@ -74,14 +73,16 @@ class MapViewCameraFragment : Fragment() {
         }
         mapViewInit(savedInstanceState)
         setOnClickListener()
+        setCameraUpdateListener()
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         mapView.initialize(savedInstanceState){
-            mapView.vehicleController().setLocation(locationA)
-            setCameraUpdateListener()
             setLocationAnnotations()
             moveCameraToLocation(locationA)
+            activity?.runOnUiThread {
+                mapView.vehicleController().setLocation(locationA)
+            }
         }
     }
 
@@ -132,9 +133,7 @@ class MapViewCameraFragment : Fragment() {
      */
     private fun setVerticalOffset(value: Double) {
         currentVerticalOffset += value
-        currentVerticalOffset = currentVerticalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(
-            MIN_OFFSET
-        )
+        currentVerticalOffset = currentVerticalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(MIN_OFFSET)
         mapView.layoutController().setVerticalOffset(currentVerticalOffset)
     }
 
@@ -143,9 +142,7 @@ class MapViewCameraFragment : Fragment() {
      */
     private fun setHorizontalOffset(value: Double) {
         currentHorizontalOffset += value
-        currentHorizontalOffset = currentHorizontalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(
-            MIN_OFFSET
-        )
+        currentHorizontalOffset = currentHorizontalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(MIN_OFFSET)
         mapView.layoutController().setHorizontalOffset(currentHorizontalOffset)
     }
 

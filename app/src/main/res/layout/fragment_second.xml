@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="navViewModel"
+            type="com.telenav.sdk.demo.main.NavSessionViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.telenav.sdk.demo.main.SecondViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        bind:context=".main.SecondFragment">
+
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/layout_second_content"
+                bind:viewModel="@{viewModel}"
+                bind:navViewModel="@{navViewModel}"/>
+
+            <include
+                layout="@layout/layout_operation_second"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start" />
+
+        </androidx.drawerlayout.widget.DrawerLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

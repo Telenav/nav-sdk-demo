@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
@@ -10,6 +10,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,10 @@ import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.map.api.touch.TouchedAnnotation
 import com.telenav.map.api.touch.listeners.TouchListener
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.util.LocationUtils
+import com.telenav.map.internal.TnAnnotation
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.util.BitmapUtils
 import kotlinx.android.synthetic.main.fragment_map_view_annotation.*
-import kotlinx.android.synthetic.main.fragment_map_view_annotation.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
 /**
@@ -58,9 +59,7 @@ class MapViewAnnotationFragment : Fragment() {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState){
-            mapView.vehicleController().setLocation(LocationUtils.getLocationByRegion())
-        }
+        mapView.initialize(savedInstanceState, null)
     }
 
     /**
@@ -72,9 +71,14 @@ class MapViewAnnotationFragment : Fragment() {
                 addAnnotation(position)
             }
         })
-        mapView.setOnAnnotationTouchListener { touchType, position, touchedAnnotation ->
-            if (touchType == TouchType.Click) {
-                removeTheAnnotation(touchedAnnotation)
+        mapView.setOnAnnotationTouchListener { touchType, position, touchedAnnotations ->
+            Log.i("ANNOTATION_TOUCH_TAG", "Getting click type ${touchType}, " + "annotation numbers: ${touchedAnnotations.size} ")
+            for(item in touchedAnnotations) {
+                val mapAnno = item.annotation as TnAnnotation
+                Log.i("ANNOTATION_TOUCH_TAG", "touched annotation id: ${mapAnno?.annotationId}")
+                if (touchType == TouchType.Click) {
+                    removeTheAnnotation(item)
+                }
             }
         }
     }
@@ -91,6 +95,26 @@ class MapViewAnnotationFragment : Fragment() {
         btn_clear_B.setOnClickListener {
             removeAnnotationsByFilter(bundleB)
         }
+
+        var clickCount = 0
+        btn_update.setOnClickListener{
+            val resourceId= if (clickCount++ %2 == 0){
+                R.drawable.map_pin_orange_icon_unfocused
+            }else{
+                R.drawable.map_pin_red_icon_unfocused
+            }
+            updateAnnotation(resourceId)
+        }
+    }
+
+    private fun updateAnnotation(resourceId :Int){
+        val bitmap = BitmapUtils.getBitmapFromVectorDrawable(requireContext(), resourceId)
+        var userGraphic = Annotation.UserGraphic(bitmap!!)
+        for (annotation in annotationList){
+
+            annotation.setUserGraphic(userGraphic)
+        }
+        mapView.annotationsController().update(annotationList)
     }
 
     /**
@@ -122,6 +146,8 @@ class MapViewAnnotationFragment : Fragment() {
         annotation.type = getSelectedType()
         annotation.extraInfo = getSelectedBundle()
         mapView.annotationsController().add(listOf(annotation))
+        val mapAnno = annotation as TnAnnotation
+        Log.i("ANNOTATION_TOUCH_TAG", "add annotation id ${mapAnno?.annotationId}")
         annotationList.add(annotation)
     }
 
@@ -179,10 +205,13 @@ class MapViewAnnotationFragment : Fragment() {
     private fun getSelectedStyle(): Annotation.Style {
         return when (rg_style.checkedRadioButtonId) {
             R.id.rb_style_ScreenAnnotationPopup -> Annotation.Style.ScreenAnnotationPopup
+            R.id.rb_style_ScreenAnnotationPopupGrouping -> Annotation.Style.ScreenAnnotationPopupGrouping
             R.id.rb_style_ScreenAnnotationPin -> Annotation.Style.ScreenAnnotationPin
             R.id.rb_style_ScreenAnnotationFlag -> Annotation.Style.ScreenAnnotationFlag
+            R.id.rb_style_ScreenAnnotationFlagGrouping -> Annotation.Style.ScreenAnnotationFlagGrouping
             R.id.rb_style_SpriteAnnotationFlag -> Annotation.Style.SpriteAnnotationFlag
             R.id.rb_style_SpriteIncident -> Annotation.Style.SpriteIncident
+            R.id.rb_style_SpriteAnnotationFlagGrouping -> Annotation.Style.SpriteAnnotationFlagGrouping
             else -> Annotation.Style.ScreenAnnotationPin
         }
     }

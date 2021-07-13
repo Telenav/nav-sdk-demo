@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.main
@@ -9,54 +9,77 @@ package com.telenav.sdk.demo.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.telenav.sdk.common.logging.TaLog
+import com.google.android.material.snackbar.Snackbar
+import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
 import com.telenav.sdk.datacollector.api.DataCollectorService
-import com.telenav.sdk.demo.BuildConfig
-import com.telenav.sdk.demo.R
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
+import com.telenav.sdk.examples.BuildConfig
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
+import com.telenav.sdk.map.model.NavSDKOptions
 import com.telenav.sdk.ota.api.OtaService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import java.io.IOException
+import java.io.File
 
-
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
     private val LOG_TAG = MainActivity::class.java.name
     private val permissionRequestCode = 12335
-    private val permissionsRequired = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.INTERNET
-    )
+
     private var initialized = false
 
-    companion object {
-        const val SDK_KEY = BuildConfig.SDK_KEY
-        const val SDK_SECRET = BuildConfig.SDK_SECRET
+    // TODO change options here
+    private val regionInitList = listOf(
+            InitSDKDataModel(Region.NA, "", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
+            InitSDKDataModel(Region.EU, "", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
+            InitSDKDataModel(Region.NA, "$SDK_DATA_DIR_BASE/NA", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
+            InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
+            InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", SDK_KEY_EU, SDK_SECRET_EU, ""),
+            InitSDKDataModel(Region.CN, "", SDK_KEY_NA, SDK_SECRET_NA, URL_CN_DEMO,"DEMO"),
+    )
 
+    companion object {
+        // The KEY and SECRET for test in NA region.
+        const val SDK_KEY_NA = "e48ee2f9-5c2c-41e9-b0d7-167d8ad47870"
+        const val SDK_SECRET_NA = "ce7e333a-e168-4fbb-bb5a-ac5a0fb28eac"
+        // The KEY and SECRET are used to test NIO project in EU region.
+        const val SDK_KEY_EU = "f98eadad-cca7-4a55-b2b5-d6dc930e8bc1"
+        const val SDK_SECRET_EU = "1daf6254-1f88-4b8d-8539-308a60e2d181"
+
+        // The URL for NA region test
         const val URL_NA = "https://apinastg.telenav.com"
+        // The URL is used to test NIO project in EU region
+        const val URL_EU = "https://nioeustg.telenav.com"
+
+        // public access server, could also be visited from intranet
+        const val URL_CN_DEMO = "http://shs-navdemo-cn-routing-01.telenav.cn:10080"
+
+        private const val SDK_DATA_DIR_BASE = "sdcard/map"
 
     }
 
     private fun checkUserPermission() {
+        val permissionsRequired = arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.INTERNET
+        )
         permissionsRequired.forEach { permission ->
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) == PackageManager.PERMISSION_DENIED
+            if (ActivityCompat.checkSelfPermission(
+                            this,
+                            permission
+                    ) == PackageManager.PERMISSION_DENIED
             ) {
                 ActivityCompat.requestPermissions(this, permissionsRequired, permissionRequestCode)
             }
@@ -64,23 +87,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String?>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == permissionRequestCode) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED)) {
                 Toast.makeText(this, "We need all Permission to proceed", Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
                 this.finishAffinity()
             }
         }
     }
 
-    fun initNavSDKAsync(ready: () -> Unit) {
+    fun initNavSDKAsync(ready : ()->Unit) {
         // simulating initializing SDK on worker thread
-        if (initialized) {
+        if (initialized){
             ready()
             return
         }
@@ -90,62 +113,101 @@ class MainActivity : AppCompatActivity() {
             if (success) {
                 initialized = true
                 ready()
-            } else {
-                Toast.makeText(applicationContext, "initialized failed!!", Toast.LENGTH_SHORT)
-                    .show()
+            } else{
+                Toast.makeText(applicationContext, "initialized failed!!", Toast.LENGTH_SHORT).show()
             }
             hideProgress()
         }
     }
 
-    private fun showProgress(text: String) {
-        tvProgress.text = text
-        layoutProgress.visibility = View.VISIBLE
-        layoutContent.visibility = View.GONE
+    fun disposeSDK(){
+        CoroutineScope(Dispatchers.Main).launch {
+            showProgress("Disposing...")
+            withContext(Dispatchers.IO) {
+                SDK.getInstance().dispose()
+                EntityService.shutdown()
+                DataCollectorService.shutdown()
+                OtaService.shutdown()
+                if (!TextUtils.isEmpty(getCachedDataDir())) {
+                    File(getCachedDataDir()).deleteRecursively()
+                }
+            }
+            initialized = false
+            hideProgress()
+        }
     }
 
-    private fun hideProgress() {
-        layoutProgress.visibility = View.GONE
-        layoutContent.visibility = View.VISIBLE
-    }
-
-    private suspend fun initNavSDK(): Boolean {
+    private suspend fun initNavSDK() : Boolean {
         // enable tasdk log
-//        TaLog.enableWriteLogsToFile(true)
-//        TaLog.setLogPath("/sdcard/tasdk.log")
+        // TaLog.enableWriteLogsToFile(true)
+        // TaLog.setLogPath("/sdcard/tasdk.log")
+        val model = RegionCachedHelper.getSDKDataModel(applicationContext) ?: regionInitList[0]
+        val region = model.region
+        // TODO set your local embedded map data path
+        val sdkDataDir = model.mapDataPath
+        val url = model.url
+        val key = model.key
+        val secret = model.secret
         // TODO set your local writable path
         val sdkCacheDataDir = getCachedDataDir()
         // TODO set your local writable ota path
         val otaDataDir = "sdcard/test/"
 
         val optionsBuilder = SDKOptions.builder()
-            .setApiKey(SDK_KEY)
-            .setApiSecret(SDK_SECRET)
-            .setUserId("AndroidSampleTest")
-            .setSdkCacheDataDir(sdkCacheDataDir)
-            .setCloudEndPoint(URL_NA)
-            .setLocale(Locale.EN_US)
+                .setApiKey(key)
+                .setApiSecret(secret)
+                .setSdkCacheDataDir(sdkCacheDataDir)
+                .setCloudEndPoint(url)
+                .setLocale(getLocale(region))    //  if not specified, SDK will assume region EU
+                .setUserId("AndroidSampleTest")
+        if (!TextUtils.isEmpty(sdkDataDir)) {
+            if (File(sdkDataDir).exists()) {
+                optionsBuilder.setSdkDataDir(sdkDataDir)
+            }else{
+                Snackbar.make(layoutContent, "sdkDataDir does not exist",Snackbar.LENGTH_LONG).show()
+            }
+        }
+        Log.i("MainActivity",filesDir.absolutePath)
         val success = initSDK(optionsBuilder.build())
         initEntityService(optionsBuilder.build())
         optionsBuilder
-            .setDeviceGuid("AndroidDeviceGuid")
-            .setApplicationInfo(ApplicationInfo.builder(packageName, "1").build())
-            .setSdkDataDir(otaDataDir)
-            .build()
+                .setDeviceGuid("AndroidDeviceGuid")
+                .setApplicationInfo(ApplicationInfo.builder("demo","1").build())
+                .setSdkDataDir(otaDataDir)
+                .build()
         initDataCollectorService(optionsBuilder.build())
         initOtaService(optionsBuilder.build())
         return success
     }
 
+    /**
+     * This method is evoked by FirstFragment
+     */
     fun getCachedDataDir(): String {
         return "$cacheDir/nav-cached/"
     }
 
+    /**
+     * This method is evoked by FirstFragment
+     */
+    fun getRegionInitList() = regionInitList
 
-    private suspend fun initSDK(options: SDKOptions): Boolean {
+    private suspend fun initSDK(options: SDKOptions) : Boolean {
         val success: Boolean
         withContext(Dispatchers.IO) {
-            success = SDK.getInstance().initialize(this@MainActivity, options) == 0
+            val peLogDir = File(getExternalFilesDir(null),"peLog");
+            peLogDir.mkdir()
+            val navSDKOptions = NavSDKOptions.builder(options)
+                    .setTrafficRefreshTime(60)
+                    .setTrafficExpireTime(60)
+                    .enableTraffic(true)
+                    .enablePositionEngineLog(true)
+                    .setTrafficFetchRange(240)
+                    .setPositionEngineLogStorePath(peLogDir.absolutePath)
+                    .setMapStreamingSpaceLimit(1024*1024*1024)
+                    .build()
+            success = SDK.getInstance().initialize(this@MainActivity, navSDKOptions) == 0
+            Log.e("MainActivity", filesDir.absolutePath)
         }
         return success
     }
@@ -172,14 +234,51 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getUrl(region: Region, tag: String?): String {
+        return if (region == Region.CN) {
+            if (tag != null && tag.isNotEmpty() && tag == "DEMO") {
+                URL_CN_DEMO
+            } else {
+                ""
+            }
+        } else if (region == Region.EU) {
+            URL_EU
+        } else {
+            URL_NA
+        }
+    }
     private suspend fun initDataCollectorService(options: SDKOptions) {
         withContext(Dispatchers.IO) {
             try {
                 DataCollectorService.initialize(this@MainActivity, options)
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun getKey(region: Region): String = if (region == Region.EU) SDK_KEY_EU else SDK_KEY_NA
+
+    private fun getSecret(region: Region): String = if (region == Region.EU) SDK_SECRET_EU else SDK_SECRET_NA
+
+    private fun getLocale(region: Region): Locale = when (region) {
+        Region.CN -> Locale.SIMPLIFIED_CHINESE
+        Region.EU -> Locale.NORWEGIAN
+        Region.TW -> Locale.TRADITIONAL_CHINESE
+        Region.KR -> Locale.KOREAN
+        Region.NA -> Locale.EN_US
+        else -> Locale.GERMAN
+    }
+
+    private fun showProgress(text: String) {
+        tvProgress.text = text
+        layoutProgress.visibility = View.VISIBLE
+        layoutContent.visibility = View.GONE
+    }
+
+    private fun hideProgress() {
+        layoutProgress.visibility = View.GONE
+        layoutContent.visibility = View.VISIBLE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,20 +287,20 @@ class MainActivity : AppCompatActivity() {
         checkUserPermission()
 
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = BuildConfig.APPLICATION_ID
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     override fun onDestroy() {
         Log.i(LOG_TAG, "Begin onDestroy ...")
         SDK.getInstance().dispose()
+        EntityService.shutdown()
         DataCollectorService.shutdown()
         OtaService.shutdown()
         Log.i(LOG_TAG, "Telenav SDK disposed")
@@ -210,6 +309,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
+
         SDK.getInstance().trimMemory(level)
     }
 }

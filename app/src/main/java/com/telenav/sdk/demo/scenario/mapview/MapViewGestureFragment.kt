@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
@@ -21,7 +21,7 @@ import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchType
 import com.telenav.map.api.touch.listeners.TouchListener
 import com.telenav.map.api.touch.listeners.ViewTouchListener
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_gesture.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map_with_text.*
@@ -60,11 +60,11 @@ class MapViewGestureFragment : Fragment() {
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState){
+        mapView.initialize(savedInstanceState) {
             mapView.vehicleController().setLocation(location)
             mapView.cameraController().position = Camera.Position.Builder().setLocation(location).build()
+            resetGestureState()
         }
-
     }
 
     private fun operationInit() {
@@ -81,7 +81,6 @@ class MapViewGestureFragment : Fragment() {
             setAndroidTouchListener(isChecked)
 
         }
-        resetGestureState()
         resetGestureTitleText()
     }
 

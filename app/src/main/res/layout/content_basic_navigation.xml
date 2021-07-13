@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/startNavButton"
+        android:id="@+id/navButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="false"
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/stopNavButton"
+        android:id="@+id/subViewButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="false"
@@ -58,7 +58,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@id/startNavButton"
+        app:layout_constraintBottom_toTopOf="@id/navButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

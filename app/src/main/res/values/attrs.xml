@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressSeekBar">
+        <attr name="bsb_progress" format="float|reference"/>
+        <attr name="bsb_second_track_color" format="color|reference"/> <!--color of left-track, default: R.color.colorAccent-->
+        <attr name="bsb_bubble_text_color" format="color|reference"/> <!--text color of bubble-progress, default: #ffffffff-->
+        <attr name="bsb_show_section_mark" format="boolean"/> <!--show demarcation points or not, default: false-->
+        <attr name="bsb_track_color" format="color|reference"/> <!--color of right-track, default: R.color.colorPrimary-->
+        <attr name="android:enabled"/>
+    </declare-styleable>
+</resources>

@@ -1,7 +1,7 @@
 /*
  * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
- *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
- *  other countries. Other names may be trademarks of their respective owners.
+ * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+ * other countries. Other names may be trademarks of their respective owners.
  */
 
 package com.telenav.sdk.demo.scenario.mapview
@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.views.TnMapView
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.databinding.FragmentMapViewStateBinding
-import com.telenav.sdk.demo.util.LocationUtils
-import kotlinx.android.synthetic.main.fragment_map_view_state.*
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.main.SecondViewModel
+import com.telenav.sdk.examples.databinding.FragmentMapViewStateBinding
+import kotlinx.android.synthetic.main.fragment_map_view_camera.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 
 
@@ -35,6 +35,7 @@ class MapViewStateFragment : Fragment() {
 
     }
 
+    private lateinit var viewModel: SecondViewModel
     lateinit var binding: FragmentMapViewStateBinding
     lateinit var mapView: TnMapView
 
@@ -49,6 +50,7 @@ class MapViewStateFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel = SecondViewModel()
     }
 
     override fun onCreateView(
@@ -71,29 +73,6 @@ class MapViewStateFragment : Fragment() {
         setCameraUpdateListener()
 
 
-        mapView.mapDiagnosis().addMapViewListener {
-            mapView.mapDiagnosis().mapViewStatus?.let {
-                binding.tvTitlePositionSet.post(Runnable {
-                    val text = String.format(
-                        "Camera latitude : %.4f\nCamera longitude : %.4f\n" +
-                                "Camera heading : %.2f\nCar latitude : %.4f\nCar longitude : %.4f\nZoom level : %s\nIs animating : " +
-                                "%s\nInteraction mode :%s\nRender mode val : %s\nIsAutoZoomAnimationRunning : %s",
-                        it.cameraLatitude,
-                        it.cameraLongitude,
-                        it.cameraHeading,
-                        it.carLatitude,
-                        it.carLongitude,
-                        it.zoomLevel,
-                        it.isAnimating,
-                        it.interactionMode,
-                        it.renderModeval,
-                        it.isAutoZoomAnimationRunning
-                    )
-                    binding.tvTitlePositionSet.text = text
-                })
-            }
-            Log.i(TAG, "onMapFirstFrameDraw ")
-        }
     }
 
     private fun setCameraUpdateListener() {
@@ -114,9 +93,31 @@ class MapViewStateFragment : Fragment() {
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         mapView.initialize(savedInstanceState){
-            mapView.vehicleController().setLocation(LocationUtils.getLocationByRegion())
             moveCameraToLocation(locationA)
             setLocationAnnotations()
+            mapView.mapDiagnosis().addMapViewListener {
+                mapView.mapDiagnosis().mapViewStatus?.let { //viewModel.setUpVehicleDetails(it)
+                    binding.tvTitlePositionSet.post(Runnable {
+                        val text = String.format(
+                                "Camera latitude : %.4f\nCamera longitude : %.4f\n" +
+                                        "Camera heading : %.2f\nCar latitude : %.4f\nCar longitude : %.4f\nZoom level : %s\nIs animating : " +
+                                        "%s\nInteraction mode :%s\nRender mode val : %s\nIsAutoZoomAnimationRunning : %s",
+                                it.cameraLatitude,
+                                it.cameraLongitude,
+                                it.cameraHeading,
+                                it.carLatitude,
+                                it.carLongitude,
+                                it.zoomLevel,
+                                it.isAnimating,
+                                it.interactionMode,
+                                it.renderModeval,
+                                it.isAutoZoomAnimationRunning
+                        )
+                        binding.tvTitlePositionSet.text = text
+                    })
+                }
+                Log.i(TAG, "onMapFirstFrameDraw ")
+            }
         }
     }
 

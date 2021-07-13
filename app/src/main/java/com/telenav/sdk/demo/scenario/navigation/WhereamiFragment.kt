@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+ *  Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
  *  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  *  other countries. Other names may be trademarks of their respective owners.
  */
@@ -14,9 +14,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.telenav.sdk.demo.R
-import com.telenav.sdk.demo.databinding.FragmentNavWhereamiBinding
 import com.telenav.sdk.drivesession.model.StreetInfo
+import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.databinding.FragmentNavWhereamiBinding
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_nav_whereami.*
 
@@ -42,7 +42,7 @@ class WhereamiFragment : BaseNavFragment() {
             viewModel.showNavigationDetails.postValue(it)
         }
         setVehicleLocation.setOnClickListener {
-            stopNavButton.performClick()
+            navButton.performClick()
             isSettingLocation = true
         }
     }

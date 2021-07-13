@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.telenav.sdk.demo.R
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_candidate_road.*
 
 class JumpRoadDialogFragment : DialogFragment() {
