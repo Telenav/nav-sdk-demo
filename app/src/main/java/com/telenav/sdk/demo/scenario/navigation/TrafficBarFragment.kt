@@ -1,4 +1,4 @@
-package com.telenav.sdk.examples.scenario.navigation
+package com.telenav.sdk.demo.scenario.navigation
 
 import android.location.Location
 import android.os.Bundle
@@ -11,18 +11,20 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
+import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_traffic_bar.*
 import kotlinx.android.synthetic.main.fragment_traffic_bar.mapView
 import kotlinx.android.synthetic.main.fragment_traffic_bar.navButton
+import kotlinx.android.synthetic.main.layout_action_bar.*
 
 /**
  * @author zhai.xiang on 2021/2/25
@@ -54,7 +56,7 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
+        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(),DemoLocationProvider.ProviderType.SIMULATION)
         locationProvider.start()
         driveSession.injectLocationProvider(locationProvider)
         mapViewInit(savedInstanceState)
@@ -180,6 +182,9 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
+    }
+
+    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
     }
 
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {

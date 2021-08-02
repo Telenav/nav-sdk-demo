@@ -1,16 +1,19 @@
-package com.telenav.sdk.demo.main
+package com.telenav.sdk.examples.main
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.text.TextUtils
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.telenav.sdk.examples.R
+import kotlinx.android.synthetic.main.fragment_set_vehicle_heading_dialog.view.*
 import kotlin.math.roundToInt
 
 /**
@@ -20,7 +23,7 @@ import kotlin.math.roundToInt
 class SetVehicleHeadingDialogFragment : DialogFragment() {
 
     private lateinit var editText :EditText
-    private lateinit var viewModel: SetVehicleHeadingViewModel
+    private lateinit var viewModel:SetVehicleHeadingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

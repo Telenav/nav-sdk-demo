@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.examples.scenario.navigation.*
 import kotlinx.android.synthetic.main.activity_nav_main.*
 
 /**
@@ -58,8 +57,8 @@ class NavMainActivity : AppCompatActivity() {
             MenuData("traffic bar") {
                 showFragment(TrafficBarFragment())
             },
-            MenuData("jump road") {
-                showFragment(JumpRoadFragment())
+            MenuData("nav draw poi") {
+                showFragment(NavDrawPoIFragment())
             }
     )
 

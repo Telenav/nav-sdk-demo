@@ -415,7 +415,8 @@ open class BaseMessage(val content: Long) {
      * position's offset, it doesn't mean its behind, the actual offset is current value + 8192
      */
     fun getActualOffset(currentOffset: Int, vehicleOffset: Int): Int = if (currentOffset < vehicleOffset &&
-            currentOffset + MAX_OFFSET < vehicleOffset + MAX_DETECT_DISTANCE) {
+            currentOffset + MAX_OFFSET < vehicleOffset + MAX_DETECT_DISTANCE
+    ) {
         currentOffset + MAX_OFFSET
     } else {
         currentOffset

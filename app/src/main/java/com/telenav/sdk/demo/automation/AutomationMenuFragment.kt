@@ -44,6 +44,10 @@ class AutomationMenuFragment : Fragment() {
 
     private fun initMenuData() {
         menuList = listOf(
+                MenuData("Pure Navigation Test") {
+                    findNavController().navigate(R.id.action_automationMenuFragment_to_noMapViewFragment)
+                },
+
                 MenuData("RequestRoute") {
                     findNavController().navigate(R.id.action_menuFragment_to_requestRouteFragment)
                 }

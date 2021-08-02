@@ -15,6 +15,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.telenav.map.api.controllers.Camera
+import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.demo.util.AndroidThreadUtils
+import com.telenav.sdk.demo.util.SingleLiveEvent
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.*
@@ -22,10 +25,6 @@ import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.adas.AdasMessage
 import com.telenav.sdk.drivesession.model.alert.ExitInfo
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.examples.main.SecondFragment
-import com.telenav.sdk.demo.provider.DemoLocationProvider
-import com.telenav.sdk.demo.util.AndroidThreadUtils
-import com.telenav.sdk.demo.util.SingleLiveEvent
 import com.telenav.sdk.map.direction.model.Action
 import com.telenav.sdk.map.direction.model.LaneInfo
 import com.telenav.sdk.map.direction.model.Route
@@ -48,7 +47,7 @@ class NavSessionViewModel(private val turnListAdapter: TnTurnListRecyclerViewAda
     val distanceRemainingToNextTurn = MutableLiveData<String>()
     val turnDirectionDrawable = MutableLiveData<Int>()
     val nextTurnStreetName = MutableLiveData<String>()
-    val turnListVisibility = MutableLiveData<Boolean>(false)
+    private val turnListVisibility = MutableLiveData<Boolean>(false)
 
     val currentStreetName = MutableLiveData<String>()
     val compassDirectionLiveData = MutableLiveData<String>()
@@ -56,8 +55,10 @@ class NavSessionViewModel(private val turnListAdapter: TnTurnListRecyclerViewAda
     val vehicleLocation = MutableLiveData<Location>()
     val junctionBitmap = MutableLiveData<Bitmap?>()
     val navigationOn = MutableLiveData<Boolean>(false)
+
     val currentFollowVehicleMode = MutableLiveData<Camera.FollowVehicleMode?>(null)
     var lastFollowVehicleMode : Camera.FollowVehicleMode? = null
+
     val candidateRoadsLiveData = MutableLiveData<List<CandidateRoadInfo>?>()
     var toast = SingleLiveEvent<String>()
     val betterRouteLiveData = MutableLiveData<Route>()
@@ -198,12 +199,38 @@ class NavSessionViewModel(private val turnListAdapter: TnTurnListRecyclerViewAda
             currentStreetName.postValue(it)
             Log.i("navigation", "current street: $it")
         }
-        curStreetInfo.speedLimit?.let { speedLimitLiveData.postValue(it.speedLimit.toString()) }
+        curStreetInfo.speedLimit?.let {
+
+            var speedLimit = "invalid"
+            var speed = 33.0;
+            if (it.speedLimit <= -1 ){
+                speed = 1.38; //5km/h
+            }else if(it.speedLimit > -1 && it.speedLimit < 0x7FFFFFFF) {
+                if (it.speedLimitUnit == SpeedLimitInfo.SpeedLimitUnit.KILOMETERS_PER_HOUR) {
+                    speed =  it.speedLimit / 3.6 - 1.0
+                    speedLimit = it.speedLimit.toString() + "km/h"
+
+                } else {
+                    speed =  1.609344 * it.speedLimit / 3.6
+                    speedLimit = it.speedLimit.toString() + "mph"
+                }
+            }else if (it.speedLimit >= 0x7FFFFFFF){
+                speed = 41.67; // 150 km/h
+                speedLimit = "unlimited"
+
+            }
+            speedLimitLiveData.postValue(speedLimit)
+            navigationSession?.setDemonstrateSpeed(speed.toDouble())
+        }
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
         this.roadCalibrator = roadCalibrator
         candidateRoadsLiveData.postValue(roadCalibrator.getCandidateRoads())
+    }
+
+    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
+        Log.d(TAG, "onMMFeedbackUpdated: ")
     }
 
     override fun onLocationUpdated(vehicleLocationIn: Location) {
@@ -458,15 +485,11 @@ class NavSessionViewModel(private val turnListAdapter: TnTurnListRecyclerViewAda
 
     private fun getNextFollowVehicleModel(currentMode: Camera.FollowVehicleMode?): Camera.FollowVehicleMode {
         if (currentMode == null) {
-            return Camera.FollowVehicleMode.Enhanced
+            return Camera.FollowVehicleMode.values().first()
         }
-        return when (currentMode) {
-            Camera.FollowVehicleMode.Enhanced -> Camera.FollowVehicleMode.HeadingUp
-            Camera.FollowVehicleMode.HeadingUp -> Camera.FollowVehicleMode.NorthUp
-            Camera.FollowVehicleMode.NorthUp -> Camera.FollowVehicleMode.Static
-            Camera.FollowVehicleMode.Static -> Camera.FollowVehicleMode.Enhanced
-            else -> Camera.FollowVehicleMode.Enhanced
-        }
+
+        val values = Camera.FollowVehicleMode.values()
+        return values[(currentMode.ordinal+1) % values.size]
     }
 
     override fun onInit(status: Int) {

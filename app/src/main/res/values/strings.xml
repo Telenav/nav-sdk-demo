@@ -42,6 +42,8 @@
     <string name="title_activity_map_view_status">Map Diagnosis</string>
     <string name="title_activity_map_view_vehicle">Vehicle icon</string>
     <string name="title_activity_map_view_traffic_bubble">Traffic bubble</string>
+    <string name="title_activity_map_view_snaps_shots">snaps shots</string>
+
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>
     <string name="reset_vehicle_icon">Reset vehicle icon</string>
@@ -51,5 +53,6 @@
     <string name="title_activity_search_show_POI">Show POI</string>
     <string name="title_activity_search_along_route">Search along route</string>
     <string name="title_activity_show_poi_in_camera">Show POI in camera</string>
+    <string name="title_activity_search_rgc">RGC Search</string>
     <string name="sub_view_btn_text" translatable="false">SubView</string>
 </resources>

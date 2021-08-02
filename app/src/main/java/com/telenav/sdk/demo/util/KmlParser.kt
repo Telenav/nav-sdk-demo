@@ -14,7 +14,6 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
-import kotlin.jvm.Throws
 
 /**
  * @author zhai.xiang on 2021/4/2

@@ -40,7 +40,7 @@ class SecondViewModel() : ViewModel() {
         /**
          * default mode if no follow vehicle mode selected before
          */
-        val DEFAULT_FOLLOW_VEHICLE_MODE = Camera.FollowVehicleMode.Enhanced
+        val DEFAULT_FOLLOW_VEHICLE_MODE = Camera.FollowVehicleMode.values().first()
     }
 
     val searchResponse = MutableLiveData<EntitySearchResponse?>()

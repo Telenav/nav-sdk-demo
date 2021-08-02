@@ -58,6 +58,9 @@ class SearchMenuFragment : Fragment() {
                 MenuData(getString(R.string.title_activity_show_poi_in_camera)) {
                     findNavController().navigate(R.id.action_searchMenuFragment_to_showPoiInCameraFragment)
                 },
+                MenuData(getString(R.string.title_activity_search_rgc)) {
+                    findNavController().navigate(R.id.action_searchMenuFragment_to_searchRgcFragment)
+                },
         )
     }
 

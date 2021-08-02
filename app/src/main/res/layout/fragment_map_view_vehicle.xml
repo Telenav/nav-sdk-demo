@@ -11,7 +11,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.MapViewCameraFragment">
+    tools:context=".scenario.mapview.MapViewCameraFragment">
 
     <include
         android:id="@+id/action_bar"
@@ -60,25 +60,15 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_set_vehicle_icon" />
 
         <Button
-            android:id="@+id/btn_reset_vehicle_icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/reset_vehicle_icon"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="@+id/btn_set_vehicle_icon_bitmap"
-            app:layout_constraintStart_toStartOf="@+id/btn_set_vehicle_icon_bitmap"
-            app:layout_constraintTop_toBottomOf="@+id/btn_set_vehicle_icon_bitmap" />
-        <Button
             android:id="@+id/btn_locate_map_center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/locate_map_center"
             android:textAllCaps="false"
-            app:layout_constraintEnd_toEndOf="@+id/btn_reset_vehicle_icon"
-            app:layout_constraintStart_toStartOf="@+id/btn_reset_vehicle_icon"
-            app:layout_constraintTop_toBottomOf="@+id/btn_reset_vehicle_icon" />
+            app:layout_constraintEnd_toEndOf="@+id/btn_set_vehicle_icon_bitmap"
+            app:layout_constraintStart_toStartOf="@+id/btn_set_vehicle_icon_bitmap"
+            app:layout_constraintTop_toBottomOf="@+id/btn_set_vehicle_icon_bitmap" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

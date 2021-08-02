@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.demo.scenario.search
+package com.telenav.sdk.examples.scenario.search
 
 import android.graphics.BitmapFactory
 import android.location.Location
@@ -26,13 +26,16 @@ import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.core.Callback
+import com.telenav.sdk.demo.scenario.search.SearchNavViewModel
+import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.search.EntitySearchResponse
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.map.SDK
+import kotlinx.android.synthetic.main.fragment_search_along_route.*
 import kotlinx.android.synthetic.main.fragment_search_show_poi.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
+import kotlinx.android.synthetic.main.layout_content_map_nav.*
 import kotlinx.android.synthetic.main.layout_content_map_nav.btnStartNav
 import kotlinx.android.synthetic.main.layout_content_map_nav.btnStopNav
 import kotlinx.android.synthetic.main.layout_content_map_nav.btn_show_menu
@@ -270,7 +273,7 @@ class SearchShowPoiFragment : Fragment() {
     }
 
     private class CheckBoxAdapter(val recyclerView: RecyclerView,
-                                  val checkBoxDataList: List<CheckBoxData>, val checkedChanged: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CheckBoxViewHolder>() {
+                                  val checkBoxDataList: List<CheckBoxData>,val checkedChanged: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CheckBoxViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckBoxViewHolder =
                 CheckBoxViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_search_check_box_item,
                         parent, false)).apply {

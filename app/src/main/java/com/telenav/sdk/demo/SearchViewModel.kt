@@ -9,12 +9,12 @@ import com.telenav.map.api.Annotation
 import com.telenav.sdk.common.model.Earth.distance
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.core.Callback
+import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.demo.util.AndroidThreadUtils
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.base.EntityType
 import com.telenav.sdk.entity.model.search.EntitySearchResponse
 import com.telenav.sdk.entity.utils.EntityJsonConverter
-import com.telenav.sdk.demo.provider.DemoLocationProvider
-import com.telenav.sdk.demo.util.AndroidThreadUtils
 
 class SearchViewModel(val app : Application) : AndroidViewModel(app) {
     companion object {

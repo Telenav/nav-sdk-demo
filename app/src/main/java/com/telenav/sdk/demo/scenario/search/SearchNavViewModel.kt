@@ -12,12 +12,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.telenav.map.api.MapView
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
+import com.telenav.sdk.drivesession.model.MMFeedbackInfo
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.drivesession.model.StreetInfo
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 
@@ -57,6 +58,9 @@ class SearchNavViewModel(app: Application) : AndroidViewModel(app), PositionEven
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
+    }
+
+    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
     }
 
     fun requestDirection(begin: Location , end: Location) {

@@ -12,8 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_set_up.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
 

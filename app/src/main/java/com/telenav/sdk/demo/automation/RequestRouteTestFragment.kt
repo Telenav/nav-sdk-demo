@@ -8,6 +8,8 @@ package com.telenav.sdk.demo.automation
 
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -17,8 +19,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.Margins
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.scenario.navigation.BaseNavFragment
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
@@ -26,7 +28,7 @@ import java.util.*
 
 /**
  * A simple [Fragment] for automation test of route request
- * @author tang.hui on 2021/1/12
+ * @author tang.hui on 2021/3/23
  */
 class RequestRouteTestFragment : BaseNavFragment() {
 
@@ -39,6 +41,7 @@ class RequestRouteTestFragment : BaseNavFragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             findNavController().navigateUp()
@@ -52,6 +55,7 @@ class RequestRouteTestFragment : BaseNavFragment() {
     }
 
     override fun requestDirection(begin: Location, end: Location, wayPointList: MutableList<Location>?) {
+        EspressoIdlingResource.increment()
         Log.d("requestDirection", "MapLogsForTestData >>>> requestDirection begin: $begin + end $end")
         val request: RouteRequest = RouteRequest.Builder(
                 GeoLocation(begin),
@@ -80,7 +84,19 @@ class RequestRouteTestFragment : BaseNavFragment() {
                 }
             }
             task.dispose()
+            EspressoIdlingResource.decrement()
         }
+    }
+
+    override fun onNavButtonClick(navigating: Boolean) {
+        if (navigating) {
+            EspressoIdlingResource.increment()
+        } else {
+            EspressoIdlingResource.decrement()
+        }
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            navButton.performClick()// stop navigation for automation test
+        }, 5000)
     }
 
 

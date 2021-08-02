@@ -18,10 +18,18 @@
         <action
             android:id="@+id/action_menuFragment_to_requestRouteFragment"
             app:destination="@id/requestRouteTestFragment" />
+        <action
+            android:id="@+id/action_automationMenuFragment_to_noMapViewFragment"
+            app:destination="@id/noMapViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/requestRouteTestFragment"
         android:name="com.telenav.sdk.demo.automation.RequestRouteTestFragment"
         android:label="fragment_request_route_test"
         tools:layout="@layout/content_basic_navigation" />
+    <fragment
+        android:id="@+id/noMapViewFragment"
+        android:name="com.telenav.sdk.demo.automation.PureNavigationFragment"
+        android:label="fragment_no_view_map"
+        tools:layout="@layout/fragment_pure_navigation" />
 </navigation>

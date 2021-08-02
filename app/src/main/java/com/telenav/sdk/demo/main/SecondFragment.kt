@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.examples.main
+package com.telenav.sdk.demo.main
 
 import android.app.Dialog
 import android.graphics.Bitmap
@@ -33,6 +33,7 @@ import com.telenav.map.api.controllers.ShapesController
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.map.elements.MapElement
+import com.telenav.map.elements.TrafficInfo
 import com.telenav.map.geo.Attributes
 import com.telenav.map.geo.Shape
 import com.telenav.sdk.common.internal.SdkUserSettingInternal
@@ -42,18 +43,23 @@ import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.common.model.UnitType
 import com.telenav.sdk.demo.SearchResultItemDao
 import com.telenav.sdk.demo.SharedSearchLocationViewModel
-import com.telenav.sdk.demo.main.*
-import com.telenav.sdk.examples.*
 import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.demo.seekbar.ProgressSeekBar
-import com.telenav.sdk.demo.seekbar.ProgressSeekBar.OnProgressChangedListener
+import com.telenav.sdk.demo.util.BitmapUtils
+import com.telenav.sdk.demo.util.NavPoiFactory
 import com.telenav.sdk.demo.util.NavSearchEngine
+import com.telenav.sdk.demo.util.NavSearchEngine.Companion.SEARCH_FOOD
+import com.telenav.sdk.examples.*
+import com.telenav.sdk.examples.main.CandidateRoadDialogFragment
+import com.telenav.sdk.examples.main.SetVehicleHeadingDialogFragment
+import com.telenav.sdk.examples.main.SetVehicleHeadingViewModel
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.model.RequestMode
 import com.telenav.sdk.map.direction.model.Route
 import com.telenav.sdk.ui.turn.TnTurnListRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_second.*
 import kotlinx.android.synthetic.main.layout_operation_second.*
+import kotlinx.android.synthetic.main.layout_operation_tune_mode.*
 import kotlinx.android.synthetic.main.layout_second_content.*
 import kotlinx.android.synthetic.main.layout_second_content.navButton
 import kotlinx.android.synthetic.main.layout_second_content.subViewButton
@@ -96,6 +102,7 @@ class SecondFragment : Fragment() {
     private val routeAnnotations = ArrayList<Annotation>()
     private var searchController: SearchController? = null
     private var searchEngine: NavSearchEngine? = null
+    private var trafficInfoAnnotation: Annotation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -362,10 +369,11 @@ class SecondFragment : Fragment() {
             } else {
                 R.drawable.ic_cloud_24
             }
+
             tv_request_mode.setImageResource(imageRes)
         }
         val ss: ProgressSeekBar = seekBar
-        ss.onProgressChangedListener = object : OnProgressChangedListener {
+        ss.onProgressChangedListener = object : ProgressSeekBar.OnProgressChangedListener {
             override fun onProgressChanged(
                     progressSeekBar: ProgressSeekBar?,
                     progress: Int,
@@ -454,7 +462,7 @@ class SecondFragment : Fragment() {
             if (it == null) {
                 map_view.cameraController().disableFollowVehicle()
             } else {
-                map_view.cameraController().enableFollowVehicleMode(it)
+                map_view.cameraController().enableFollowVehicleMode(it, sw_use_auto_zoom.isChecked)
                 cameraFollowModeButton.visibility = View.VISIBLE
                 cameraFollowModeButton.text = it.name
             }
@@ -523,6 +531,7 @@ class SecondFragment : Fragment() {
     private fun setOnTouchFunction() {
         map_view.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
             when (touchType) {
+
                 TouchType.Down, TouchType.Up, TouchType.Click, TouchType.Move, TouchType.Cancel -> {
                     Log.i(
                             "TOUCH_TAG", "Touch type ${touchType}, " +
@@ -550,6 +559,11 @@ class SecondFragment : Fragment() {
     private fun setOnTouchAnnotationFunctions() {
         map_view.setOnAnnotationTouchListener() { touchType, data, touchedAnnotations ->
             if (touchType == TouchType.Click) {
+                if (touchedAnnotations[0].annotation == trafficInfoAnnotation) {
+                    hideTrafficIncidentInfo()
+                    return@setOnAnnotationTouchListener
+                }
+
                 val vehicleLocation = navViewModel.vehicleLocation.value
                 if (touchedAnnotations[0].annotation.displayText?.text?.contains("wayPoint") == true) {
                     activity?.runOnUiThread {
@@ -616,11 +630,49 @@ class SecondFragment : Fragment() {
                     "location:[${position.geoLocation?.latitude},${position.geoLocation?.longitude}]")
             for (element in elements) {
                 when (element.type) {
-                    MapElement.Type.TrafficIncident -> Log.i("MAP_ELEMENT_TOUCH_TAG", "Traffic Incident")
+                    MapElement.Type.TrafficIncident -> {
+                        Log.i("MAP_ELEMENT_TOUCH_TAG", "Traffic Incident")
+                        if (element is MapElement.TrafficIncident) {
+                            position.geoLocation?.let {
+                                showTrafficIncidentInfo(it, element.info)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+
+    private fun showTrafficIncidentInfo(location: Location, trafficInfo: TrafficInfo) {
+        hideTrafficIncidentInfo()
+
+        val showText = "IncidentType: ${trafficInfo.incidentType}\n" +
+                "message: ${trafficInfo.message}\n" +
+                "severity: ${trafficInfo.severity}\n" +
+                "sourceType: ${trafficInfo.sourceType}\n" +
+                "crossStreet: ${trafficInfo.crossStreet}\n" +
+                "firstCrossStreet: ${trafficInfo.firstCrossStreet}\n" +
+                "secondCrossStreet: ${trafficInfo.secondCrossStreet}"
+        val layout: View = LayoutInflater.from(requireActivity()).inflate(R.layout.layout_traffic_incident_info,
+                null, false)
+        layout.findViewById<TextView>(R.id.tv).text = showText
+        val bitmap = BitmapUtils.createBitmapFromView(layout)
+        val factory = map_view.annotationsController().factory()
+        trafficInfoAnnotation = factory.create(requireContext(), Annotation.UserGraphic(bitmap), location).apply {
+            this.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+            this.iconY = -0.5
+        }
+
+        map_view.annotationsController().add(listOf(trafficInfoAnnotation))
+    }
+
+    private fun hideTrafficIncidentInfo() {
+        trafficInfoAnnotation?.let {
+            map_view.annotationsController().remove(listOf(it))
+            trafficInfoAnnotation = null
+        }
+    }
+
 
     private fun setZoomLevel(level: Float) {
         val newLevel =
@@ -655,6 +707,7 @@ class SecondFragment : Fragment() {
         initShowPOIOnMap()
         initShowVersionItem()
         initLocaleItem()
+        initSwitchAutoZoomDelegate()
     }
 
     private fun initStyleChangeItem() {
@@ -754,7 +807,7 @@ class SecondFragment : Fragment() {
         layout_free_drive.setOnClickListener {
             if (!startFreeDrive) {
                 tv_free_drive.text = "Stop free drive"
-                map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp)
+                map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
             } else {
                 tv_free_drive.text = "Start free drive"
                 map_view.cameraController().disableFollowVehicle()
@@ -775,7 +828,7 @@ class SecondFragment : Fragment() {
                 SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, value: Int, fromUser: Boolean) {
                 setFPSLabel.setText("Set FPS (" + value + ")")
-                //map_view.setFPS(value)
+                map_view.setFPS(value)
             }
 
             override fun onStartTrackingTouch(seek: SeekBar) {}
@@ -815,9 +868,20 @@ class SecondFragment : Fragment() {
     private fun initShowPOIOnMap() {
         sw_show_poi.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                searchController?.displayPOI(listOf("gas"))
+                searchController?.displayPOI(listOf(SEARCH_FOOD))
             } else {
                 searchController?.displayPOI(emptyList())
+            }
+        }
+    }
+
+
+    private fun initSwitchAutoZoomDelegate() {
+        sw_az_delegate.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                map_view.routesController().setAutoZoomDataDelegate(NIOAutoZoomDelegate())
+            } else {
+                map_view.routesController().setAutoZoomDataDelegate(null)
             }
         }
     }
@@ -929,7 +993,6 @@ class SecondFragment : Fragment() {
 
     private fun resetMapCamera() {
         navViewModel.disableCameraFollow()
-        map_view.cameraController().position = Camera.Position.Builder().setTilt(0f).setBearing(0f).build()
     }
 
     private fun configureMapView() {
@@ -943,7 +1006,7 @@ class SecondFragment : Fragment() {
         map_view.featuresController().scaleBar().setEnabled()
 
         map_view.layoutController().setVerticalOffset(-0.5)
-        // if build_jni_locally use day mode
+
         SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
 
         // recenter to vehicle position
@@ -953,6 +1016,7 @@ class SecondFragment : Fragment() {
         map_view.vehicleController().setIcon(R.drawable.cvp)
         searchEngine = NavSearchEngine(requireContext())
         searchController = map_view.searchController()
+        searchController?.injectPoiAnnotationFactory(NavPoiFactory(requireContext(), map_view.annotationsController().factory()))
         searchController?.injectSearchEngine(searchEngine!!)
     }
 
@@ -1039,24 +1103,6 @@ class SecondFragment : Fragment() {
         } else {
             mapView.shapesController().remove(testShapeId!!)
             testShapeId = null
-        }
-    }
-
-    private var congestionBubble: Annotation? = null
-    private fun testCongestionBubble(location: Location?, isHeavyCongested: Boolean) {
-        if (congestionBubble == null && location != null) {
-            var bubbleStyle: Annotation.ExplicitStyle = Annotation.ExplicitStyle.HeavyCongestionBubble
-            if (!isHeavyCongested) {
-                bubbleStyle = Annotation.ExplicitStyle.LightCongestionBubble
-            }
-            congestionBubble = map_view.annotationsController().factory().create(bubbleStyle, location)
-            congestionBubble?.displayText = Annotation.TextDisplayInfo.Centered("450 m  | 10 min")
-            congestionBubble?.getDisplayText()?.textColor = 0xffffffff.toInt()
-            congestionBubble?.getDisplayText()?.textSize = 20.0f
-            map_view.annotationsController().add(arrayListOf(congestionBubble!!))
-        } else {
-            map_view.annotationsController().remove(arrayListOf(congestionBubble!!))
-            congestionBubble = null;
         }
     }
 
@@ -1204,4 +1250,7 @@ class SecondFragment : Fragment() {
         annotation?.style = Annotation.Style.ScreenAnnotationPopup
         return annotation
     }
+
+    var stage = 0
+    var annotationLayerTestList: List<Annotation> = ArrayList()
 }

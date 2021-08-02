@@ -1,4 +1,4 @@
-package com.telenav.sdk.demo.main
+package com.telenav.sdk.examples.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

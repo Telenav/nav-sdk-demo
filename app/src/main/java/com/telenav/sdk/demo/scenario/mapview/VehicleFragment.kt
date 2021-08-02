@@ -14,10 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.telenav.map.api.Annotation
-import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.controllers.Camera
-import com.telenav.map.api.factories.AnnotationFactory
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
 import kotlinx.android.synthetic.main.fragment_map_view_vehicle.*
@@ -26,7 +23,7 @@ import kotlinx.android.synthetic.main.layout_action_bar.*
 
 /**
  * This fragment shows how to set Vehicle in MapView
- * @author shashank reddy on 2021/27/11
+ * @author wu,changzhong on 2021/30/07
  */
 class VehicleFragment : Fragment() {
 
@@ -34,9 +31,6 @@ class VehicleFragment : Fragment() {
         const val TAG = "VehicleFragment"
     }
 
-    lateinit var factory: AnnotationFactory
-    lateinit var annotation: Annotation
-    lateinit var annotationsController: AnnotationsController
     private val location = Location(MapViewCameraFragment.TAG).apply {
         this.latitude = 40.7478055
         this.longitude = -73.9850480
@@ -62,57 +56,30 @@ class VehicleFragment : Fragment() {
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         mapView.initialize(savedInstanceState) {
-            annotationsController = mapView.annotationsController()
-            factory = annotationsController.factory()
-            setLocationAnnotations()
             moveCameraToLocation(location)
+            mapView.vehicleController().setLocation(location)
         }
     }
 
     private fun setOnClickListener() {
-        btn_set_vehicle_icon.setOnClickListener { setMarker() }
-        btn_set_vehicle_icon_bitmap.setOnClickListener { setMarkerBitmap() }
-        btn_reset_vehicle_icon.setOnClickListener { removeMarker() }
+        btn_set_vehicle_icon.setOnClickListener { setVehicleIconByDrawable() }
+        btn_set_vehicle_icon_bitmap.setOnClickListener { setVehicleIconByBitmap() }
         btn_locate_map_center.setOnClickListener { moveCameraToLocation(location) }
     }
 
     /**
-     * This function shows how to remove marker
+     * This function shows how to set vehicle icon by drawable
      */
-    private fun removeMarker() {
-        annotationsController.clear()
-        annotation =
-            factory.create(requireContext(), R.drawable.map_pin_green_icon_unfocused, location)
-        annotationsController.add(listOf(annotation))
+    private fun setVehicleIconByDrawable() {
+        mapView.vehicleController().setIcon(R.drawable.map_pin_red_icon_unfocused)
     }
 
     /**
-     * This function shows how to set marker annotations
+     * This function shows how to set vehicle icon by bitmap
      */
-    private fun setMarker() {
-        annotationsController.clear()
-        annotation = factory.create(requireContext(), R.drawable.map_pin_red_icon_unfocused, location)
-        annotationsController.add(listOf(annotation))
-    }
-
-    /**
-     * This function shows how to set bitmap annotations
-     */
-    private fun setMarkerBitmap() {
-        annotationsController.clear()
+    private fun setVehicleIconByBitmap() {
         val bitmap = BitmapFactory.decodeResource(context?.resources, R.drawable.car_steering_wheel)
-        val userGraphic = Annotation.UserGraphic(bitmap)
-        annotation = factory.create(requireContext(), userGraphic, location)
-        annotationsController.add(listOf(annotation))
-    }
-
-    /**
-     * This function shows how to set default annotations
-     */
-    private fun setLocationAnnotations() {
-        annotationsController.clear()
-        annotation = factory.create(requireContext(), R.drawable.map_pin_green_icon_unfocused, location)
-        annotationsController.add(listOf(annotation))
+        mapView.vehicleController().setIcon(bitmap)
     }
 
     override fun onResume() {

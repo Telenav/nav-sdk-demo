@@ -133,7 +133,9 @@ class MapViewCameraFragment : Fragment() {
      */
     private fun setVerticalOffset(value: Double) {
         currentVerticalOffset += value
-        currentVerticalOffset = currentVerticalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(MIN_OFFSET)
+        currentVerticalOffset = currentVerticalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(
+            MIN_OFFSET
+        )
         mapView.layoutController().setVerticalOffset(currentVerticalOffset)
     }
 
@@ -142,7 +144,9 @@ class MapViewCameraFragment : Fragment() {
      */
     private fun setHorizontalOffset(value: Double) {
         currentHorizontalOffset += value
-        currentHorizontalOffset = currentHorizontalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(MIN_OFFSET)
+        currentHorizontalOffset = currentHorizontalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(
+            MIN_OFFSET
+        )
         mapView.layoutController().setHorizontalOffset(currentHorizontalOffset)
     }
 

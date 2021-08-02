@@ -9,6 +9,7 @@ package com.telenav.sdk.demo.scenario.mapview
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,10 +24,13 @@ import com.telenav.map.api.touch.TouchType
 import com.telenav.map.api.touch.TouchedAnnotation
 import com.telenav.map.api.touch.listeners.TouchListener
 import com.telenav.map.internal.TnAnnotation
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.util.BitmapUtils
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_annotation.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
+import kotlinx.android.synthetic.main.layout_content_map.btn_show_menu
+import kotlinx.android.synthetic.main.layout_content_map.mapView
+import kotlinx.android.synthetic.main.layout_operation_annotation.*
 
 /**
  * This fragment shows how to operate annotation in MapView
@@ -37,6 +41,7 @@ class MapViewAnnotationFragment : Fragment() {
 
     private val bundleA = Bundle()
     private val bundleB = Bundle()
+    private val pxUnit = 50
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -49,6 +54,9 @@ class MapViewAnnotationFragment : Fragment() {
         tv_title.text = getString(R.string.title_activity_map_view_annotation)
         iv_back.setOnClickListener {
             findNavController().navigateUp()
+        }
+        btn_show_menu.setOnClickListener {
+            drawer_layout.open()
         }
         mapViewInit(savedInstanceState)
         setMapViewClickListener()
@@ -145,6 +153,9 @@ class MapViewAnnotationFragment : Fragment() {
         annotation.style = getSelectedStyle()
         annotation.type = getSelectedType()
         annotation.extraInfo = getSelectedBundle()
+        val annotationOffset = getAnnotationOffset()
+        annotation.iconX = annotationOffset.first
+        annotation.iconY = annotationOffset.second
         mapView.annotationsController().add(listOf(annotation))
         val mapAnno = annotation as TnAnnotation
         Log.i("ANNOTATION_TOUCH_TAG", "add annotation id ${mapAnno?.annotationId}")
@@ -155,6 +166,9 @@ class MapViewAnnotationFragment : Fragment() {
         return when (rg_create_method.checkedRadioButtonId) {
             R.id.rb_create_resource -> createAnnotationWithResource(position)
             R.id.rb_create_bitmap -> createAnnotationWithBitmap(position)
+            R.id.rb_bitmap_text -> createAnnotationWithText(position)
+            R.id.rb_create_heavy_congestion_bubble -> createCongestionBubble(Annotation.ExplicitStyle.HeavyCongestionBubble, position)
+            R.id.rb_create_light_congestion_bubble -> createCongestionBubble(Annotation.ExplicitStyle.LightCongestionBubble, position)
             else -> createAnnotationWithResource(position)
         }
     }
@@ -176,14 +190,51 @@ class MapViewAnnotationFragment : Fragment() {
         return factory.create(requireContext(), Annotation.UserGraphic(bitmap), position.geoLocation!!)
     }
 
+    private fun createAnnotationWithText(position: TouchPosition) : Annotation {
+        val factory = mapView.annotationsController().factory()
+        val offset = getTextOffset()
+        return factory.create(requireContext(), Annotation.UserGraphic(getBitmap()), position.geoLocation!!).apply {
+            this.displayText = Annotation.TextDisplayInfo("Text", offset.first, offset.second).apply {
+                this.textColor = Color.RED
+            }
+        }
+    }
+
+    private fun getBitmap() : Bitmap{
+        return Bitmap.createBitmap(4 * pxUnit, 4 * pxUnit, Bitmap.Config.ARGB_8888).apply {
+            for (i in 0 until 4 * pxUnit){
+                for (j in 0 until 4 * pxUnit){
+                    val dark = (i / pxUnit + j / pxUnit) % 2 == 0
+                    if (dark) {
+                        this.setPixel(i, j, Color.BLUE)
+                    }else{
+                        this.setPixel(i, j, Color.GREEN)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * This method shows how to create a congestion bubble
+     */
+    private fun createCongestionBubble(explicitStyle : Annotation.ExplicitStyle, position: TouchPosition): Annotation {
+        val factory = mapView.annotationsController().factory()
+        val congestionBubble = factory.create(explicitStyle, position.geoLocation!!)
+        congestionBubble?.displayText = Annotation.TextDisplayInfo.Centered("450 m | 10 min")
+        congestionBubble?.getDisplayText()?.textColor = 0xffffffff.toInt()
+        congestionBubble?.getDisplayText()?.textSize = 20.0f
+        return congestionBubble
+    }
+
     /**
      * Create a view to show
      */
     private fun createView(position: TouchPosition): View {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.layout_complex_annotation,
-                null, false)
+            null, false)
         layout.findViewById<TextView>(R.id.tv_position).text = String.format("[ %.6f , %.6f ]",
-                position.geoLocation?.latitude ?: 0f, position.geoLocation?.longitude ?: 0f)
+            position.geoLocation?.latitude ?: 0f, position.geoLocation?.longitude ?: 0f)
         return layout
     }
 
@@ -232,6 +283,24 @@ class MapViewAnnotationFragment : Fragment() {
             R.id.rb_inject_B -> bundleB
             R.id.rb_inject_default -> null
             else -> null
+        }
+    }
+
+    private fun getAnnotationOffset() : Pair<Double , Double>{
+        return when(rg_annotation_offset.checkedRadioButtonId){
+            R.id.rb_annotation_offset_default -> Pair(0.0 ,0.0)
+            R.id.rb_annotation_offset_neg -> Pair(-0.5 , -0.5)
+            R.id.rb_annotation_offset_pos -> Pair(0.5 , 0.5)
+            else -> Pair(0.0 ,0.0)
+        }
+    }
+
+    private fun getTextOffset() : Pair<Int , Int>{
+        return when(rg_text_offset.checkedRadioButtonId){
+            R.id.rb_text_offset_default -> Pair(0 ,0)
+            R.id.rb_text_offset_neg -> Pair(-pxUnit , -pxUnit)
+            R.id.rb_text_offset_pos -> Pair(pxUnit , pxUnit)
+            else -> Pair(0 ,0)
         }
     }
 

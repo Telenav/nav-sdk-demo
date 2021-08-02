@@ -18,14 +18,15 @@ import com.telenav.map.api.MapView
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.diagnosis.RenderMode
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.demo.provider.SimulationLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
+import com.telenav.sdk.drivesession.model.MMFeedbackInfo
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.demo.provider.DemoLocationProvider
-import com.telenav.sdk.demo.provider.SimulationLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.fragment_map_view_tune_mode.*
@@ -109,6 +110,9 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
 
+    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
+    }
+
     /**
      * the initialize function must be called after SDK is initialized
      */
@@ -185,7 +189,8 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
      */
     private fun enableFollowVehicle() {
         val model = getSelectedFollowMode()
-        mapView.cameraController().enableFollowVehicleMode(model)
+        val useAutoZoom = getUseAutoZoom()
+        mapView.cameraController().enableFollowVehicleMode(model, useAutoZoom)
     }
 
     /**
@@ -197,10 +202,14 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
 
     private fun getSelectedFollowMode(): Camera.FollowVehicleMode =
             when (rg_follow_model.checkedRadioButtonId) {
-                R.id.rb_heading_up_3D -> Camera.FollowVehicleMode.Enhanced
+                R.id.rb_heading_up_3D -> Camera.FollowVehicleMode.HeadingUp
                 R.id.rb_north_up -> Camera.FollowVehicleMode.NorthUp
-                else -> Camera.FollowVehicleMode.HeadingUp
+                else -> Camera.FollowVehicleMode.Static
             }
+
+    private fun getUseAutoZoom(): Boolean {
+        return sc_use_auto_zoom.isChecked
+    }
 
     /**
      *T his function shows how to move camera to the vehicle.

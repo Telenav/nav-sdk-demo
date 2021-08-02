@@ -21,6 +21,7 @@ import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
 import com.telenav.sdk.datacollector.api.DataCollectorService
+import com.telenav.sdk.demo.util.RegionCachedHelper
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
@@ -44,8 +45,9 @@ open class MainActivity : AppCompatActivity() {
             InitSDKDataModel(Region.EU, "", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
             InitSDKDataModel(Region.NA, "$SDK_DATA_DIR_BASE/NA", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
             InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
-            InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", SDK_KEY_EU, SDK_SECRET_EU, ""),
-            InitSDKDataModel(Region.CN, "", SDK_KEY_NA, SDK_SECRET_NA, URL_CN_DEMO,"DEMO"),
+            InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", ON_BOARD_KEY, ON_BOARD_SECRET, ""),         InitSDKDataModel(Region.CN, "", SDK_KEY_NA,
+            SDK_SECRET_NA,
+            URL_CN_DEMO,"DEMO"),
     )
 
     companion object {
@@ -55,6 +57,9 @@ open class MainActivity : AppCompatActivity() {
         // The KEY and SECRET are used to test NIO project in EU region.
         const val SDK_KEY_EU = "f98eadad-cca7-4a55-b2b5-d6dc930e8bc1"
         const val SDK_SECRET_EU = "1daf6254-1f88-4b8d-8539-308a60e2d181"
+        // The value for embedded setting, can be any value but empty string.
+        const val ON_BOARD_KEY = "0"
+        const val ON_BOARD_SECRET = "0"
 
         // The URL for NA region test
         const val URL_NA = "https://apinastg.telenav.com"
@@ -183,7 +188,7 @@ open class MainActivity : AppCompatActivity() {
     /**
      * This method is evoked by FirstFragment
      */
-    fun getCachedDataDir(): String {
+    private fun getCachedDataDir(): String {
         return "$cacheDir/nav-cached/"
     }
 

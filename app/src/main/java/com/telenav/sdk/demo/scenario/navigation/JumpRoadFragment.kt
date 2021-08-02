@@ -21,6 +21,7 @@ import com.telenav.sdk.demo.util.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.CandidateRoadInfo
+import com.telenav.sdk.drivesession.model.MMFeedbackInfo
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.examples.R
@@ -115,6 +116,10 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
         }
     }
 
+    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
+        TODO("Not yet implemented")
+    }
+
     private fun showRoadsDialog() {
         candidateRoadDialogFragment?.dismiss()
         candidateRoadDialogFragment = JumpRoadDialogFragment()
@@ -161,7 +166,7 @@ class JumpRoadFragment : Fragment(), PositionEventListener {
 
         navButton.setOnClickListener {
             // enableFollowVehicleMode
-            map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp)
+            map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp,true)
 
             activity?.runOnUiThread {
                 navButton.isEnabled = false

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.examples.main.SecondFragment
 
 class SecondActivity : AppCompatActivity() {
     var fragmentManager: FragmentManager? = null

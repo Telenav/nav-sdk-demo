@@ -18,19 +18,17 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.automation.EspressoIdlingResource
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
-import kotlinx.android.synthetic.main.content_basic_navigation.iv_camera_fix
-import kotlinx.android.synthetic.main.content_basic_navigation.map_view
-import kotlinx.android.synthetic.main.content_basic_navigation.navButton
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -62,10 +60,11 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
+        EspressoIdlingResource.increment()
+        locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(),DemoLocationProvider.ProviderType.SIMULATION)
         locationProvider.start()
         driveSession.injectLocationProvider(locationProvider)
-        map_view.initialize(savedInstanceState, {
+        map_view.initialize(savedInstanceState) {
             // Enable all of the MapView features
             map_view.featuresController().traffic().setEnabled()
             map_view.featuresController().landmarks().setEnabled()
@@ -78,7 +77,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
 
             // recenter to vehicle position
             map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
-        })
+
+            EspressoIdlingResource.decrement()
+        }
 
         setupButtons()
 
@@ -92,6 +93,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             highlightedRouteId = routeID
             map_view.routesController().highlight(routeID)
         }
+
+        subViewButton.visibility = View.INVISIBLE
+
     }
 
     open fun onLongClick(location: Location?) {
@@ -195,6 +199,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
         navButton.setOnClickListener {
 
             navigating = !navigating
+            onNavButtonClick(navigating)
             if (navigating) {
                 navigationSession?.stopNavigation()
 
@@ -216,7 +221,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
                 }
                 map_view.routesController().updateRouteProgress(pickedRoute.id)
                 // enableFollowVehicleMode
-                map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp)
+                map_view.cameraController().enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, false)
 
                 navButton.setText(R.string.stop_navigation)
             } else {
@@ -232,6 +237,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             }
         }
 
+    }
+
+    open fun onNavButtonClick(navigating: Boolean) {
     }
 
     open fun getDemonstrateSpeed(): Double {
@@ -257,6 +265,10 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
         }
     }
 
+    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
+        Log.d(TAG, "onMMFeedbackUpdated: ")
+    }
+
     override fun onJunctionViewUpdated(junctionViewInfo: JunctionViewInfo) {
         Log.d(TAG, "onJunctionViewUpdated")
     }
@@ -275,6 +287,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             activity?.runOnUiThread {
                 navButton.isEnabled = false
             }
+            EspressoIdlingResource.decrement()
         }
     }
 

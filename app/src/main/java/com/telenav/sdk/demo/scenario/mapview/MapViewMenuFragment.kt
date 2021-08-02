@@ -83,7 +83,10 @@ class MapViewMenuFragment : Fragment() {
                 },
                 MenuData(getString(R.string.title_activity_map_view_traffic_bubble)) {
                     findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewTrafficBubbleFragment)
-                }
+                },
+                MenuData(getString(R.string.title_activity_map_view_snaps_shots)) {
+                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewSnapshotsFragment)
+                },
         )
     }
 

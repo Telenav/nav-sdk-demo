@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.demo.scenario.search
+package com.telenav.sdk.examples.scenario.search
 
 import android.location.Location
 import com.telenav.sdk.entity.model.base.Entity

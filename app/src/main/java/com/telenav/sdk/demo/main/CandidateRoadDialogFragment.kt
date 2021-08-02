@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.demo.main
+package com.telenav.sdk.examples.main
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.telenav.sdk.demo.main.CandidateRoadViewModel
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_candidate_road.*
 

@@ -863,23 +863,23 @@ class ProgressSeekBar @JvmOverloads constructor(
      */
     interface OnProgressChangedListener {
         fun onProgressChanged(
-                progressSeekBar: ProgressSeekBar?,
-                progress: Int,
-                progressFloat: Float,
-                fromUser: Boolean
+            progressSeekBar: ProgressSeekBar?,
+            progress: Int,
+            progressFloat: Float,
+            fromUser: Boolean
         )
 
         fun getProgressOnActionUp(
-                progressSeekBar: ProgressSeekBar?,
-                progress: Int,
-                progressFloat: Float
+            progressSeekBar: ProgressSeekBar?,
+            progress: Int,
+            progressFloat: Float
         )
 
         fun getProgressOnFinally(
-                progressSeekBar: ProgressSeekBar?,
-                progress: Int,
-                progressFloat: Float,
-                fromUser: Boolean
+            progressSeekBar: ProgressSeekBar?,
+            progress: Int,
+            progressFloat: Float,
+            fromUser: Boolean
         )
     }
 

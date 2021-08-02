@@ -10,7 +10,7 @@ import android.content.Context
 import android.location.Location
 import com.telenav.sdk.common.model.LocationProvider
 import com.telenav.sdk.common.model.Region
-import com.telenav.sdk.demo.main.RegionCachedHelper
+import com.telenav.sdk.demo.util.RegionCachedHelper
 import java.util.*
 import kotlin.collections.ArrayList
 

@@ -19,11 +19,14 @@
         <action
             android:id="@+id/action_searchMenuFragment_to_showPoiInCameraFragment"
             app:destination="@id/showPoiInCameraFragment" />
+        <action
+            android:id="@+id/action_searchMenuFragment_to_searchRgcFragment"
+            app:destination="@id/searchRgcFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/searchShowPoiFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.SearchShowPoiFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.SearchShowPoiFragment"
         android:label="SearchShowPoiFragment"
         tools:layout="@layout/fragment_search_show_poi" />
     <fragment
@@ -36,4 +39,8 @@
         android:name="com.telenav.sdk.demo.scenario.search.ShowPoiInCameraFragment"
         tools:layout="@layout/fragment_show_poi_in_camera"
         android:label="ShowPoiInCameraFragment" />
+    <fragment
+        android:id="@+id/searchRgcFragment"
+        android:name="com.telenav.sdk.demo.scenario.search.SearchRgcFragment"
+        android:label="SearchRgcFragment" />
 </navigation>

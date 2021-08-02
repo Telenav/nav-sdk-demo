@@ -9,6 +9,7 @@ package com.telenav.sdk.demo.util
 import android.content.Context
 import com.google.gson.Gson
 import com.telenav.sdk.common.model.Region
+import com.telenav.sdk.demo.main.InitSDKDataModel
 
 /**
  * @author zhai.xiang on 2021/2/20

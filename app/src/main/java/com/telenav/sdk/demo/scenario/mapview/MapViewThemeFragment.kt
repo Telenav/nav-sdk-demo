@@ -13,8 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.telenav.sdk.common.model.DayNightMode
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.provider.DemoLocationProvider
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.fragment_map_view_theme.*
 import kotlinx.android.synthetic.main.layout_action_bar.*

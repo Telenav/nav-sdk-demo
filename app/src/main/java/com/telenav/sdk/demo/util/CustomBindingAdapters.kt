@@ -1,4 +1,4 @@
-package com.telenav.sdk.examples.util
+package com.telenav.sdk.demo.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

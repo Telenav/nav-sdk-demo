@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.demo.main
+package com.telenav.sdk.examples.main
 
 import android.text.TextUtils
 import android.view.LayoutInflater

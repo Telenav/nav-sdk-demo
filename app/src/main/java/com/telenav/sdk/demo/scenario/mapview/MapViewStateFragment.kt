@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.views.TnMapView
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.main.SecondViewModel
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentMapViewStateBinding
 import kotlinx.android.synthetic.main.fragment_map_view_camera.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
