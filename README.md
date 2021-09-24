@@ -15,7 +15,3 @@ Setting App key and secret
 const val API_KEY = "API_KEY"
 const val API_SECRET = "API_SECRET"
 ```
-
-Screenshots
------------
-![](screenshots/demo-splash.png)
