@@ -142,10 +142,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         end: Location,
         wayPointList: MutableList<Location>? = null
     ) {
-        Log.d(
-            "MapLogsForTestData",
-            "MapLogsForTestData >>>> requestDirection begin: $begin + end $end"
-        )
+        Log.d(LOG_TAG, "requestDirection begin: $begin + end $end")
         val wayPoints: ArrayList<GeoLocation> = arrayListOf()
         wayPointList?.forEach {
             wayPoints.add(GeoLocation(LatLon(it.latitude, it.longitude)))
@@ -161,17 +158,13 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         val task = DirectionClient.Factory.hybridClient()
             .createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
-            Log.d(
-                LOG_TAG,
-                "MapLogsForTestData >>>> requestDirection task status: ${response.response.status}"
-            )
+            Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
                 val routes = response.response.result
                 val routeIds = map_view.routesController().add(routes)
                 map_view.routesController().highlight(routeIds[0])
                 val region = map_view.routesController().region(routeIds)
                 map_view.cameraController().showRegion(region, Margins.Percentages(0.20, 0.20))
-//                highlightedRouteId = routeIds[0]
                 pickedRoute = routes[0]
                 runOnUiThread {
                     navButton.isEnabled = true
