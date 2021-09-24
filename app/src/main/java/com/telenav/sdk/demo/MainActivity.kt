@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
+import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
@@ -190,6 +191,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 }
 
             } else {
+                Log.e(LOG_TAG, "requestDirection task failed! status: ${response.response.status}")
+
                 runOnUiThread {
                     navButton.isEnabled = false
                 }
@@ -210,15 +213,15 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {
-//        TODO("Not yet implemented")
+        //  TODO("Not yet implemented")
     }
 
     override fun onJunctionViewUpdated(junctionViewInfo: JunctionViewInfo) {
-//        TODO("Not yet implemented")
+        //  TODO("Not yet implemented")
     }
 
     override fun onAlongRouteTrafficUpdated(alongRouteTraffic: AlongRouteTraffic) {
-//        TODO("Not yet implemented")
+        //  TODO("Not yet implemented")
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
@@ -248,19 +251,21 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onLocationUpdated(vehicleLocation: Location) {
-        map_view.vehicleController().setLocation(vehicleLocation)
+        map_view?.let {
+            (it.vehicleController())?.setLocation(vehicleLocation)
+        }
     }
 
     override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
-//        TODO("Not yet implemented")
+        //  TODO("Not yet implemented")
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
-//        TODO("Not yet implemented")
+        //  TODO("Not yet implemented")
     }
 
     override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
-//        TODO("Not yet implemented")
+        //  TODO("Not yet implemented")
     }
 
 }
