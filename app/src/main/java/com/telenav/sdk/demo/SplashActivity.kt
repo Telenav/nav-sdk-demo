@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+
 /**
  * @author tang.hui on 2021/9/24
  */
@@ -45,10 +46,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        checkUserPermission()
-        initNavSDKAsync {
-            MainActivity.start(this)
-            finish()
+        if (checkUserPermission()) {
+            initNavSDKAsync {
+                MainActivity.start(this)
+                finish()
+            }
         }
     }
 
@@ -57,7 +59,7 @@ class SplashActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    private fun checkUserPermission() {
+    private fun checkUserPermission(): Boolean {
         val permissionsRequired = arrayOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -71,8 +73,10 @@ class SplashActivity : AppCompatActivity() {
                 ) == PackageManager.PERMISSION_DENIED
             ) {
                 ActivityCompat.requestPermissions(this, permissionsRequired, permissionRequestCode)
+                return false
             }
         }
+        return true
     }
 
     override fun onRequestPermissionsResult(
@@ -86,6 +90,11 @@ class SplashActivity : AppCompatActivity() {
                 Toast.makeText(this, "We need all Permission to proceed", Toast.LENGTH_SHORT)
                     .show()
                 this.finishAffinity()
+            } else {
+                initNavSDKAsync {
+                    MainActivity.start(this)
+                    finish()
+                }
             }
         }
     }

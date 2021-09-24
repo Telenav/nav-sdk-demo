@@ -56,8 +56,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     init {
-        driveSession.enableAlert(true)
-        driveSession.enableADAS(true)
         driveSession.injectLocationProvider(locationProvider)
         driveSession.eventHub?.let {
             it.addNavigationEventListener(this)
@@ -68,7 +66,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     private val LOG_TAG = MainActivity::class.java.name
-
 
     companion object {
         fun start(context: Context) {
