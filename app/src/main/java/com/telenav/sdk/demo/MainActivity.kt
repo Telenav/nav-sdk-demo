@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private val driveSession: DriveSession = DriveSession.Factory.createInstance()
     private var locationProvider = SimulationLocationProvider(this)
     private var navigationSession: NavigationSession? = null
+    private var mapViewInitialized = false
     private var navigating = false
 
     private var vehicleLocation: Location = Location("Demo").apply {
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         map_view.initialize(savedInstanceState) {
+            mapViewInitialized = true
             map_view.vehicleController().setIcon(R.drawable.cvp)
 
             // Enable all of the MapView features
@@ -251,8 +253,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onLocationUpdated(vehicleLocation: Location) {
-        map_view?.let {
-            (it.vehicleController())?.setLocation(vehicleLocation)
+        if (mapViewInitialized) {
+            map_view.vehicleController().setLocation(vehicleLocation)
         }
     }
 
