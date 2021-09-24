@@ -25,12 +25,12 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "SDK_KEY", "${SDK_KEY}")
-            buildConfigField("String", "SDK_SECRET", "${SDK_SECRET}")
+            buildConfigField("String", "API_KEY", "${API_KEY}")
+            buildConfigField("String", "API_SECRET", "${API_SECRET}")
         }
         release {
-            buildConfigField("String", "SDK_KEY", "${SDK_KEY}")
-            buildConfigField("String", "SDK_SECRET", "${SDK_SECRET}")
+            buildConfigField("String", "API_KEY", "${API_KEY}")
+            buildConfigField("String", "API_SECRET", "${API_SECRET}")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -45,25 +45,26 @@ android {
 
 }
 
+repositories {
+    maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
+    maven { url "http://artifactory.telenav.com/telenav-maven-releases/" }
+}
+
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    implementation 'androidx.test.espresso:espresso-idling-resource:3.3.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation "com.telenav.sdk:telenav-android-mapview:${telanavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-drivesession:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-customui:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-entity-cloud:1.6.0"
+//    implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
+//    implementation "com.telenav.sdk:telenav-android-customui:${telanavSdkVersion}"
+//    implementation "com.telenav.sdk:telenav-entity-cloud:1.6.0"
 }

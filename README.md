@@ -12,8 +12,8 @@ The demo use the Gradle build system. Use the "gradlew build" command or use "Im
 ## Running locally
 Setting App key and secret
 ```kotlin
-const val SDK_KEY = "SDK_APP_KEY"
-const val SDK_SECRET = "SDK_APP_SECRET"
+const val API_KEY = "API_KEY"
+const val API_SECRET = "API_SECRET"
 ```
 
 Screenshots
