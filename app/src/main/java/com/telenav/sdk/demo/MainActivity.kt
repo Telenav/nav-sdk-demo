@@ -50,9 +50,11 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         this.latitude = 37.3982607
         this.longitude = -121.9782241
     }
+
     private var destinationLocation: Location = Location("Demo").apply {
-        this.latitude = 37.404812
-        this.longitude = -121.969538
+        //  city center of San Francisco, CA 94110
+        this.latitude = 37.756430
+        this.longitude = -122.418841
     }
 
     init {
@@ -102,8 +104,24 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             map_view.annotationsController().clear()
             map_view.annotationsController().add(arrayListOf(annotation))
 
-            requestDirection(vehicleLocation, destinationLocation)
+            //  requestDirection(vehicleLocation, destinationLocation)
+        }
 
+        map_view?.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
+            when (touchType) {
+                TouchType.Down, TouchType.Up, TouchType.Click, TouchType.Move, TouchType.Cancel -> {
+                    Log.d(
+                        "TOUCH_TAG", "Touch type ${touchType}, " +
+                                "geoLocation latitude: ${data.geoLocation?.latitude} longitude: ${data.geoLocation?.longitude}"
+                    )
+                }
+
+                TouchType.LongClick -> {
+                    //  val location = data.geoLocation
+                    destinationLocation.set(data.geoLocation)
+                    requestDirection(vehicleLocation, destinationLocation)
+                }
+            }
         }
 
         locationProvider.start()
@@ -113,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             navigating = !navigating
             if (navigating) {
                 navigationSession?.stopNavigation()
-                navigationSession = driveSession.startNavigation(pickedRoute!!, true, 100.0)
+                navigationSession = driveSession.startNavigation(pickedRoute!!, true, 45.0)
                 map_view.routesController().updateRouteProgress(pickedRoute!!.id)
 
                 map_view.cameraController()

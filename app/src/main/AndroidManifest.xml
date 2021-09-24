@@ -29,7 +29,7 @@
 
         <activity
             android:name="com.telenav.sdk.demo.MainActivity"
-            android:label="Easy Navigation Demo"/>
+            android:label="Navigation Demo(Long press on map to set destination)"/>
 
     </application>
 
