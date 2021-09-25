@@ -10,7 +10,6 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.util.Range
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +19,7 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
+import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
@@ -28,13 +28,12 @@ import com.telenav.sdk.drivesession.listener.AlertEventListener
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
-import com.telenav.sdk.examples.BuildConfig
+import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import java.util.*
 
 /**
@@ -82,6 +81,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        //  by default: using DAY color theme:
+        SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
+
         map_view.initialize(savedInstanceState) {
             mapViewInitialized = true
             map_view.vehicleController().setIcon(R.drawable.cvp)
@@ -90,10 +92,13 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             map_view.featuresController().traffic().setEnabled()
             map_view.featuresController().landmarks().setEnabled()
             map_view.featuresController().buildings().setEnabled()
-            map_view.featuresController().terrain().setEnabled()
+            map_view.featuresController().terrain().setDisabled()   //  disable terrain
             map_view.featuresController().globe().setEnabled()
-            map_view.featuresController().compass().setEnabled()
-            map_view.featuresController().scaleBar().setEnabled()
+            map_view.featuresController().compass().setDisabled()   //  disable compass
+            map_view.featuresController().scaleBar().setDisabled()   //  disable scale bar
+
+            //  set zoom level range(1 to 16):
+            map_view.cameraController().zoomLevelRange = Range(1.0f, 16.0f)
 
             // recenter to vehicle position
             map_view.cameraController().position =
@@ -138,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 map_view.routesController().updateRouteProgress(pickedRoute!!.id)
 
                 map_view.cameraController()
-                    .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, false)
+                    .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
 
                 navButton.setText(R.string.stop_navigation)
             } else {
@@ -241,15 +246,13 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         }
     }
 
-    override fun onNavigationRouteUpdated(
-        route: Route,
-        reason: NavigationEventListener.RouteUpdateReason?
-    ) {
-        route.dispose()
+    override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext) {
+        route?.dispose()
     }
 
-    override fun onBetterRouteDetected(betterRouteCandidate: BetterRouteCandidate) {
-        betterRouteCandidate.accept(false)
+    override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
+                                       betterRouteCandidate: BetterRouteCandidate?) {
+        betterRouteCandidate?.accept(false)
     }
 
     override fun onLocationUpdated(vehicleLocation: Location) {
