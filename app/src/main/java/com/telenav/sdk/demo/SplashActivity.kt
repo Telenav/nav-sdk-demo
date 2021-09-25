@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.telenav.sdk.common.logging.TaLog
+import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.NavLogLevelType
 import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.core.ApplicationInfo
@@ -136,19 +137,23 @@ class SplashActivity : AppCompatActivity() {
     private suspend fun initSDK(options: SDKOptions): Boolean {
         val success: Boolean
         withContext(Dispatchers.IO) {
-            val peLogDir = File(getExternalFilesDir(null), "peLog");
-            peLogDir.mkdir()
+            TaLog.enableLogs(true)
+            TaLog.setLogLevel(NavLogLevelType.INFO) //  set INFO log by default
+
             val navSDKOptions = NavSDKOptions.builder(options)
                 .setTrafficRefreshTime(20)
                 .setTrafficExpireTime(20)
                 .enableTraffic(true)
-                .enablePositionEngineLog(true)
                 .setTrafficFetchRange(3600)
-                .setPositionEngineLogStorePath(peLogDir.absolutePath)
                 .setMapStreamingSpaceLimit(1024 * 1024 * 1024)
                 .build()
             success = SDK.getInstance().initialize(this@SplashActivity, navSDKOptions) == 0
+            if (success) {
+                //  by default: using DAY color theme:
+                SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
+            }
         }
+
         return success
     }
 }

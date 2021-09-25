@@ -16,15 +16,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
-import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
-import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
-import com.telenav.sdk.drivesession.listener.ADASEventListener
-import com.telenav.sdk.drivesession.listener.AlertEventListener
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
@@ -80,9 +76,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        //  by default: using DAY color theme:
-        SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
 
         map_view.initialize(savedInstanceState) {
             mapViewInitialized = true
@@ -186,6 +179,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         task.runAsync { response ->
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
+                map_view.routesController().clear()
+
                 val routes = response.response.result
                 val routeIds = map_view.routesController().add(routes)
                 map_view.routesController().highlight(routeIds[0])
@@ -239,6 +234,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             map_view.cameraController().disableFollowVehicle()
             map_view.cameraController().position =
                 Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
+
             runOnUiThread {
                 navButton.isEnabled = false
                 navButton.setText(R.string.start_navigation)
