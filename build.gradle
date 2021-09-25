@@ -17,8 +17,8 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
-        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
+        mavenCentral()
+        maven { url "http://artifactory.telenav.com/telenav-maven-public/" }
     }
 }
 

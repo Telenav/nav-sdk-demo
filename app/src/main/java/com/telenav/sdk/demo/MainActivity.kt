@@ -97,15 +97,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             map_view.cameraController().position =
                 Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
 
-            // Set annotation at destination location
-            val factory = map_view.annotationsController().factory()
-            val annotation =
-                factory.create(this, R.drawable.map_pin_green_icon_unfocused, destinationLocation)
-            annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
-            map_view.annotationsController().clear()
-            map_view.annotationsController().add(arrayListOf(annotation))
-
-            //  requestDirection(vehicleLocation, destinationLocation)
         }
 
         map_view?.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
@@ -118,6 +109,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 }
 
                 TouchType.LongClick -> {
+                    data.geoLocation?.let {
+                        runOnUiThread {
+                            // Set annotation at location
+                            val factory = map_view.annotationsController().factory()
+                            val annotation = factory.create(this, R.drawable.map_pin_green_icon_unfocused, data.geoLocation!!)
+                            annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
+                            map_view.annotationsController().clear()
+                            map_view.annotationsController().add(arrayListOf(annotation))
+                        }
+                    }
                     //  val location = data.geoLocation
                     destinationLocation.set(data.geoLocation)
                     requestDirection(vehicleLocation, destinationLocation)
@@ -208,7 +209,21 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         return super.onSupportNavigateUp()
     }
 
+    override fun onResume() {
+        super.onResume()
+        map_view.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        map_view.onPause()
+    }
+
     override fun onDestroy() {
+        driveSession.eventHub?.removePositionEventListener(this)
+        driveSession.eventHub?.removeNavigationEventListener(this)
+        driveSession.dispose()
+        locationProvider.stop()
         SDK.getInstance().dispose()
         Log.i(LOG_TAG, "Telenav SDK disposed")
         super.onDestroy()
@@ -243,7 +258,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext) {
-        route?.dispose()
+        route.dispose()
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
