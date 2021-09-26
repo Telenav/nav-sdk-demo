@@ -114,10 +114,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private suspend fun initNavSDK(): Boolean {
-        // enable tasdk log
-        // TaLog.enableWriteLogsToFile(true)
-        // TaLog.setLogPath("/sdcard/tasdk.log")
-        TaLog.setLogLevel(NavLogLevelType.INFO)
+        TaLog.enableLogs(true)// enable tasdk log
+        TaLog.setLogLevel(NavLogLevelType.INFO) //  set INFO log by default
         // TODO set your local writable path
         val sdkCacheDataDir = "$cacheDir/nav-cached/"
 
@@ -137,9 +135,6 @@ class SplashActivity : AppCompatActivity() {
     private suspend fun initSDK(options: SDKOptions): Boolean {
         val success: Boolean
         withContext(Dispatchers.IO) {
-            TaLog.enableLogs(true)
-            TaLog.setLogLevel(NavLogLevelType.INFO) //  set INFO log by default
-
             val navSDKOptions = NavSDKOptions.builder(options)
                 .setTrafficRefreshTime(20)
                 .setTrafficExpireTime(20)

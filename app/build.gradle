@@ -23,14 +23,6 @@ android {
         dataBinding true
     }
 
-    signingConfigs {
-        release {
-            storeFile file('../hello.keystore')
-            storePassword '123456'
-            keyAlias = 'hello'
-            keyPassword '123456'
-        }
-    }
     buildTypes {
         debug {
             //Reading system variables
@@ -41,7 +33,6 @@ android {
             //Reading system variables
             buildConfigField("String", "API_KEY", "${API_KEY}")
             buildConfigField("String", "API_SECRET", "${API_SECRET}")
-            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

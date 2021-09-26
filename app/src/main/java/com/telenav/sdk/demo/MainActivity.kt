@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             map_view.routesController().clear()
             map_view.cameraController().disableFollowVehicle()
             map_view.cameraController().position =
-                Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
+                Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
 
             runOnUiThread {
                 navButton.isEnabled = false
