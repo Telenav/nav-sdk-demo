@@ -8,11 +8,11 @@ package com.telenav.sdk.demo.scenario.navigation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.telenav.sdk.demo.util.AndroidThreadUtils
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.model.ManeuverInfo
 import com.telenav.sdk.drivesession.model.NavigationEvent
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.demo.util.AndroidThreadUtils
 import com.telenav.sdk.map.direction.model.Action
 import com.telenav.sdk.map.direction.model.LaneInfo
 import com.telenav.sdk.ui.ImageItems
@@ -95,7 +95,8 @@ class TurnbyturnViewModel(val tnTurnListAdapter: TnTurnListRecyclerViewAdapter) 
                         TnTurnListItem(
                             it.streetName,
                             getMilesOrFeet(it.lengthMeters),
-                            getTurnDrawable(it.turnAction)
+                            getTurnDrawable(it.turnAction),
+                            it.stepInfo
                         )
                     }
 

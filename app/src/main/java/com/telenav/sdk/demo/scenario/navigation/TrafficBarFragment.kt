@@ -17,6 +17,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
@@ -201,10 +202,10 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
     }
 
-    override fun onNavigationRouteUpdated(route: Route, reason: NavigationEventListener.RouteUpdateReason?) {
+    override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
     }
 
-    override fun onBetterRouteDetected(betterRouteCandidate: BetterRouteCandidate) {
+    override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus, betterRouteCandidate: BetterRouteCandidate?) {
     }
 
 }

@@ -4,7 +4,7 @@
  *  other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.demo.scenario.navigation
+package com.telenav.sdk.examples.scenario.navigation
 
 import android.location.Location
 import android.os.Bundle
@@ -16,8 +16,10 @@ import androidx.fragment.app.Fragment
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.Margins
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.scenario.navigation.BaseNavFragment
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.model.BetterRouteCandidate
+import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
@@ -88,8 +90,11 @@ class AutoRefreshRouteFragment : BaseNavFragment() {
         }
     }
 
-    override fun onNavigationRouteUpdated(route: Route, reason: NavigationEventListener.RouteUpdateReason?) {
-//        route.dispose()
+    override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus, betterRouteCandidate: BetterRouteCandidate?) {
+        betterRouteCandidate?.accept(true)
+    }
+
+    override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
         Log.d(TAG, "onNavigationRouteUpdated:${route.id}")
         highlightedRouteId?.let { map_view.routesController().remove(it) }
         map_view.routesController().refresh(route)//auto refresh route
@@ -99,7 +104,4 @@ class AutoRefreshRouteFragment : BaseNavFragment() {
         }
     }
 
-    override fun onBetterRouteDetected(betterRouteCandidate: BetterRouteCandidate) {
-        betterRouteCandidate.accept(true)
-    }
 }

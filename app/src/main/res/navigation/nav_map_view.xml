@@ -48,6 +48,9 @@
         <action
             android:id="@+id/action_mapViewMenuFragment_to_mapViewSnapshotsFragment"
             app:destination="@id/mapViewSnapshotsFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewShowRegionRectFragment"
+            app:destination="@id/mapViewShowRegionRectFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapViewSetUpFragment"
@@ -104,4 +107,9 @@
         android:name="com.telenav.sdk.demo.scenario.mapview.MapViewSnapshotsFragment"
         android:label="MapViewTrafficBubbleFragment"
         tools:layout="@layout/fragment_map_view_traffic_bubble"/>
+    <fragment
+        android:id="@+id/mapViewShowRegionRectFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewShowRegionRectFragment"
+        android:label="MapViewShowRegionFragment"
+        tools:layout="@layout/fragment_map_view_show_region"/>
 </navigation>

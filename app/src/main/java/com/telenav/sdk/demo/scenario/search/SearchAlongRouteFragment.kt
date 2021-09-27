@@ -28,7 +28,6 @@ import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.base.GeoPoint
 import com.telenav.sdk.entity.model.search.*
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.examples.scenario.search.SearchResultModel
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.fragment_search_along_route.*
 import kotlinx.android.synthetic.main.layout_action_bar.*

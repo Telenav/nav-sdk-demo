@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.examples.scenario.search
+package com.telenav.sdk.demo.scenario.search
 
 import android.graphics.BitmapFactory
 import android.location.Location
@@ -26,7 +26,6 @@ import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.core.Callback
-import com.telenav.sdk.demo.scenario.search.SearchNavViewModel
 import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.search.EntitySearchResponse
@@ -273,7 +272,7 @@ class SearchShowPoiFragment : Fragment() {
     }
 
     private class CheckBoxAdapter(val recyclerView: RecyclerView,
-                                  val checkBoxDataList: List<CheckBoxData>,val checkedChanged: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CheckBoxViewHolder>() {
+                                  val checkBoxDataList: List<CheckBoxData>, val checkedChanged: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CheckBoxViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckBoxViewHolder =
                 CheckBoxViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_search_check_box_item,
                         parent, false)).apply {

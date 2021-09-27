@@ -54,11 +54,9 @@ class RequestRouteFragment : BaseNavFragment(), RadioGroup.OnCheckedChangeListen
             rb_cloud.id -> requestMode = RequestMode.CLOUD_ONLY
             rb_onbard.id -> requestMode = RequestMode.EMBEDDED_ONLY
             rb_fastest.id -> routeStyle = RouteStyle.FASTEST
-            rb_fastest.id -> routeStyle = RouteStyle.FASTEST
             rb_shortest.id -> routeStyle = RouteStyle.SHORTEST
-            rb_pedestrian.id -> routeStyle = RouteStyle.PEDESTRIAN
             rb_eco.id -> routeStyle = RouteStyle.ECO
-            rb_personalized.id -> routeStyle = RouteStyle.PERSONALIZED
+            rb_easy.id -> routeStyle = RouteStyle.EASY
             rb_count1.id -> routeCount = 1
             rb_count2.id -> routeCount = 2
             rb_count3.id -> routeCount = 3
@@ -96,7 +94,7 @@ class RequestRouteFragment : BaseNavFragment(), RadioGroup.OnCheckedChangeListen
                         .avoidCarTrains(cb_avoid_car_trains.isChecked)
                         .avoidUnpavedRoads(cb_avoid_unpaved_roads.isChecked)
                         .avoidTunnels(cb_avoid_tunnels.isChecked)
-                        .useTraffic(cb_use_traffic.isChecked)
+                        .avoidTrafficCongestion(cb_use_traffic.isChecked)
                         .avoidCountryBorders(cb_avoid_country_border.isChecked)
                         .avoidSharpTurns(cb_avoid_sharp_turns.isChecked)
                         .avoidPermitRequiredRoads(cb_avoid_roads_requiring_permits.isChecked)
@@ -115,6 +113,7 @@ class RequestRouteFragment : BaseNavFragment(), RadioGroup.OnCheckedChangeListen
                 map_view.cameraController().showRegion(region, Margins.Percentages(0.20, 0.20))
                 activity?.runOnUiThread {
                     navButton.isEnabled = true
+                    navButton.setText(R.string.start_navigation)
                     showRouteOptionDialog()
                 }
 

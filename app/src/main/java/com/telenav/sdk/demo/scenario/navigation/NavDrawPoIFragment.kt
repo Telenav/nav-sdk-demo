@@ -10,14 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.telenav.map.api.Annotation
 import com.telenav.sdk.common.model.DayNightMode
+import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.drivesession.listener.AlertEventListener
-import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.model.AlertEvent
 import com.telenav.sdk.drivesession.model.alert.AlertItem
 import com.telenav.sdk.drivesession.model.alert.CameraInfo
+import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentNavDrawPoiBinding
-import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.model.Route
 import kotlinx.android.synthetic.main.content_basic_navigation.*
@@ -124,8 +124,8 @@ class NavDrawPoIFragment : BaseNavFragment(), AlertEventListener {
 
     }
 
-    override fun onNavigationRouteUpdated(route: Route, reason: NavigationEventListener.RouteUpdateReason?) {
-        super.onNavigationRouteUpdated(route, reason)
+    override fun onNavigationRouteUpdated(route: Route, context : RouteUpdateContext?) {
+        super.onNavigationRouteUpdated(route, context)
         cameraInfoMap.clear()
         drawPoiAnnotationMap.clear()
         lastCameraAlterItems = listOf()

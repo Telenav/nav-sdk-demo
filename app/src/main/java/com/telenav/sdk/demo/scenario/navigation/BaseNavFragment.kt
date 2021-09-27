@@ -18,13 +18,13 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.automation.EspressoIdlingResource
 import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
@@ -50,6 +50,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
     var highlightedRouteId: String? = null
 
     val navigationOn = MutableLiveData(false)
+    var navigating = false
 
     init {
         driveSession.eventHub?.let {
@@ -60,7 +61,6 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        EspressoIdlingResource.increment()
         locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(),DemoLocationProvider.ProviderType.SIMULATION)
         locationProvider.start()
         driveSession.injectLocationProvider(locationProvider)
@@ -77,8 +77,6 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
 
             // recenter to vehicle position
             map_view.cameraController().position = Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
-
-            EspressoIdlingResource.decrement()
         }
 
         setupButtons()
@@ -162,6 +160,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
                 highlightedRouteId = routeIds[0]
                 activity?.runOnUiThread {
                     navButton.isEnabled = true
+                    navButton.setText(R.string.start_navigation)
                 }
 
             } else {
@@ -195,14 +194,12 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             setZoomLevel(currentLevel + 1)
         }
 
-        var navigating = false
-        navButton.setOnClickListener {
 
+        navButton.setOnClickListener {
             navigating = !navigating
             onNavButtonClick(navigating)
             if (navigating) {
                 navigationSession?.stopNavigation()
-
                 var pickedRouteIndex = 0 // default route first
                 if (!highlightedRouteId.isNullOrEmpty()) {
                     routes.forEachIndexed { index, route ->
@@ -234,6 +231,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
                     navButton.isEnabled = false
                 }
                 navButton.setText(R.string.start_navigation)
+                navigating = false
             }
         }
 
@@ -287,16 +285,17 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             activity?.runOnUiThread {
                 navButton.isEnabled = false
             }
-            EspressoIdlingResource.decrement()
+            navigating = false
         }
     }
 
-    override fun onNavigationRouteUpdated(route: Route, reason: NavigationEventListener.RouteUpdateReason?) {
+    override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
         route.dispose()
     }
 
-    override fun onBetterRouteDetected(betterRouteCandidate: BetterRouteCandidate) {
-        betterRouteCandidate.accept(false)
+    override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
+                                       betterRouteCandidate: BetterRouteCandidate?) {
+        betterRouteCandidate?.accept(false)
     }
 
 }

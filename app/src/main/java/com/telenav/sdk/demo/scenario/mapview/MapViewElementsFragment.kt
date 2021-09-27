@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.map.api.controllers.Feature
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.scenario.mapview.MapViewNavViewModel
 import kotlinx.android.synthetic.main.fragment_map_view_elements.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map.*
@@ -39,8 +40,8 @@ class MapViewElementsFragment : Fragment() {
             ElementOperationItem("Buildings"){
                 setBuildings(it)
             },
-            ElementOperationItem("Terrain"){
-                setTerrain(it)
+            ElementOperationItem("Flat Terrain"){
+                setFlatTerrain(it)
             },
             ElementOperationItem("Globe"){
                 setGlobe(it)
@@ -134,8 +135,8 @@ class MapViewElementsFragment : Fragment() {
     /**
      * this method show or hide terrain
      */
-    private fun setTerrain(on : Boolean){
-        setFeature(mapView.featuresController().terrain(), on)
+    private fun setFlatTerrain(on : Boolean){
+        setFeature(mapView.featuresController().flatTerrain(), on)
     }
 
     /**
@@ -190,7 +191,7 @@ class MapViewElementsFragment : Fragment() {
     }
 
 
-    inner class ElementAdapter() : RecyclerView.Adapter<ElementViewHolder>(){
+    inner class ElementAdapter : RecyclerView.Adapter<ElementViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_map_view_element_item,parent,false)
             return ElementViewHolder(view).apply {

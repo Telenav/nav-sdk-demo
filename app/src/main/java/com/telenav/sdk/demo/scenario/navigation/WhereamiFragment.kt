@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.telenav.sdk.drivesession.listener.AlertEventListener
+import com.telenav.sdk.drivesession.model.AlertEvent
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentNavWhereamiBinding
@@ -24,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_nav_whereami.*
  * A simple [Fragment] for whereami and location provider
  * @author tang.hui on 2021/1/22
  */
-class WhereamiFragment : BaseNavFragment() {
+class WhereamiFragment : BaseNavFragment(), AlertEventListener {
 
     private val viewModel: WhereamiViewModel by viewModels()
     var isSettingLocation: Boolean = false
@@ -38,11 +40,19 @@ class WhereamiFragment : BaseNavFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        driveSession.enableAlert(true)
+        driveSession.eventHub.addAlertEventListener(this)
         navigationOn.observe(viewLifecycleOwner) {
-            viewModel.showNavigationDetails.postValue(it)
+            if (!it) routes?.clear()
         }
         setVehicleLocation.setOnClickListener {
-            navButton.performClick()
+            navigationSession?.stopNavigation()
+            map_view.annotationsController().clear()
+            map_view.routesController().clear()
+            map_view.cameraController().disableFollowVehicle()
+            navButton.setText(R.string.stop_navigation)
+            navButton.isEnabled = false
+            navigating = false
             isSettingLocation = true
         }
     }
@@ -74,7 +84,7 @@ class WhereamiFragment : BaseNavFragment() {
             }
 
             if (!cityName.isNullOrEmpty()) {
-                viewModel.countyLiveData.postValue("current county: ${cityName}")
+                viewModel.countyLiveData.postValue("current county: $cityName")
             }
         }
 
@@ -90,5 +100,35 @@ class WhereamiFragment : BaseNavFragment() {
         viewModel.onLocationUpdated(vehicleLocation)
     }
 
+    override fun onAlertEventUpdated(alertEvent: AlertEvent) {
+        val userPositionInfo = alertEvent.userPositionInfo
+        userPositionInfo?.apply {
+            var previousDistanceToVehicle = previousIntersection?.run { distanceToVehicle }
+            var nextDistanceToVehicle = nextIntersection?.run { distanceToVehicle }
+            var previousContent = previousIntersection?.currentRoadInfo?.name?.orthography?.content
+            var nextContent = nextIntersection?.currentRoadInfo?.name?.orthography?.content
+            var closetStreetName = closetStreetInfo?.name?.orthography?.content
+            var closetStreetDistance = closetStreetInfo?.distanceToVehicle
+            previousDistanceToVehicle.let { viewModel.previousStreetDistanceToVehicle.postValue("previousStreetDistance:${getDesDistance(it)}") }
+            nextDistanceToVehicle.let { viewModel.nextStreetDistanceToVehicle.postValue("nextStreetDistance:${getDesDistance(it)}") }
+            previousContent.let { viewModel.previousStreetName.postValue("previousStreet:${it ?: ""}") }
+            nextContent.let { viewModel.nextStreetName.postValue("nextStreet:${it ?: ""}") }
+            closetStreetName.let { viewModel.closetStreetName.postValue("closetStreet:${it ?: ""}") }
+            closetStreetDistance.let { viewModel.closetStreetDistance.postValue("closetStreetDistance:${getDesDistance(it)}") }
+        }
+    }
+
+    override fun onDestroyView() {
+        driveSession.eventHub.removeAlertEventListener(this)
+        super.onDestroyView()
+    }
+
+    private fun getDesDistance(meters: Int?): String? {
+        return if (meters != null){
+            "$meters meters"
+        }else{
+            ""
+        }
+    }
 
 }

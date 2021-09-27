@@ -18,6 +18,7 @@ import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_camera.*
 import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
+import java.util.*
 
 
 /**
@@ -87,9 +88,9 @@ class MapViewCameraFragment : Fragment() {
     }
 
     private fun setOnClickListener() {
-        btn_position_A.text = String.format("Go to New York\n(%.5f,%.5f)",locationA.latitude,locationA.longitude)
+        btn_position_A.text = String.format(Locale.getDefault(),"Go to New York\n(%.5f,%.5f)",locationA.latitude,locationA.longitude)
         btn_position_A.setOnClickListener { moveCameraToLocation(locationA) }
-        btn_position_B.text = String.format("Go to Los Angeles\n(%.5f,%.5f)",locationB.latitude,locationB.longitude)
+        btn_position_B.text = String.format(Locale.getDefault(),"Go to Los Angeles\n(%.5f,%.5f)",locationB.latitude,locationB.longitude)
         btn_position_B.setOnClickListener { moveCameraToLocation(locationB) }
 
         btn_offset_up.setOnClickListener { setVerticalOffset(-0.1) }
@@ -133,9 +134,7 @@ class MapViewCameraFragment : Fragment() {
      */
     private fun setVerticalOffset(value: Double) {
         currentVerticalOffset += value
-        currentVerticalOffset = currentVerticalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(
-            MIN_OFFSET
-        )
+        currentVerticalOffset = currentVerticalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(MIN_OFFSET)
         mapView.layoutController().setVerticalOffset(currentVerticalOffset)
     }
 
@@ -144,9 +143,7 @@ class MapViewCameraFragment : Fragment() {
      */
     private fun setHorizontalOffset(value: Double) {
         currentHorizontalOffset += value
-        currentHorizontalOffset = currentHorizontalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(
-            MIN_OFFSET
-        )
+        currentHorizontalOffset = currentHorizontalOffset.coerceAtMost(MAX_OFFSET).coerceAtLeast(MIN_OFFSET)
         mapView.layoutController().setHorizontalOffset(currentHorizontalOffset)
     }
 
@@ -178,7 +175,7 @@ class MapViewCameraFragment : Fragment() {
     private fun setCameraUpdateListener() {
         mapView.addMapViewListener {
             it.cameraLocation
-            val text = String.format("camera position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f\noffset [%.1f, %.1f]",
+            val text = String.format(Locale.getDefault(),"camera position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f\noffset [%.1f, %.1f]",
                     it.cameraLocation.latitude,
                     it.cameraLocation.longitude,
                     it.zoomLevel,

@@ -22,6 +22,7 @@ import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentMapViewStateBinding
 import kotlinx.android.synthetic.main.fragment_map_view_camera.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
+import java.util.*
 
 
 /**
@@ -78,7 +79,7 @@ class MapViewStateFragment : Fragment() {
     private fun setCameraUpdateListener() {
         mapView.addMapViewListener {
             it.cameraLocation
-            val text = String.format(
+            val text = String.format(Locale.getDefault(),
                 "camera position: [%.4f , %.4f]\nzoom level: %.1f]",
                 it.cameraLocation.latitude,
                 it.cameraLocation.longitude,
@@ -98,7 +99,7 @@ class MapViewStateFragment : Fragment() {
             mapView.mapDiagnosis().addMapViewListener {
                 mapView.mapDiagnosis().mapViewStatus?.let { //viewModel.setUpVehicleDetails(it)
                     binding.tvTitlePositionSet.post(Runnable {
-                        val text = String.format(
+                        val text = String.format(Locale.getDefault(),
                                 "Camera latitude : %.4f\nCamera longitude : %.4f\n" +
                                         "Camera heading : %.2f\nCar latitude : %.4f\nCar longitude : %.4f\nZoom level : %s\nIs animating : " +
                                         "%s\nInteraction mode :%s\nRender mode val : %s\nIsAutoZoomAnimationRunning : %s",

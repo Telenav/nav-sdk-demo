@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,7 +10,6 @@
         <variable
             name="viewModel"
             type="com.telenav.sdk.demo.scenario.navigation.WhereamiViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,19 +42,70 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drawer_layout_toolbar" />
 
+
+        <TextView
+            android:id="@+id/upcoming_street_name"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/color_white"
+            android:layout_marginTop="60dp"
+            android:text="@{viewModel.nextStreetName}"
+            app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+            bind:text="upcoming street:" />
+        <TextView
+            android:id="@+id/upcoming_street_distance_to_Vehicle"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/color_white"
+            android:text="@{viewModel.nextStreetDistanceToVehicle}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upcoming_street_name"
+            bind:text="upcoming street to vehicle Distance:" />
+
+        <TextView
+            android:id="@+id/previous_street_name"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/color_white"
+            android:text="@{viewModel.previousStreetName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upcoming_street_distance_to_Vehicle"
+            bind:text="previous street:" />
+
+        <TextView
+            android:id="@+id/previous_street_distance_to_Vehicle"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@color/color_white"
+            android:text="@{viewModel.previousStreetDistanceToVehicle}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/previous_street_name"
+            bind:text="previous street to vehicle Distance:" />
+
         <TextView
             android:id="@+id/current_street_name"
             style="@style/RegularTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorVivid"
+            android:textColor="@color/color_white"
             android:padding="10dp"
+            android:textSize="18sp"
             android:text="@{viewModel.currentStreetName}"
-            android:visibility="@{viewModel.showNavigationDetails ?View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/previous_street_distance_to_Vehicle"
             bind:text="Current Street" />
 
         <TextView
@@ -64,11 +113,10 @@
             style="@style/RegularTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorVivid"
+            android:textColor="@color/color_white"
             android:padding="10dp"
+            android:textSize="18sp"
             android:text="@{viewModel.compassDirectionLiveData}"
-            android:visibility="@{viewModel.showNavigationDetails ?View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_street_name"
             bind:text="NE" />
@@ -79,11 +127,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:background="@color/colorVivid"
+            android:textColor="@color/color_white"
             android:padding="10dp"
+            android:textSize="18sp"
             android:text="@{viewModel.countryLiveData}"
-            android:visibility="@{viewModel.showNavigationDetails ?View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_street_compass_direction"
             bind:text="current country: USA" />
@@ -94,11 +141,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:background="@color/colorVivid"
+            android:textColor="@color/color_white"
             android:padding="10dp"
+            android:textSize="18sp"
             android:text="@{viewModel.countyLiveData}"
-            android:visibility="@{viewModel.showNavigationDetails ?View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/country"
             bind:text="current county:" />
@@ -109,15 +155,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:background="@color/colorVivid"
+            android:textColor="@color/color_white"
             android:padding="10dp"
+            android:textSize="18sp"
             android:text="@{viewModel.roadStateLiveData}"
-            android:visibility="@{viewModel.showNavigationDetails ?View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/county"
             bind:text="off-road" />
-
+        <TextView
+            android:id="@+id/closet_street_name"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/color_white"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:text="@{viewModel.closetStreetName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/off_road_state"
+            bind:text="closetStreetName" />
+        <TextView
+            android:id="@+id/closet_street_distance"
+            style="@style/RegularTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/color_white"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:text="@{viewModel.closetStreetDistance}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/closet_street_name"
+            bind:text="closetStreetInfoDistance" />
         <Button
             android:id="@+id/setVehicleLocation"
             android:layout_width="wrap_content"

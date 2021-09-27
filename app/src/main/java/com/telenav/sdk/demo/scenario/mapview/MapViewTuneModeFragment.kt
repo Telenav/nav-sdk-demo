@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.layout_content_map_with_text.tv_state
 import kotlinx.android.synthetic.main.layout_operation_tune_mode.*
 import kotlinx.android.synthetic.main.layout_operation_tune_mode.btn_offset_down
 import kotlinx.android.synthetic.main.layout_operation_tune_mode.navButton
+import java.util.*
 
 /**
  * This fragment shows how to change the map mode
@@ -65,7 +66,6 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
 
     init {
         driveSession.eventHub?.addPositionEventListener(this)
-        driveSession.injectLocationProvider(locationProvider)
     }
 
     override fun onDestroyView() {
@@ -83,6 +83,7 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         locationProvider = DemoLocationProvider.Factory.createProvider(requireContext(), DemoLocationProvider.ProviderType.SIMULATION)
+        driveSession.injectLocationProvider(locationProvider)
         (locationProvider as SimulationLocationProvider).setLocation(startLocation)
         locationProvider.start()
         tv_title.text = getString(R.string.title_activity_map_view_tune_mode)
@@ -255,7 +256,8 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     private fun setCameraUpdateListener() {
         mapView.addMapViewListener {
             it.cameraLocation
-            val text = String.format("camera position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f\nvertical offset %.1f",
+            val text = String.format(
+                    Locale.getDefault(),"camera position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f\nvertical offset %.1f",
                     it.cameraLocation.latitude,
                     it.cameraLocation.longitude,
                     it.zoomLevel,

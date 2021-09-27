@@ -31,6 +31,8 @@ import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map.btn_show_menu
 import kotlinx.android.synthetic.main.layout_content_map.mapView
 import kotlinx.android.synthetic.main.layout_operation_annotation.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * This fragment shows how to operate annotation in MapView
@@ -232,9 +234,9 @@ class MapViewAnnotationFragment : Fragment() {
      */
     private fun createView(position: TouchPosition): View {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.layout_complex_annotation,
-            null, false)
-        layout.findViewById<TextView>(R.id.tv_position).text = String.format("[ %.6f , %.6f ]",
-            position.geoLocation?.latitude ?: 0f, position.geoLocation?.longitude ?: 0f)
+                null, false)
+        layout.findViewById<TextView>(R.id.tv_position).text = String.format(Locale.getDefault(),"[ %.6f , %.6f ]",
+                position.geoLocation?.latitude ?: 0f, position.geoLocation?.longitude ?: 0f)
         return layout
     }
 

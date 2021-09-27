@@ -16,11 +16,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.scenario.mapview.MapViewActivity
 import com.telenav.sdk.demo.scenario.navigation.NavMainActivity
 import com.telenav.sdk.demo.scenario.ota.OtaActivity
 import com.telenav.sdk.demo.scenario.search.SearchActivity
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.activity_scenario_menu.*
 
 class ScenarioMenuActivity : AppCompatActivity() {
@@ -29,18 +29,18 @@ class ScenarioMenuActivity : AppCompatActivity() {
      * add menu and click function here
      */
     private val menuList = listOf(
-            MenuData("Navigation") {
-                startActivity(Intent(this, NavMainActivity::class.java))
-            },
-            MenuData("Map view") {
-                startActivity(MapViewActivity.getCallingIntent(this))
-            },
-            MenuData("Ota") {
-                startActivity(OtaActivity.getCallingIntent(this))
-            },
-            MenuData("Search") {
-                startActivity(SearchActivity.getCallingIntent(this))
-            },
+        MenuData("Navigation") {
+            startActivity(Intent(this, NavMainActivity::class.java))
+        },
+        MenuData("Map view") {
+            startActivity(MapViewActivity.getCallingIntent(this))
+        },
+        MenuData("Ota") {
+            startActivity(OtaActivity.getCallingIntent(this))
+        },
+        MenuData("Search") {
+            startActivity(SearchActivity.getCallingIntent(this))
+        },
     )
 
     private lateinit var menuAdapter : MenuAdapter
@@ -53,7 +53,7 @@ class ScenarioMenuActivity : AppCompatActivity() {
         recycleView.adapter = menuAdapter
         recycleView.layoutManager = LinearLayoutManager(this)
         recycleView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -63,14 +63,14 @@ class ScenarioMenuActivity : AppCompatActivity() {
 
 
     private class MenuAdapter(
-            val recyclerView: RecyclerView,
-            val menuList: List<MenuData>
+        val recyclerView: RecyclerView,
+        val menuList: List<MenuData>
     ) : RecyclerView.Adapter<MenuViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
-                MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
-                        parent, false)).apply {
-                            this.layoutRoot.setOnClickListener(onClickListener)
-                }
+            MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
+                parent, false)).apply {
+                this.layoutRoot.setOnClickListener(onClickListener)
+            }
 
         override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
             holder.tvTitle.text = menuList[position].text

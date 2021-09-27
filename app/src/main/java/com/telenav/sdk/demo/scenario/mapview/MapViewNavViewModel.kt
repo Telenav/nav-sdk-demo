@@ -1,4 +1,4 @@
-package com.telenav.sdk.demo.scenario.mapview
+package com.telenav.sdk.examples.scenario.mapview
 
 import android.app.Application
 import android.location.Location

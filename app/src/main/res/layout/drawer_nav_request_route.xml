@@ -62,22 +62,16 @@
             android:text="shortest" />
 
         <RadioButton
-            android:id="@+id/rb_pedestrian"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="pedestrian" />
-
-        <RadioButton
             android:id="@+id/rb_eco"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="eco" />
 
         <RadioButton
-            android:id="@+id/rb_personalized"
+            android:id="@+id/rb_easy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="personalized" />
+            android:text="easy" />
     </RadioGroup>
 
     <TextView

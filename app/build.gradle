@@ -64,6 +64,6 @@ dependencies {
     implementation "com.telenav.sdk:telenav-android-drivesession:${telanavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-customui:${telanavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-uikit:${telanavSdkVersion}"
     implementation "com.telenav.sdk:telenav-entity-cloud:1.6.0"
 }

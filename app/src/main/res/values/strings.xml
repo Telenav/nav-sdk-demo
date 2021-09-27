@@ -43,6 +43,7 @@
     <string name="title_activity_map_view_vehicle">Vehicle icon</string>
     <string name="title_activity_map_view_traffic_bubble">Traffic bubble</string>
     <string name="title_activity_map_view_snaps_shots">snaps shots</string>
+    <string name="title_activity_map_view_show_region_rect">showRegion Rect</string>
 
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>

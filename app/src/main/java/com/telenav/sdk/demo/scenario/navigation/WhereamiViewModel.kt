@@ -9,6 +9,7 @@ package com.telenav.sdk.demo.scenario.navigation
 import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.telenav.sdk.drivesession.model.alert.IntersectionInfo
 
 /**
  * @author tang.hui
@@ -21,6 +22,12 @@ class WhereamiViewModel : ViewModel() {
     val roadStateLiveData = MutableLiveData<String>()
     val countryLiveData = MutableLiveData<String>()
     val countyLiveData = MutableLiveData<String>()
+    val nextStreetName = MutableLiveData<String>()
+    val nextStreetDistanceToVehicle = MutableLiveData<String>()
+    val previousStreetName = MutableLiveData<String>()
+    val previousStreetDistanceToVehicle = MutableLiveData<String>()
+    val closetStreetName= MutableLiveData<String>()
+    val closetStreetDistance = MutableLiveData<String>()
 
     fun onLocationUpdated(vehicleLocation: Location) {
         compassDirectionLiveData.postValue("compass:" + getCompassDirection(vehicleLocation.bearing))

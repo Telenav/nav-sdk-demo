@@ -30,9 +30,7 @@
         <activity
             android:name="com.telenav.sdk.demo.scenario.navigation.NavMainActivity"
             android:label="scenario of navigation"/>
-        <activity
-            android:name="com.telenav.sdk.demo.automation.AutomationMainActivity"
-            android:label="Automation UI test"/>
+
         <activity
             android:name="com.telenav.sdk.demo.scenario.ScenarioMenuActivity"
             android:label="@string/title_activity_scenario_menu"/>
