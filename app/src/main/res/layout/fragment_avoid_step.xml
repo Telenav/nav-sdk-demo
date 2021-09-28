@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.telenav.sdk.demo.scenario.navigation.avoid.AvoidStepViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/drawer_layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:gravity="center_vertical"
+            android:minHeight="?android:actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="avoid step" />
+
+        <include
+            android:id="@+id/content_basic_navigation"
+            layout="@layout/content_basic_navigation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_layout_toolbar" />
+
+        <include
+            android:id="@+id/next_direction_container"
+            layout="@layout/view_eta_and_avoid_step"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:visibility="@{viewModel.showNavigationDetails ?View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/guide_line_navigation_details_length"
+            app:layout_constraintEnd_toStartOf="@+id/guide_line_navigation_details"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drawer_layout_toolbar"
+            bind:viewModel="@{viewModel}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/turn_direction_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.turnListVisibility ? View.VISIBLE : View.GONE}"
+            android:orientation="vertical"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constrainedHeight="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/next_direction_container"
+            app:layout_constraintStart_toStartOf="@id/next_direction_container"
+            app:layout_constraintTop_toBottomOf="@id/next_direction_container" />
+
+        <com.telenav.sdk.ui.TnJunctionView
+            android:id="@+id/junction_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_line_navigation_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.42" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_line_navigation_details_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.30" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

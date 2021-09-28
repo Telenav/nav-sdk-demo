@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~ of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~ other countries. Other names may be trademarks of their respective owners.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="com.telenav.sdk.demo.scenario.navigation.NavigationUtils"/>
+        <variable
+            name="alongRouteTrafficIncidentInfo"
+            type="com.telenav.sdk.drivesession.model.AlongRouteTrafficIncidentInfo" />
+    </data>
+    <LinearLayout
+        android:layout_marginBottom="@dimen/dim_10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/grey"
+        android:layout_width="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="@dimen/dim_20dp"
+        android:paddingBottom="@dimen/dim_20dp"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/RegularTextStyle2"
+            android:textSize="18dp"
+            android:textColor="@color/color_white"
+            android:layout_width="wrap_content"
+            android:text="incident:"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/txt_next_turn_miles_to_go"
+            style="@style/RegularTextStyle2"
+            android:textSize="18dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/color_white"
+            android:layout_width="wrap_content"
+            android:text="@{NavigationUtils.getIncidentLatLon(alongRouteTrafficIncidentInfo)}"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</layout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.telenav.sdk.demo.scenario.navigation.avoid.AvoidStepViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/dimens_5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gredientnavigation">
+
+            <View
+                android:id="@+id/nav_details_background"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/navigation_time_black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/time_of_arrival"
+                style="@style/RegularTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimens_10dp"
+                android:padding="3dp"
+                android:text="@{viewModel.timeToArrival}"
+                app:layout_constraintBottom_toBottomOf="@id/nav_details_background"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="12:59 AM" />
+
+            <ImageView
+                android:id="@+id/divide_dot_arrival_time_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_turn_panel_dot"
+                app:layout_constraintBottom_toBottomOf="@id/nav_details_background"
+                app:layout_constraintEnd_toStartOf="@+id/total_time_left"
+                app:layout_constraintStart_toEndOf="@+id/time_of_arrival"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/total_time_left"
+                style="@style/RegularTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorVivid"
+                android:padding="3dp"
+                android:text="@{viewModel.tripTimeRemaining}"
+                app:layout_constraintBottom_toBottomOf="@id/nav_details_background"
+                app:layout_constraintEnd_toStartOf="@id/divide_dot_time_left_distance_to_cover"
+                app:layout_constraintStart_toEndOf="@id/divide_dot_arrival_time_left"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="17 min" />
+
+            <ImageView
+                android:id="@+id/divide_dot_time_left_distance_to_cover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_turn_panel_dot"
+                app:layout_constraintBottom_toBottomOf="@id/nav_details_background"
+                app:layout_constraintEnd_toStartOf="@+id/distance_to_be_covered"
+                app:layout_constraintStart_toEndOf="@+id/total_time_left"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/distance_to_be_covered"
+                style="@style/RegularTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dimens_10dp"
+                android:background="@color/colorVivid"
+                android:padding="3dp"
+                android:text="@{viewModel.totalDistanceRemaining}"
+                app:layout_constraintBottom_toBottomOf="@id/nav_details_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/divide_dot_time_left_distance_to_cover"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="12 Mi" />
+
+            <com.telenav.sdk.ui.TnCurrentTurnView
+                android:id="@+id/currentTurn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                app:currentTurnDrawable="@{viewModel.turnDirectionDrawable}"
+                app:currentTurnNextMiles="@{viewModel.distanceRemainingToNextTurn}"
+                app:currentTurnStreetNextTurn="@{viewModel.nextTurnStreetName}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
