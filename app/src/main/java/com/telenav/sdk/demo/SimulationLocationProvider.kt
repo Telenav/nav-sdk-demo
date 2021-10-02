@@ -26,14 +26,8 @@ class SimulationLocationProvider(val context: Context) : LocationProvider {
 
     init {
         location = Location(NAME).apply {
-            /*
-            //  Telenav-US HQ:
             this.latitude = 37.3982607
             this.longitude = -121.9782241
-             */
-
-            this.latitude = 37.4194955
-            this.longitude = -122.13814
             this.time = Calendar.getInstance().timeInMillis
         }
     }

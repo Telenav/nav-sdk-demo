@@ -46,8 +46,14 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var navigating = false
 
     private var vehicleLocation: Location = Location("Demo").apply {
+        /*
+        //  Telenav-US HQ:
         this.latitude = 37.3982607
         this.longitude = -121.9782241
+         */
+
+        this.latitude = 37.4194955
+        this.longitude = -122.13814
     }
 
     private var destinationLocation: Location = Location("Demo").apply {
@@ -117,7 +123,11 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                             val factory = map_view.annotationsController().factory()
                             val annotation = factory.create(this, R.drawable.map_pin_green_icon_unfocused, data.geoLocation!!)
                             annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
+
+                            //  Waypoint annotation layer:
                             annotation.layer = Annotation.Layer(RouteWayPoint)
+
+                            //  disable culling for this annotation(always visible):
                             annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
 
                             map_view.annotationsController().clear()
@@ -155,22 +165,37 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
                 navButton.setText(R.string.stop_navigation)
             } else {
-                navigationSession?.stopNavigation()
-                map_view.annotationsController().clear()
-                map_view.routesController().clear()
-                map_view.cameraController().disableFollowVehicle()
-                map_view.cameraController().position =
-                    Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
-
-                runOnUiThread {
-                    navButton.isEnabled = false
-                }
-                navButton.setText(R.string.start_navigation)
-                navigating = false
-                activeRouteId = null
+                handleNavigationSessionEnd(true)
             }
         }
+    }
 
+    private fun handleNavigationSessionEnd(forceStop: Boolean) {
+        if (forceStop) {
+            Log.i(LOG_TAG, "navigation stopped by user")
+        } else {
+            Log.i(LOG_TAG, "navigation stopped. reach destination")
+        }
+
+        navigationSession?.stopNavigation()
+        map_view.annotationsController().clear()
+        map_view.routesController().clear()
+
+        //  disable following vehicle mode, allow user pan & zoom map:
+        map_view.cameraController().disableFollowVehicle()
+
+        //  back to vehicle location and reset to default zoom level(3):
+        map_view.cameraController().position =
+            Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
+
+        runOnUiThread {
+            navButton.isEnabled = false
+            navButton.setText(R.string.start_navigation)
+        }
+
+        navigating = false
+        activeRouteId = null
+        navigationSession = null
     }
 
     var pickedRoute: Route? = null
@@ -210,7 +235,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                     navButton.isEnabled = true
                     navButton.setText(R.string.start_navigation)
                 }
-
             } else {
                 Log.e(LOG_TAG, "requestDirection task failed! status: ${response.response.status}")
 
@@ -218,6 +242,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                     navButton.isEnabled = false
                 }
             }
+
             task.dispose()
         }
     }
@@ -243,6 +268,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         driveSession.dispose()
         locationProvider.stop()
         SDK.getInstance().dispose()
+
         Log.i(LOG_TAG, "Telenav SDK disposed")
         super.onDestroy()
     }
@@ -261,20 +287,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
         if (stopIndex == -1) {// -1 means reach destination
-            navigationSession?.stopNavigation()
-            map_view.annotationsController().clear()
-            map_view.routesController().clear()
-            map_view.cameraController().disableFollowVehicle()
-            map_view.cameraController().position =
-                Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
-
-            activeRouteId = null
-            navigating = false
-
-            runOnUiThread {
-                navButton.isEnabled = false
-                navButton.setText(R.string.start_navigation)
-            }
+            handleNavigationSessionEnd(false)
         }
     }
 
@@ -283,7 +296,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             if (route!!.id != it) {
                 Log.i(LOG_TAG, "updated route. new route id: " + route!!.id + "reason: " + routeUpdateContext!!.reason)
 
-                //  TODO: run in map rendering thread:
                 map_view.routesController().remove(it)
                 map_view.routesController().refresh(route)
                 map_view.routesController().updateRouteProgress(route!!.id)
@@ -295,6 +307,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
                                        betterRouteCandidate: BetterRouteCandidate?) {
+        //  ignore the recommended route:
         betterRouteCandidate?.accept(false)
     }
 
