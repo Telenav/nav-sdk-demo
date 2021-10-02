@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var locationProvider = SimulationLocationProvider(this)
     private var navigationSession: NavigationSession? = null
     private var mapViewInitialized = false
+    private var activeRouteId: String? = null
     private var navigating = false
 
     private var vehicleLocation: Location = Location("Demo").apply {
@@ -134,7 +135,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             if (navigating) {
                 navigationSession?.stopNavigation()
                 navigationSession = driveSession.startNavigation(pickedRoute!!, true, 45.0)
-                map_view.routesController().updateRouteProgress(pickedRoute!!.id)
+
+                //  TODO: disable traffic based DRG temporarily:
+                navigationSession?.let {
+                    it.setMinTimeSavedPercentage(70)
+                }
+
+                activeRouteId = pickedRoute!!.id
+                activeRouteId?.let {
+                    map_view.routesController().updateRouteProgress(it)
+                }
 
                 map_view.cameraController()
                     .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
@@ -150,6 +160,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 }
                 navButton.setText(R.string.start_navigation)
                 navigating = false
+                activeRouteId = null
             }
         }
 
@@ -250,6 +261,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             map_view.cameraController().position =
                 Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
 
+            activeRouteId = null
+            navigating = false
+
             runOnUiThread {
                 navButton.isEnabled = false
                 navButton.setText(R.string.start_navigation)
@@ -258,7 +272,18 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext) {
-        route.dispose()
+        activeRouteId?.let {
+            if (route!!.id != it) {
+                Log.i(LOG_TAG, "updated route. new route id: " + route!!.id + "reason: " + routeUpdateContext!!.reason)
+
+                //  TODO: run in map rendering thread:
+                map_view.routesController().remove(it)
+                map_view.routesController().refresh(route)
+                map_view.routesController().updateRouteProgress(route!!.id)
+            }
+        }
+
+        activeRouteId = route!!.id
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
