@@ -14,10 +14,12 @@ import android.util.Log
 import android.util.Range
 import androidx.appcompat.app.AppCompatActivity
 import com.telenav.map.api.Annotation
+import com.telenav.map.api.Annotation.Layer.RouteWayPoint
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
@@ -25,7 +27,6 @@ import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
@@ -116,6 +117,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                             val factory = map_view.annotationsController().factory()
                             val annotation = factory.create(this, R.drawable.map_pin_green_icon_unfocused, data.geoLocation!!)
                             annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
+                            annotation.layer = Annotation.Layer(RouteWayPoint)
+                            annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+
                             map_view.annotationsController().clear()
                             map_view.annotationsController().add(arrayListOf(annotation))
                         }
@@ -155,6 +159,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 map_view.annotationsController().clear()
                 map_view.routesController().clear()
                 map_view.cameraController().disableFollowVehicle()
+                map_view.cameraController().position =
+                    Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
+
                 runOnUiThread {
                     navButton.isEnabled = false
                 }
