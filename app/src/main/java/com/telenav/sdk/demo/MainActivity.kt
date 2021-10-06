@@ -17,6 +17,7 @@ import com.telenav.map.api.Annotation
 import com.telenav.map.api.Annotation.Layer.RouteWayPoint
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
+import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.examples.R
@@ -37,13 +38,13 @@ import java.util.*
  * @author tang.hui on 2021/9/24
  */
 class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEventListener {
-
     private val driveSession: DriveSession = DriveSession.Factory.createInstance()
     private var locationProvider = SimulationLocationProvider(this)
     private var navigationSession: NavigationSession? = null
     private var mapViewInitialized = false
+    private var isNavigation = false    //  flag whether in active navigation state
     private var activeRouteId: String? = null
-    private var navigating = false
+    private val LOG_TAG = "Nav SDK Demo"
 
     private var vehicleLocation: Location = Location("Demo").apply {
         /*
@@ -56,12 +57,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         this.longitude = -122.13814
     }
 
-    private var destinationLocation: Location = Location("Demo").apply {
-        //  city center of San Francisco, CA 94110
-        this.latitude = 37.756430
-        this.longitude = -122.418841
-    }
-
     init {
         driveSession.injectLocationProvider(locationProvider)
         driveSession.eventHub?.let {
@@ -71,8 +66,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         locationProvider.setLocation(vehicleLocation)
         locationProvider.start()
     }
-
-    private val LOG_TAG = MainActivity::class.java.name
 
     companion object {
         fun start(context: Context) {
@@ -85,18 +78,21 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        //  inject customized location provider:
+        locationProvider.start()
+        driveSession.injectLocationProvider(locationProvider)
+
         map_view.initialize(savedInstanceState) {
             mapViewInitialized = true
             map_view.vehicleController().setIcon(R.drawable.cvp)
 
-            // Enable all of the MapView features
             map_view.featuresController().traffic().setEnabled()
             map_view.featuresController().landmarks().setEnabled()
             map_view.featuresController().buildings().setEnabled()
             map_view.featuresController().terrain().setDisabled()   //  disable terrain
             map_view.featuresController().globe().setEnabled()
             map_view.featuresController().compass().setDisabled()   //  disable compass
-            map_view.featuresController().scaleBar().setDisabled()   //  disable scale bar
+            map_view.featuresController().scaleBar().setDisabled()  //  disable scale bar
 
             //  set zoom level range(1 to 16):
             map_view.cameraController().zoomLevelRange = Range(1.0f, 16.0f)
@@ -104,56 +100,56 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             // recenter to vehicle position
             map_view.cameraController().position =
                 Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
-
         }
 
         map_view?.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
             when (touchType) {
                 TouchType.Down, TouchType.Up, TouchType.Click, TouchType.Move, TouchType.Cancel -> {
-                    Log.d(
+                    Log.v(
                         "TOUCH_TAG", "Touch type ${touchType}, " +
                                 "geoLocation latitude: ${data.geoLocation?.latitude} longitude: ${data.geoLocation?.longitude}"
                     )
                 }
 
                 TouchType.LongClick -> {
-                    data.geoLocation?.let {
-                        runOnUiThread {
-                            // Set annotation at location
-                            val factory = map_view.annotationsController().factory()
-                            val annotation = factory.create(this, R.drawable.map_pin_green_icon_unfocused, data.geoLocation!!)
-                            annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
+                    //  during active navigation, disable long-press destination pick
+                    if (!isNavigation) {
+                        data.geoLocation?.let {
+                            runOnUiThread {
+                                // Set annotation at location
+                                val factory = map_view.annotationsController().factory()
+                                val annotation = factory.create(
+                                    this,
+                                    R.drawable.map_pin_green_icon_unfocused,
+                                    data.geoLocation!!
+                                )
+                                //  annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
 
-                            //  Waypoint annotation layer:
-                            annotation.layer = Annotation.Layer(RouteWayPoint)
+                                //  Waypoint annotation layer:
+                                annotation.layer = Annotation.Layer(RouteWayPoint)
 
-                            //  disable culling for this annotation(always visible):
-                            annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+                                //  disable culling for this annotation(always visible):
+                                annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
 
-                            map_view.annotationsController().clear()
-                            map_view.annotationsController().add(arrayListOf(annotation))
+                                map_view.annotationsController().clear()
+                                map_view.annotationsController().add(arrayListOf(annotation))
+                            }
                         }
+
+                        //  TODO("avoid route request while exists one is on the air")
+                        val destinationLocation = Location("Demo")
+                        destinationLocation.set(data.geoLocation)
+                        requestDirection(vehicleLocation, destinationLocation)
                     }
-                    //  val location = data.geoLocation
-                    destinationLocation.set(data.geoLocation)
-                    requestDirection(vehicleLocation, destinationLocation)
                 }
             }
         }
 
-        locationProvider.start()
-        driveSession.injectLocationProvider(locationProvider)
-
         navButton.setOnClickListener {
-            navigating = !navigating
-            if (navigating) {
+            isNavigation = !isNavigation
+            if (isNavigation) {
                 navigationSession?.stopNavigation()
                 navigationSession = driveSession.startNavigation(pickedRoute!!, true, 45.0)
-
-                //  TODO: disable traffic based DRG temporarily:
-                navigationSession?.let {
-                    it.setMinTimeSavedPercentage(70)
-                }
 
                 activeRouteId = pickedRoute!!.id
                 activeRouteId?.let {
@@ -163,8 +159,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 map_view.cameraController()
                     .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
 
+                //  disable pan during following vehicle mode(just remind since we turned on auto-zoom, so sometimes even user
+                //  changed zoom level with gesture but will still back to the calculated zoom automatically):
+                val activeGestures = setOf(GestureType.Zoom, GestureType.Tilt)
+                map_view.setActiveGestures(activeGestures)
+
                 navButton.setText(R.string.stop_navigation)
             } else {
+                //  reset default map gestures:
+                val activeGestures = setOf(GestureType.Zoom, GestureType.Pan, GestureType.Rotate, GestureType.Tilt)
+                map_view.setActiveGestures(activeGestures)
                 handleNavigationSessionEnd(true)
             }
         }
@@ -193,7 +197,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             navButton.setText(R.string.start_navigation)
         }
 
-        navigating = false
+        isNavigation = false
         activeRouteId = null
         navigationSession = null
     }
@@ -293,21 +297,22 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
     override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext) {
         activeRouteId?.let {
-            if (route!!.id != it) {
-                Log.i(LOG_TAG, "updated route. new route id: " + route!!.id + "reason: " + routeUpdateContext!!.reason)
+            if (route.id != it) {
+                Log.i(LOG_TAG, "updated route. new route id: " + route.id + "reason: " + routeUpdateContext.reason)
 
                 map_view.routesController().remove(it)
                 map_view.routesController().refresh(route)
-                map_view.routesController().updateRouteProgress(route!!.id)
+                map_view.routesController().updateRouteProgress(route.id)
             }
         }
 
-        activeRouteId = route!!.id
+        activeRouteId = route.id
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
                                        betterRouteCandidate: BetterRouteCandidate?) {
-        //  ignore the recommended route:
+        //  TODO("one can decide accept or not according value of status")
+        //  ignore the recommended route
         betterRouteCandidate?.accept(false)
     }
 
@@ -328,5 +333,4 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
         //  TODO("Not yet implemented")
     }
-
 }

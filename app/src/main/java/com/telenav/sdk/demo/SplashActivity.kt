@@ -9,16 +9,12 @@ package com.telenav.sdk.demo
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.telenav.sdk.common.logging.TaLog
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.NavLogLevelType
-import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
@@ -30,14 +26,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /**
  * @author tang.hui on 2021/9/24
  */
 class SplashActivity : AppCompatActivity() {
-
-    //TODO The KEY and SECRET to be set
     val SDK_KEY = BuildConfig.API_KEY
     val SDK_SECRET = BuildConfig.API_SECRET
 
@@ -100,7 +93,6 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-
     private fun initNavSDKAsync(ready: () -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
             val success = initNavSDK()
@@ -114,11 +106,14 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private suspend fun initNavSDK(): Boolean {
-        TaLog.enableLogs(true)// enable tasdk log
-        TaLog.setLogLevel(NavLogLevelType.INFO) //  set INFO log by default
-        // TODO set your local writable path
-        val sdkCacheDataDir = "$cacheDir/nav-cached/"
+        TaLog.enableLogs(true)// enable SDK log
+        TaLog.setLogLevel(NavLogLevelType.INFO) //  set INFO log level by default
 
+        //  TODO("logging Nav SDK log to local file")
+        //  TaLog.enableWriteLogsToFile(true)
+        //  TaLog.setLogPath("/sdcard/Download/telenav_sdk_demo.log")
+
+        val sdkCacheDataDir = "$cacheDir/nav-cached/"
         val sdkOptions = SDKOptions.builder()
             .setApiKey(SDK_KEY)
             .setApiSecret(SDK_SECRET)
