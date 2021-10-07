@@ -60,10 +60,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.3.0'
 
-    implementation "com.telenav.sdk:telenav-android-mapview:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-drivesession:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-ota:${telanavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-uikit:${telanavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-mapview:${telenavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-drivesession:${telenavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-ota:${telenavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-ota:${telenavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-uikit:${telenavSdkVersion}"
     implementation "com.telenav.sdk:telenav-entity-cloud:1.6.0"
 }
