@@ -2,13 +2,13 @@
 This is a sample app to demonstrate how to integrate Telenav navigation SDK with basic features.
 
 
-## Key Project Reources
+## Key Project Resources
 | Resource     |     Description                                                    |
 |--------------|--------------------------------------------------------------------|
 |*Project Name*|nav-sdk-demo                                                        |
-|*Summary*     |Basic sample app demostrating integrate Telenav navigation SDK |
+|*Summary*     |Basic sample app demonstrating integrate Telenav navigation SDK |
 |*REAME.me*    |This REAME document                                                 |
-|*app/build.gradle* |Application gradle file. SDK depenedncy configuration          |
+|*app/build.gradle* |Application gradle file. SDK dependency configuration          |
 |*app/src/main/res/layout/activity_main.xml* | Main activity layout definition file. Declaring Mapview |
 |*app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt* | Navigation SDK initialization |
 |*app/src/main/java/com/telenav/sdk/demo/MainActivity.kt.kt* | Majority part of logic on showing map, route request, start and stop navigation |
@@ -125,7 +125,7 @@ For more detailed implementation, please find from the project source file *Main
 Call function *DriveSession.Factory.createInstance* to obtain an instance of DriveSession. The application layer needs to register drive session event listeners to receive different types of notifications. <br/>For more information, please refer the document [Work with DriveSession](https://docs.telenav.com/nav/start-navigation.html). To make the demo application simple, only a few events are processed. Most events are ignored and marked as *TODO*.
 
 # Compilation and Running
-Build the demo project, connect target Android device. If everyghint OK, the demo application will be able to be installed and launched on the target device.
+Build the demo project, connect target Android device. If everything OK, the demo application will be able to be installed and launched on the target device.
 You will see a map after application is launched. The map supports gestures like panning, pinch zooming, tilting etc.
 Long press on map display area to set a destination, application will trigger route requesting with that destination.
 To start navigation, click the "Start Navigation" button shows on middle-bottom of screen. click this button again will stop navigation and go back to the original state.
