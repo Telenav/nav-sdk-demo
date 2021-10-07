@@ -7,7 +7,7 @@ This is a sample app to demonstrate how to integrate Telenav navigation SDK with
 |--------------|--------------------------------------------------------------------|
 |*Project Name*|nav-sdk-demo                                                        |
 |*Summary*     |Basic sample app demonstrating integrate Telenav navigation SDK |
-|*README.me*    |This README document                                                 |
+|*README.md*    |This README document                                                 |
 |*app/build.gradle* |Application gradle file. SDK dependency configuration          |
 |*app/src/main/res/layout/activity_main.xml* | Main activity layout definition file. Declaring Mapview |
 |*app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt* | Navigation SDK initialization |
