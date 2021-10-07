@@ -8,10 +8,10 @@ This is a sample app to demonstrate how to integrate Telenav navigation SDK with
 |*Project Name*|nav-sdk-demo                                                        |
 |*Summary*     |Basic sample app demonstrating integrate Telenav navigation SDK |
 |*README.md*    |This README document                                                 |
-|*app/build.gradle* |Application gradle file. SDK dependency configuration          |
-|*app/src/main/res/layout/activity_main.xml* | Main activity layout definition file. Declaring Mapview |
-|*app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt* | Navigation SDK initialization |
-|*app/src/main/java/com/telenav/sdk/demo/MainActivity.kt.kt* | Majority part of logic on showing map, route request, start and stop navigation |
+|*[app/build.gradle](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/build.gradle)* |Application gradle file. SDK dependency configuration          |
+|*[app/src/main/res/layout/activity_main.xml](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/res/layout/activity_main.xml)* | Main activity layout definition file. Declaring Mapview |
+|*[app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt)* | Navigation SDK initialization |
+|*[app/src/main/java/com/telenav/sdk/demo/MainActivity.kt.kt](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/java/com/telenav/sdk/demo/MainActivity.kt)* | Majority part of logic on showing map, route request, start and stop navigation |
 
 # Quick Start
 
