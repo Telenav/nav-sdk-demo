@@ -56,7 +56,7 @@ To start Navigation SDK integration, add the SDK as a dependency of the project.
 ```
 
 ## Initialize Navigation SDK 
-To initialize Navigation SDK, you need to create an instance of *NavSDKOptions*, please see below code snipet. For more detailed implement, please refer to function *SplashActivity.initNavSDK* from the project source file *SplashActivity.kt*. <br/>Please don't forget to replace *'SDK_KEY'* and *'SDK_SECRET'* with correct API key and secret strings respectively which you need to get from Telenav first. 
+To initialize Navigation SDK, you need to create an instance of *NavSDKOptions*, please see below code snippet. For more detailed implement, please refer to function *SplashActivity.initNavSDK* from the project source file *SplashActivity.kt*. <br/>Please don't forget to replace *'SDK_KEY'* and *'SDK_SECRET'* with correct API key and secret strings respectively which you need to get from Telenav first. 
 
 > ***In this demo application works in pure streaming mode, thus the cloud endpoint is mandatory. And *sdkCacheDataDir* needs to be a writable folder.***
 
