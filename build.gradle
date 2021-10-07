@@ -17,8 +17,19 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral()
-        maven { url "http://artifactory.telenav.com/telenav-maven-public/" }
+        jcenter()
+
+        // for release version
+        maven {
+            url "https://telenav.jfrog.io/artifactory/telenav-maven-releases/"
+            credentials {
+                username "${REPO_USER_NAME}"
+                password "${REPO_PASSWD}"
+            }
+        }
+
+        // for develop version
+        maven { url "${MAVEN_PUBLIC}" }
     }
 }
 
