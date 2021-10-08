@@ -29,6 +29,7 @@
 
         <activity
             android:name="com.telenav.sdk.demo.MainActivity"
+            android:configChanges="orientation|screenSize"
             android:label="Navigation Demo(Long press on map to set destination)"/>
 
     </application>
