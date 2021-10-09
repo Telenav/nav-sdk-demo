@@ -25,12 +25,12 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "SDK_KEY", "${SDK_KEY}")
-            buildConfigField("String", "SDK_SECRET", "${SDK_SECRET}")
+            buildConfigField("String", "SDK_KEY", "${API_KEY}")
+            buildConfigField("String", "SDK_SECRET", "${API_SECRET}")
         }
         release {
-            buildConfigField("String", "SDK_KEY", "${SDK_KEY}")
-            buildConfigField("String", "SDK_SECRET", "${SDK_SECRET}")
+            buildConfigField("String", "SDK_KEY", "${API_KEY}")
+            buildConfigField("String", "SDK_SECRET", "${API_SECRET}")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
