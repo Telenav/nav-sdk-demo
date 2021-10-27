@@ -28,8 +28,8 @@ import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentAvoidStepBinding
 import com.telenav.sdk.map.direction.model.Route
-import com.telenav.sdk.ui.turn.TnTurnListItem
-import com.telenav.sdk.ui.turn.TnTurnListRecyclerViewAdapter
+import com.telenav.sdk.uikit.turn.TnTurnListItem
+import com.telenav.sdk.uikit.turn.TnTurnListRecyclerViewAdapter
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_nav_turnbyturn_list.*
 

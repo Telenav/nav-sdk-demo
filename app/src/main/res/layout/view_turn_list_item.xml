@@ -7,7 +7,7 @@
 
         <variable
             name="turnListItem"
-            type="com.telenav.sdk.ui.turn.TnTurnListItem" />
+            type="com.telenav.sdk.uikit.turn.TnTurnListItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

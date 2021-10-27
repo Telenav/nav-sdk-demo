@@ -8,7 +8,9 @@ package com.telenav.sdk.demo.provider
 
 import android.content.Context
 import android.location.Location
+import android.os.SystemClock
 import com.telenav.sdk.common.model.LocationProvider
+import com.telenav.sdk.common.model.LocationExtension.setDRTimestamp
 import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.demo.util.RegionCachedHelper
 import java.util.*
@@ -69,6 +71,21 @@ class SimulationLocationProvider(val context: Context) : DemoLocationProvider {
                 defaultLat = 37.5335715
                 defaultLon = 126.972063
             }
+            Region.SEA -> {
+                //  City center of Jakarta, Indonesia:
+                defaultLat = -6.2033775
+                defaultLon = 106.8447530
+            }
+            Region.MEA -> {
+                //  City center of Dubai, United Arab Emirates
+                defaultLat = 25.1977404
+                defaultLon = 55.2694173
+            }
+            Region.ANZ -> {
+                //  City center of Sydney
+                defaultLat = -33.833708
+                defaultLon = 151.213987
+            }
             else -> {
                 // Telenav US HQ
                 defaultLat = 37.398762
@@ -79,6 +96,7 @@ class SimulationLocationProvider(val context: Context) : DemoLocationProvider {
             this.latitude = defaultLat
             this.longitude = defaultLon
             this.time = Calendar.getInstance().timeInMillis
+            this.setDRTimestamp(SystemClock.elapsedRealtime())
         }
     }
 

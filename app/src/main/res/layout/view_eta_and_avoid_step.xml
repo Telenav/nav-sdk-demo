@@ -93,7 +93,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="12 Mi" />
 
-            <com.telenav.sdk.ui.TnCurrentTurnView
+            <com.telenav.sdk.uikit.TnCurrentTurnView
                 android:id="@+id/currentTurn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

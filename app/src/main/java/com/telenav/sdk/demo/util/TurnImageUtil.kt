@@ -8,7 +8,7 @@ package com.telenav.sdk.demo.util
 
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.model.LanePattern
-import com.telenav.sdk.ui.ImageItems
+import com.telenav.sdk.uikit.ImageItems
 
 class TurnImageUtil {
     companion object Factory {

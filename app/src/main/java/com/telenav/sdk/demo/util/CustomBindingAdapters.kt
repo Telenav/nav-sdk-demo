@@ -2,9 +2,9 @@ package com.telenav.sdk.demo.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.telenav.sdk.ui.ImageItems
-import com.telenav.sdk.ui.TnLaneGuidanceView
-import com.telenav.sdk.ui.TnCurrentTurnView
+import com.telenav.sdk.uikit.ImageItems
+import com.telenav.sdk.uikit.TnLaneGuidanceView
+import com.telenav.sdk.uikit.TnCurrentTurnView
 import com.telenav.sdk.map.direction.model.LaneInfo
 
 @BindingAdapter("imageResource")

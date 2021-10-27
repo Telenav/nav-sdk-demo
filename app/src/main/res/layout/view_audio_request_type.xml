@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~ of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~ other countries. Other names may be trademarks of their respective owners.
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="audioRequestTypeInfo"
+            type="com.telenav.sdk.demo.scenario.navigation.aduio.AudioRequestTypeInfo" />
+    </data>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/audio_request_type_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:textColor="@color/color_white"
+            android:text="@{audioRequestTypeInfo.typeDesc}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="@dimen/dim_15dp" />
+        <TextView
+            android:background="@color/grey"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </LinearLayout>
+</layout>

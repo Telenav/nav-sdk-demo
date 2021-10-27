@@ -18,6 +18,7 @@ import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.telenav.sdk.demo.scenario.navigation.aduio.AudioGuidanceFragment
 import com.telenav.sdk.demo.scenario.navigation.avoid.AvoidIncidentFragment
 import com.telenav.sdk.demo.scenario.navigation.avoid.AvoidStepFragment
 import com.telenav.sdk.examples.R
@@ -68,6 +69,9 @@ class NavMainActivity : AppCompatActivity() {
         },
         MenuData("avoid step") {
             showFragment(AvoidStepFragment())
+        },
+        MenuData("AudioGuidance") {
+            showFragment(AudioGuidanceFragment())
         },
     )
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">android-sdk-demo</string>
+    <string name="app_name">android-sdk-examples</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -8,6 +8,7 @@
     <string name="next">Next</string>
     <string name="go_to_scenario_menu">Go To Scenario Menu</string>
     <string name="automation_menu">Automation Test Menu</string>
+    <string name="performance_monitor">Performance Monitor</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
@@ -44,6 +45,7 @@
     <string name="title_activity_map_view_traffic_bubble">Traffic bubble</string>
     <string name="title_activity_map_view_snaps_shots">snaps shots</string>
     <string name="title_activity_map_view_show_region_rect">showRegion Rect</string>
+    <string name="title_activity_map_view_multi_map">Multi Map View</string>
 
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>

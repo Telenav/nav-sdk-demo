@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/mapView">
 
-        <com.telenav.sdk.ui.TnTrafficBarView
+        <com.telenav.sdk.uikit.TnTrafficBarView
             android:id="@+id/trafficBar"
             android:layout_width="0dp"
             android:layout_height="48dp"

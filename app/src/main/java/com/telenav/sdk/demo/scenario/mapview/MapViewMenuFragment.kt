@@ -90,6 +90,9 @@ class MapViewMenuFragment : Fragment() {
                 MenuData(getString(R.string.title_activity_map_view_show_region_rect)) {
                     findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewShowRegionRectFragment)
                 },
+//                MenuData(getString(R.string.title_activity_map_view_multi_map)) {
+//                findNavController().navigate(R.id.action_mapViewMenuFragment_to_multiMapViewFragment)
+//            }
         )
     }
 

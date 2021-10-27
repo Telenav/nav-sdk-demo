@@ -19,7 +19,7 @@ import com.telenav.sdk.drivesession.model.JunctionViewInfo
 import com.telenav.sdk.drivesession.model.NavigationEvent
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentNavTurnbyturnListBinding
-import com.telenav.sdk.ui.turn.TnTurnListRecyclerViewAdapter
+import com.telenav.sdk.uikit.turn.TnTurnListRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_nav_turnbyturn_list.*
 import kotlinx.android.synthetic.main.fragment_nav_turnbyturn_list.turn_direction_recycler_view
 

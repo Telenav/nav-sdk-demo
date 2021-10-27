@@ -16,6 +16,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
+import com.telenav.sdk.common.logging.TaLog
+import com.telenav.sdk.common.model.NavLogLevelType
 import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
@@ -41,13 +43,16 @@ open class MainActivity : AppCompatActivity() {
 
     // TODO change options here
     private val regionInitList = listOf(
-            InitSDKDataModel(Region.NA, "", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
-            InitSDKDataModel(Region.EU, "", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
-            InitSDKDataModel(Region.NA, "$SDK_DATA_DIR_BASE/NA", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
-            InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
-            InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", ON_BOARD_KEY, ON_BOARD_SECRET, ""),         InitSDKDataModel(Region.CN, "", SDK_KEY_NA,
-            SDK_SECRET_NA,
-            URL_CN_DEMO,"DEMO"),
+        InitSDKDataModel(Region.NA, "",SDK_KEY_NA, SDK_SECRET_NA,URL_NA),
+        InitSDKDataModel(Region.EU, "",SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
+        InitSDKDataModel(Region.NA, "$SDK_DATA_DIR_BASE/NA",SDK_KEY_NA, SDK_SECRET_NA,URL_NA),
+        InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU",SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
+        InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", "", "", ""),
+        InitSDKDataModel(Region.SEA, "$SDK_DATA_DIR_BASE/SEA",ON_BOARD_KEY, ON_BOARD_SECRET, ""),
+        InitSDKDataModel(Region.ANZ, "$SDK_DATA_DIR_BASE/ANZ",ON_BOARD_KEY, ON_BOARD_SECRET, ""),
+        InitSDKDataModel(Region.CN, "", SDK_KEY_NA,SDK_SECRET_NA,URL_CN_DEMO,"DEMO"),
+        InitSDKDataModel(Region.NA, "", SDK_KEY_OSM, SDK_SECRET_OSM, URL_NA_OSM, "OSM"),
+        InitSDKDataModel(Region.EU, "", SDK_KEY_OSM, SDK_SECRET_OSM, URL_EU_OSM, "OSM")
     )
 
     companion object {
@@ -57,6 +62,10 @@ open class MainActivity : AppCompatActivity() {
         // The KEY and SECRET are used to test NIO project in EU region.
         const val SDK_KEY_EU = "f98eadad-cca7-4a55-b2b5-d6dc930e8bc1"
         const val SDK_SECRET_EU = "1daf6254-1f88-4b8d-8539-308a60e2d181"
+        // The KEY and SECRET are used to test OSM project
+        const val SDK_KEY_OSM = "fe53800f-2fd1-41a0-81ef-610fb3177e4e"
+        const val SDK_SECRET_OSM = "771da85e-a1ef-482b-9abf-c60090d07413"
+
         // The value for embedded setting, can be any value but empty string.
         const val ON_BOARD_KEY = "0"
         const val ON_BOARD_SECRET = "0"
@@ -68,6 +77,11 @@ open class MainActivity : AppCompatActivity() {
 
         // public access server, could also be visited from intranet
         const val URL_CN_DEMO = "http://shs-navdemo-cn-routing-01.telenav.cn:10080"
+
+        // The URL for OSM NA region test
+        const val URL_NA_OSM = "http://apinastg.telenav.com"
+        // The URL for OSM EU region test
+        const val URL_EU_OSM = "https://apieustg.telenav.com"
 
         private const val SDK_DATA_DIR_BASE = "sdcard/map"
 
@@ -146,6 +160,7 @@ open class MainActivity : AppCompatActivity() {
         // enable tasdk log
         // TaLog.enableWriteLogsToFile(true)
         // TaLog.setLogPath("/sdcard/tasdk.log")
+        TaLog.setLogLevel(NavLogLevelType.INFO)
         val model = RegionCachedHelper.getSDKDataModel(applicationContext) ?: regionInitList[0]
         val region = model.region
         // TODO set your local embedded map data path
@@ -159,12 +174,12 @@ open class MainActivity : AppCompatActivity() {
         val otaDataDir = "sdcard/test/"
 
         val optionsBuilder = SDKOptions.builder()
-                .setApiKey(key)
-                .setApiSecret(secret)
-                .setSdkCacheDataDir(sdkCacheDataDir)
-                .setCloudEndPoint(url)
-                .setLocale(getLocale(region))    //  if not specified, SDK will assume region EU
-                .setUserId("AndroidSampleTest")
+            .setApiKey(key)
+            .setApiSecret(secret)
+            .setSdkCacheDataDir(sdkCacheDataDir)
+            .setCloudEndPoint(url)
+            .setLocale(getLocale(region))    //  if not specified, SDK will assume region EU
+            .setUserId("AndroidSampleTest")
         if (!TextUtils.isEmpty(sdkDataDir)) {
             if (File(sdkDataDir).exists()) {
                 optionsBuilder.setSdkDataDir(sdkDataDir)
@@ -173,13 +188,13 @@ open class MainActivity : AppCompatActivity() {
             }
         }
         Log.i("MainActivity",filesDir.absolutePath)
-        val success = initSDK(optionsBuilder.build())
+        val success = initSDK(optionsBuilder.build(), region)
         initEntityService(optionsBuilder.build())
         optionsBuilder
-                .setDeviceGuid("AndroidDeviceGuid")
-                .setApplicationInfo(ApplicationInfo.builder("demo","1").build())
-                .setSdkDataDir(otaDataDir)
-                .build()
+            .setDeviceGuid("AndroidDeviceGuid")
+            .setApplicationInfo(ApplicationInfo.builder("demo","1").build())
+            .setSdkDataDir(otaDataDir)
+            .build()
         initDataCollectorService(optionsBuilder.build())
         initOtaService(optionsBuilder.build())
         return success
@@ -192,25 +207,28 @@ open class MainActivity : AppCompatActivity() {
         return "$cacheDir/nav-cached/"
     }
 
-    /**
-     * This method is evoked by FirstFragment
-     */
-    fun getRegionInitList() = regionInitList
 
-    private suspend fun initSDK(options: SDKOptions) : Boolean {
+    private suspend fun initSDK(options: SDKOptions, region: Region) : Boolean {
         val success: Boolean
         withContext(Dispatchers.IO) {
+            // Set the fixed port of broker server for example app.
+            // To reduce port conflicts, please don't use port in range [20000, 20099].
+//            Os.setenv(Constants.KEY_TASDK_BROKER_SERVER_PORT, "20210", true);
+
             val peLogDir = File(getExternalFilesDir(null),"peLog");
             peLogDir.mkdir()
             val navSDKOptions = NavSDKOptions.builder(options)
-                    .setTrafficRefreshTime(60)
-                    .setTrafficExpireTime(60)
-                    .enableTraffic(true)
-                    .enablePositionEngineLog(true)
-                    .setTrafficFetchRange(240)
-                    .setPositionEngineLogStorePath(peLogDir.absolutePath)
-                    .setMapStreamingSpaceLimit(1024*1024*1024)
-                    .build()
+                //The refresh frequency of the incident is related to the trafficrefreshtime in the configuration,
+                // so improve the traffic refresh rate and facilitate the avoidIncident demo demonstration
+                .setTrafficRefreshTime(20)
+                .setTrafficExpireTime(20)
+                .enableTraffic(true)
+                .enablePositionEngineLog(true)
+                .setTrafficFetchRange(3600)
+                .setPositionEngineLogStorePath(peLogDir.absolutePath)
+                .setMapStreamingSpaceLimit(1024*1024*1024)
+                .setRegion(region)
+                .build()
             success = SDK.getInstance().initialize(this@MainActivity, navSDKOptions) == 0
             Log.e("MainActivity", filesDir.absolutePath)
         }
@@ -230,7 +248,7 @@ open class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun initOtaService(options: SDKOptions) {
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
             try {
                 OtaService.initialize(this@MainActivity, options)
             } catch (e: Throwable) {
@@ -262,16 +280,15 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getKey(region: Region): String = if (region == Region.EU) SDK_KEY_EU else SDK_KEY_NA
-
-    private fun getSecret(region: Region): String = if (region == Region.EU) SDK_SECRET_EU else SDK_SECRET_NA
-
     private fun getLocale(region: Region): Locale = when (region) {
         Region.CN -> Locale.SIMPLIFIED_CHINESE
         Region.EU -> Locale.NORWEGIAN
         Region.TW -> Locale.TRADITIONAL_CHINESE
         Region.KR -> Locale.KOREAN
         Region.NA -> Locale.EN_US
+        Region.SEA -> Locale.INDONESIAN
+        Region.MEA -> Locale.ARABIC
+        Region.ANZ -> Locale.ENGLISH
         else -> Locale.GERMAN
     }
 

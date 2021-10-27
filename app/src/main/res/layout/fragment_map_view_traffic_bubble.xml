@@ -17,7 +17,7 @@
         android:id="@+id/action_bar"
         layout="@layout/layout_action_bar" />
 
-    <com.telenav.sdk.ui.TnTrafficBarView
+    <com.telenav.sdk.uikit.TnTrafficBarView
         android:id="@+id/trafficBar"
         android:layout_width="0dp"
         android:layout_height="48dp"

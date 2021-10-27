@@ -15,9 +15,9 @@ import com.telenav.sdk.drivesession.model.NavigationEvent
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.model.Action
 import com.telenav.sdk.map.direction.model.LaneInfo
-import com.telenav.sdk.ui.ImageItems
-import com.telenav.sdk.ui.turn.TnTurnListItem
-import com.telenav.sdk.ui.turn.TnTurnListRecyclerViewAdapter
+import com.telenav.sdk.uikit.ImageItems
+import com.telenav.sdk.uikit.turn.TnTurnListItem
+import com.telenav.sdk.uikit.turn.TnTurnListRecyclerViewAdapter
 import java.math.BigDecimal
 import java.math.RoundingMode
 
