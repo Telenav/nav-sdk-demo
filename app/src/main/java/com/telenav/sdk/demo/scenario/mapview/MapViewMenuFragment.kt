@@ -54,45 +54,45 @@ class MapViewMenuFragment : Fragment() {
 
     private fun initMenuData() {
         menuList = listOf(
-                MenuData(getString(R.string.title_activity_map_view_set_up)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewSetUpFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_camera)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewCameraFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_annotation)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_annotationFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_tune_mode)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewTuneModeFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_gesture)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewGestureFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_elements)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewElementsFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_theme)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewThemeFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_status)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewStateFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_vehicle)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_vehicleFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_traffic_bubble)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewTrafficBubbleFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_snaps_shots)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewSnapshotsFragment)
-                },
-                MenuData(getString(R.string.title_activity_map_view_show_region_rect)) {
-                    findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewShowRegionRectFragment)
-                },
-//                MenuData(getString(R.string.title_activity_map_view_multi_map)) {
-//                findNavController().navigate(R.id.action_mapViewMenuFragment_to_multiMapViewFragment)
-//            }
+            MenuData(getString(R.string.title_activity_map_view_set_up)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewSetUpFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_camera)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewCameraFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_annotation)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_annotationFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_tune_mode)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewTuneModeFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_gesture)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewGestureFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_elements)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewElementsFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_theme)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewThemeFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_status)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewStateFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_vehicle)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_vehicleFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_traffic_bubble)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewTrafficBubbleFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_snaps_shots)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewSnapshotsFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_show_region_rect)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewShowRegionRectFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_multi_map)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_multiMapViewFragment)
+            }
         )
     }
 
@@ -101,10 +101,10 @@ class MapViewMenuFragment : Fragment() {
         val menuList: List<MenuData>
     ) : RecyclerView.Adapter<MenuViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
-                MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
-                        parent, false)).apply {
-                    this.root.setOnClickListener(onClickListener)
-                }
+            MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
+                parent, false)).apply {
+                this.root.setOnClickListener(onClickListener)
+            }
 
         override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
             holder.tvTitle.text = menuList[position].text

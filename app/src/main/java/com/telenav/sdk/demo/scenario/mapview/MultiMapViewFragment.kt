@@ -19,6 +19,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
@@ -124,7 +125,7 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
         btn_zoom_out.setOnClickListener { setZoomLevelBy(1f) }
 
         fps_slider.setOnSeekBarChangeListener(object :
-                SeekBar.OnSeekBarChangeListener {
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, value: Int, fromUser: Boolean) {
                 fps_text.setText("FPS(" + value + ")")
                 clusterMapView?.setFPS(value)
@@ -184,12 +185,12 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
     private fun navigateToLocation(begin: Location, end: Location) {
         navigationSession?.stopNavigation()
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(begin),
-                GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(begin),
+            GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
-                .routeCount(2)
-                .startTime(Calendar.getInstance().timeInMillis / 1000)
-                .build()
+            .routeCount(2)
+            .startTime(Calendar.getInstance().timeInMillis / 1000)
+            .build()
         val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
@@ -230,12 +231,12 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
         main_map_view.addMapViewListener {
             it.cameraLocation
             val text = String.format("Main Map\ncamera position: [%.4f , %.4f]\nvehicle position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f",
-                    it.cameraLocation.latitude,
-                    it.cameraLocation.longitude,
-                    it.carLocation.latitude,
-                    it.carLocation.longitude,
-                    it.zoomLevel,
-                    it.rangeHorizontal)
+                it.cameraLocation.latitude,
+                it.cameraLocation.longitude,
+                it.carLocation.latitude,
+                it.carLocation.longitude,
+                it.zoomLevel,
+                it.rangeHorizontal)
             activity?.runOnUiThread {
                 tv_print?.text = text
             }
@@ -243,12 +244,12 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
         clusterMapView?.addMapViewListener {
             it.cameraLocation
             val text = String.format("Cluster Map\ncamera position: [%.4f , %.4f]\nvehicle position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f",
-                    it.cameraLocation.latitude,
-                    it.cameraLocation.longitude,
-                    it.carLocation.latitude,
-                    it.carLocation.longitude,
-                    it.zoomLevel,
-                    it.rangeHorizontal)
+                it.cameraLocation.latitude,
+                it.cameraLocation.longitude,
+                it.carLocation.latitude,
+                it.carLocation.longitude,
+                it.zoomLevel,
+                it.rangeHorizontal)
             activity?.runOnUiThread {
                 tv_print2?.text = text
             }
@@ -292,8 +293,15 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
         }
     }
 
-    override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext?) {
+    override fun onNavigationRouteUpdated(route: Route, betterRouteContext: BetterRouteContext?) {
         route.dispose()
+    }
+
+    override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext?) {
+    }
+
+    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
+        betterRouteInfo.betterRouteCandidate?.accept(false)
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus, betterRouteCandidate: BetterRouteCandidate?) {

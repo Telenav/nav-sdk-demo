@@ -15,7 +15,7 @@ import com.telenav.sdk.drivesession.listener.AlertEventListener
 import com.telenav.sdk.drivesession.model.AlertEvent
 import com.telenav.sdk.drivesession.model.alert.AlertItem
 import com.telenav.sdk.drivesession.model.alert.CameraInfo
-import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentNavDrawPoiBinding
 import com.telenav.sdk.map.SDK
@@ -124,8 +124,8 @@ class NavDrawPoIFragment : BaseNavFragment(), AlertEventListener {
 
     }
 
-    override fun onNavigationRouteUpdated(route: Route, context : RouteUpdateContext?) {
-        super.onNavigationRouteUpdated(route, context)
+    override fun onNavigationRouteUpdated(route: Route, contextBetter : BetterRouteContext?) {
+        super.onNavigationRouteUpdated(route, contextBetter)
         cameraInfoMap.clear()
         drawPoiAnnotationMap.clear()
         lastCameraAlterItems = listOf()

@@ -24,10 +24,8 @@ import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
-import com.telenav.sdk.drivesession.model.AlongRouteTraffic
-import com.telenav.sdk.drivesession.model.BetterRouteCandidate
-import com.telenav.sdk.drivesession.model.JunctionViewInfo
-import com.telenav.sdk.drivesession.model.NavigationEvent
+import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.scenario.mapview.MapViewNavViewModel
@@ -192,9 +190,17 @@ class MapViewTrafficBubbleFragment : Fragment(), NavigationEventListener {
         }
     }
 
-    override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
+    override fun onNavigationRouteUpdated(route: Route, betterRouteContext: BetterRouteContext?) {
         viewModel.route.postValue(route)
         updateCurrentPosition(0,0,0)
+    }
+
+    override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
+//        viewModel.route.postValue(route)
+//        updateCurrentPosition(0,0,0)
+    }
+
+    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus, betterRouteCandidate: BetterRouteCandidate?) {
@@ -215,7 +221,7 @@ class MapViewTrafficBubbleFragment : Fragment(), NavigationEventListener {
             val middleEdge = edges[(startIndex + lastIndex) / 2]
             val locations = (middleEdge.edge.getEdgeShapePoints() ?: emptyList())
             val poi = PoiModel(middleEdge.legIndex, middleEdge.stepIndex, middleEdge.edgeIndex,
-                    locations[locations.size / 2], flow.congestionLevel)
+                locations[locations.size / 2], flow.congestionLevel)
             modelList.add(poi)
         }
 

@@ -4,7 +4,7 @@
  *  other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.examples.scenario.navigation
+package com.telenav.sdk.demo.scenario.navigation
 
 import android.location.Location
 import android.os.Bundle
@@ -16,10 +16,8 @@ import androidx.fragment.app.Fragment
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.Margins
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.scenario.navigation.BaseNavFragment
-import com.telenav.sdk.drivesession.listener.NavigationEventListener
-import com.telenav.sdk.drivesession.model.BetterRouteCandidate
-import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
+import com.telenav.sdk.drivesession.model.BetterRouteInfo
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
@@ -63,12 +61,12 @@ class AutoRefreshRouteFragment : BaseNavFragment() {
                     }
 
                     val request: RouteRequest = RouteRequest.Builder(
-                            GeoLocation(it),
-                            GeoLocation(LatLon(location.latitude, location.longitude))
+                        GeoLocation(it),
+                        GeoLocation(LatLon(location.latitude, location.longitude))
                     ).contentLevel(ContentLevel.FULL)
-                            .routeCount(1)
-                            .startTime(Calendar.getInstance().timeInMillis / 1000)
-                            .build()
+                        .routeCount(1)
+                        .startTime(Calendar.getInstance().timeInMillis / 1000)
+                        .build()
                     val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
                     task.runAsync { response ->
                         Log.d(TAG, "MapLogsForTestData >>>> requestDirection task status: ${response.response.status}")
@@ -90,11 +88,11 @@ class AutoRefreshRouteFragment : BaseNavFragment() {
         }
     }
 
-    override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus, betterRouteCandidate: BetterRouteCandidate?) {
-        betterRouteCandidate?.accept(true)
+    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
+        betterRouteInfo.betterRouteCandidate?.accept(true)
     }
 
-    override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
+    override fun onNavigationRouteUpdated(route: Route, info: BetterRouteContext?) {
         Log.d(TAG, "onNavigationRouteUpdated:${route.id}")
         highlightedRouteId?.let { map_view.routesController().remove(it) }
         map_view.routesController().refresh(route)//auto refresh route

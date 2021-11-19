@@ -17,6 +17,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
@@ -128,11 +129,11 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
 
     private fun requestDirection(begin: Location, end: Location, result: (Boolean) -> Unit) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(begin),
-                GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(begin),
+            GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
-                .routeCount(1)
-                .build()
+            .routeCount(1)
+            .build()
         val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
@@ -202,7 +203,13 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
     }
 
+    override fun onNavigationRouteUpdated(route: Route, betterRouteContext: BetterRouteContext?) {
+    }
+
     override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
+    }
+
+    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus, betterRouteCandidate: BetterRouteCandidate?) {

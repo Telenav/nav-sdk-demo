@@ -24,6 +24,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
@@ -141,13 +142,13 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             wayPoints.add(GeoLocation(LatLon(it.latitude, it.longitude)))
         }
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(begin),
-                GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(begin),
+            GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
-                .routeCount(2)
-                .stopPoints(wayPoints)
-                .startTime(Calendar.getInstance().timeInMillis / 1000)
-                .build()
+            .routeCount(2)
+            .stopPoints(wayPoints)
+            .startTime(Calendar.getInstance().timeInMillis / 1000)
+            .build()
         val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             Log.d(TAG, "MapLogsForTestData >>>> requestDirection task status: ${response.response.status}")
@@ -290,12 +291,19 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
     }
 
     override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {
-        route.dispose()
     }
 
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
                                        betterRouteCandidate: BetterRouteCandidate?) {
-        betterRouteCandidate?.accept(false)
+    }
+
+    override fun onNavigationRouteUpdated(route: Route, betterRouteContext: BetterRouteContext?) {
+        route.dispose()
+    }
+
+    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
+        Log.i(TAG, "onBetterRouteDetected: status : ${betterRouteInfo.status.name}  ${betterRouteInfo.betterRouteContext.reason.name}" )
+        betterRouteInfo.betterRouteCandidate?.accept(false)
     }
 
 }

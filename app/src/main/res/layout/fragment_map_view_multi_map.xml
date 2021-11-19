@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenario.mapview.MultiMapViewFragment">
+    tools:context="com.telenav.sdk.demo.scenario.mapview.MultiMapViewFragment">
 
     <com.telenav.map.views.TnMapView
         android:id="@+id/main_map_view"
