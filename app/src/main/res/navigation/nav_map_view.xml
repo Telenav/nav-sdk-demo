@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_mapViewMenuFragment_to_multiMapViewFragment"
             app:destination="@id/multiMapViewFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewShapeFragment"
+            app:destination="@id/mapViewShapeFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapViewSetUpFragment"
@@ -120,4 +123,9 @@
         android:name="com.telenav.sdk.demo.scenario.mapview.MultiMapViewFragment"
         android:label="MultiMapViewFragment"
         tools:layout="@layout/fragment_map_view_multi_map" />
+    <fragment
+        android:id="@+id/mapViewShapeFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewShapeFragment"
+        android:label="map_view_shape_fragment"
+        tools:layout="@layout/map_view_shape_fragment" />
 </navigation>

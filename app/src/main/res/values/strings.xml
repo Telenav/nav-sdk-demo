@@ -46,6 +46,7 @@
     <string name="title_activity_map_view_snaps_shots">snaps shots</string>
     <string name="title_activity_map_view_show_region_rect">showRegion Rect</string>
     <string name="title_activity_map_view_multi_map">Multi Map View</string>
+    <string name="title_activity_map_view_shapes">Shapes</string>
 
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>

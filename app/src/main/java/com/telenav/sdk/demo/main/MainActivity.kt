@@ -9,6 +9,7 @@ package com.telenav.sdk.demo.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -17,13 +18,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.telenav.sdk.common.logging.TaLog
-import com.telenav.sdk.common.model.NavLogLevelType
-import com.telenav.sdk.common.model.Region
+import com.telenav.sdk.common.model.*
+//import com.telenav.sdk.common.broker.Constants
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
 import com.telenav.sdk.datacollector.api.DataCollectorService
 import com.telenav.sdk.demo.util.RegionCachedHelper
+import com.telenav.sdk.demo.util.VehicleProfileHelper
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
@@ -43,16 +45,19 @@ open class MainActivity : AppCompatActivity() {
 
     // TODO change options here
     private val regionInitList = listOf(
-        InitSDKDataModel(Region.NA, "",SDK_KEY_NA, SDK_SECRET_NA,URL_NA),
-        InitSDKDataModel(Region.EU, "",SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
-        InitSDKDataModel(Region.NA, "$SDK_DATA_DIR_BASE/NA",SDK_KEY_NA, SDK_SECRET_NA,URL_NA),
-        InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU",SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
+        InitSDKDataModel(Region.NA, "", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
+        InitSDKDataModel(Region.EU, "", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
+        InitSDKDataModel(Region.NA, "$SDK_DATA_DIR_BASE/NA", SDK_KEY_NA, SDK_SECRET_NA, URL_NA),
+        InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", SDK_KEY_EU, SDK_SECRET_EU, URL_EU),
         InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU", "", "", ""),
-        InitSDKDataModel(Region.SEA, "$SDK_DATA_DIR_BASE/SEA",ON_BOARD_KEY, ON_BOARD_SECRET, ""),
-        InitSDKDataModel(Region.ANZ, "$SDK_DATA_DIR_BASE/ANZ",ON_BOARD_KEY, ON_BOARD_SECRET, ""),
-        InitSDKDataModel(Region.CN, "", SDK_KEY_NA,SDK_SECRET_NA,URL_CN_DEMO,"DEMO"),
-        InitSDKDataModel(Region.NA, "", SDK_KEY_OSM, SDK_SECRET_OSM, URL_NA_OSM, "OSM"),
-        InitSDKDataModel(Region.EU, "", SDK_KEY_OSM, SDK_SECRET_OSM, URL_EU_OSM, "OSM")
+        InitSDKDataModel(Region.SEA, "$SDK_DATA_DIR_BASE/SEA", ON_BOARD_KEY, ON_BOARD_SECRET, ""),
+        InitSDKDataModel(Region.ANZ, "$SDK_DATA_DIR_BASE/ANZ", ON_BOARD_KEY, ON_BOARD_SECRET, ""),
+        InitSDKDataModel(Region.CN, "", SDK_KEY_NA, SDK_SECRET_NA, URL_CN_DEMO,false,"DEMO"),
+        InitSDKDataModel(Region.NA, "", SDK_KEY_OSM, SDK_SECRET_OSM, URL_NA_OSM, false,"OSM"),
+        InitSDKDataModel(Region.EU, "", SDK_KEY_OSM, SDK_SECRET_OSM, URL_EU_OSM, false,"OSM"),
+        InitSDKDataModel(Region.EU, "$SDK_DATA_DIR_BASE/EU",
+            SDK_KEY_EU, SDK_SECRET_EU, URL_EU, true, "4WD"),
+        InitSDKDataModel(Region.EU, "", SDK_KEY_EU, SDK_SECRET_EU, URL_EU,true, "4WD"),
     )
 
     companion object {
@@ -89,16 +94,16 @@ open class MainActivity : AppCompatActivity() {
 
     private fun checkUserPermission() {
         val permissionsRequired = arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.INTERNET
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.INTERNET
         )
         permissionsRequired.forEach { permission ->
             if (ActivityCompat.checkSelfPermission(
-                            this,
-                            permission
-                    ) == PackageManager.PERMISSION_DENIED
+                    this,
+                    permission
+                ) == PackageManager.PERMISSION_DENIED
             ) {
                 ActivityCompat.requestPermissions(this, permissionsRequired, permissionRequestCode)
             }
@@ -106,15 +111,15 @@ open class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String?>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == permissionRequestCode) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED)) {
                 Toast.makeText(this, "We need all Permission to proceed", Toast.LENGTH_SHORT)
-                        .show()
+                    .show()
                 this.finishAffinity()
             }
         }
@@ -150,6 +155,9 @@ open class MainActivity : AppCompatActivity() {
                 if (!TextUtils.isEmpty(getCachedDataDir())) {
                     File(getCachedDataDir()).deleteRecursively()
                 }
+                if (!TextUtils.isEmpty("${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}")) {
+                    File("${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}").deleteRecursively()
+                }
             }
             initialized = false
             hideProgress()
@@ -172,6 +180,12 @@ open class MainActivity : AppCompatActivity() {
         val sdkCacheDataDir = getCachedDataDir()
         // TODO set your local writable ota path
         val otaDataDir = "sdcard/test/"
+        val is4WD = model.is4WD
+        val vehicleProfile : VehicleProfile? = if (is4WD) {
+            VehicleProfileHelper.createVehicleProfile(Category.k4WD)
+        } else {
+            null
+        }
 
         val optionsBuilder = SDKOptions.builder()
             .setApiKey(key)
@@ -188,7 +202,7 @@ open class MainActivity : AppCompatActivity() {
             }
         }
         Log.i("MainActivity",filesDir.absolutePath)
-        val success = initSDK(optionsBuilder.build(), region)
+        val success = initSDK(optionsBuilder.build(), region, vehicleProfile)
         initEntityService(optionsBuilder.build())
         optionsBuilder
             .setDeviceGuid("AndroidDeviceGuid")
@@ -203,12 +217,16 @@ open class MainActivity : AppCompatActivity() {
     /**
      * This method is evoked by FirstFragment
      */
-    private fun getCachedDataDir(): String {
+    fun getCachedDataDir(): String {
         return "$cacheDir/nav-cached/"
     }
 
+    /**
+     * This method is evoked by FirstFragment
+     */
+    fun getRegionInitList() = regionInitList
 
-    private suspend fun initSDK(options: SDKOptions, region: Region) : Boolean {
+    private suspend fun initSDK(options: SDKOptions, region: Region, vehicleProfile: VehicleProfile? = null) : Boolean {
         val success: Boolean
         withContext(Dispatchers.IO) {
             // Set the fixed port of broker server for example app.
@@ -217,7 +235,7 @@ open class MainActivity : AppCompatActivity() {
 
             val peLogDir = File(getExternalFilesDir(null),"peLog");
             peLogDir.mkdir()
-            val navSDKOptions = NavSDKOptions.builder(options)
+            val navSDKOptions = NavSDKOptions.builder(options, vehicleProfile)
                 //The refresh frequency of the incident is related to the trafficrefreshtime in the configuration,
                 // so improve the traffic refresh rate and facilitate the avoidIncident demo demonstration
                 .setTrafficRefreshTime(20)
@@ -239,9 +257,9 @@ open class MainActivity : AppCompatActivity() {
         withContext(Dispatchers.IO) {
             try {
                 EntityService.initialize(options)
-            } catch (e: EntityException) {
-                print("SDK entity service init error, check your API key/secret, cloud endpoint and lib dependencies")
             } catch (e: IllegalArgumentException) {
+                print("SDK entity service init error, check your API key/secret, cloud endpoint and lib dependencies")
+            } catch (e: EntityException) {
                 print("SDK entity service init error, embedded data path: " + e.localizedMessage)
             }
         }
@@ -251,7 +269,7 @@ open class MainActivity : AppCompatActivity() {
         withContext(Dispatchers.IO) {
             try {
                 OtaService.initialize(this@MainActivity, options)
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -279,6 +297,10 @@ open class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun getKey(region: Region): String = if (region == Region.EU) SDK_KEY_EU else SDK_KEY_NA
+
+    private fun getSecret(region: Region): String = if (region == Region.EU) SDK_SECRET_EU else SDK_SECRET_NA
 
     private fun getLocale(region: Region): Locale = when (region) {
         Region.CN -> Locale.SIMPLIFIED_CHINESE

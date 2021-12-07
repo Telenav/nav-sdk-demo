@@ -21,14 +21,19 @@ class AdasMessageDecoder {
         const val MAX_DETECT_DISTANCE = 4096
 
         /**
+         * The max value of the message fall behind the cvp, or it will be removed.
+         */
+        private const val DELETE_SAFE_DISTANCE = 300
+
+        /**
          * default speed unit is kilo meter per hour
          */
         const val DEFAULT_SPEED_UNIT = 0
 
         /**
-         * index can be 0, 1, 2
+         * index can be 0, 1, 2, 3
          */
-        private const val MAX_CYCLIC_INDEX = 3
+        private const val MAX_CYCLIC_INDEX = 4
 
     }
 
@@ -38,42 +43,86 @@ class AdasMessageDecoder {
     private var segmentMessages: MutableList<SegmentMessage> = ArrayList()
     private var profileMessages: MutableList<ProfileMessage> = ArrayList()
     private var index: Int = -1
+    private var distance: Long = 0L
+    private var lastSpeed: Int = 0
 
     /**
      * put new adas message list to decoder
      */
     fun addMessageList(messageList: List<AdasMessage>) {
-        PositionMessage.getPositionMessage(messageList)?.let {
-            if (it.isPathAvailable()) {
-                this.positionMessage = it
-                if (lastPathIndex != it.pathIndex) {
-                    index = (1 + index) % MAX_CYCLIC_INDEX
-                    removeMessageByPath(lastPathIndex)
-                    segmentMessages.clear()
-                    profileMessages.clear()
-                    lastPathIndex = it.pathIndex
+        messageList.mapNotNull {
+            decodeSingleMessage(it.content)
+        }.forEach {
+            when (it) {
+                is PositionMessage -> {
+                    if (it.isPathAvailable()) {
+                        val newDistance = calculateDistance(distance, positionMessage?.offset?:0, it.offset)
+                        it.distance = newDistance
+                        if (lastPathIndex != it.pathIndex) {
+                            index = (1 + index) % MAX_CYCLIC_INDEX
+                            removeMessageByPath(lastPathIndex)
+                            segmentMessages.clear()
+                            profileMessages.clear()
+                        }
+
+                        positionMessage = it
+                        lastPathIndex = it.pathIndex
+                        distance = newDistance
+                    }
+                }
+
+                is MetaDataMessage -> {
+                    this.metaDataMessage = it
+                }
+
+                is ProfileMessage -> {
+                    if (it.pathIndex == lastPathIndex && !it.update && it.profileType == 16) {
+                        it.distance = calculateDistance(distance, positionMessage?.offset?:0, it.offset)
+                        profileMessages.add(it)
+                    }
+                }
+
+                is SegmentMessage -> {
+                    if (it.pathIndex == lastPathIndex && !it.update) {
+                        it.distance = calculateDistance(distance, positionMessage?.offset?:0, it.offset)
+                        segmentMessages.add(it)
+                    }
                 }
             }
+
         }
 
-        MetaDataMessage.getMetaDataMessage(messageList)?.let {
-            this.metaDataMessage = it
+        removeAllBehindMessage()
+    }
+
+    private fun calculateDistance(currentDistance: Long, lastOffset : Int, currentOffset: Int) : Long {
+        return if (currentOffset >= lastOffset) {
+            currentDistance + (currentOffset - lastOffset)
+        } else {
+            currentDistance + (currentOffset - lastOffset + BaseMessage.MAX_OFFSET - BaseMessage.TRAILING_LENGTH)
         }
+    }
 
-        if (positionMessage == null) {
-            return
+    private fun decodeSingleMessage(content : Long) : BaseMessage? {
+        when(BaseMessage(content).type) {
+            BaseMessage.MESSAGE_TYPE_POSITION -> {
+                return PositionMessage(content)
+            }
+
+            BaseMessage.MESSAGE_TYPE_SEGMENT -> {
+                return SegmentMessage(content)
+            }
+
+            BaseMessage.MESSAGE_TYPE_PROFILE_SHORT -> {
+                return ProfileMessage(content)
+            }
+
+            BaseMessage.MESSAGE_TYPE_PROFILE_META_DATA -> {
+                return MetaDataMessage(content)
+            }
+
+            else -> return null
         }
-
-        ProfileMessage.getMessages(messageList, positionMessage!!.offset).let {
-            this.profileMessages.addAll(it)
-        }
-
-        SegmentMessage.getMessages(messageList, positionMessage!!.offset).let {
-            this.segmentMessages.addAll(it)
-        }
-
-        removeAllBehindMessage(positionMessage!!)
-
     }
 
     /**
@@ -101,6 +150,12 @@ class AdasMessageDecoder {
             result.add(SpeedLimitPoint(SpeedLimitPoint.NO_VALUE, MAX_DETECT_DISTANCE, DEFAULT_SPEED_UNIT, type, index))
         }
 
+        val lastSpeedChange = (result[0].speed != lastSpeed)
+        lastSpeed = result[0].speed
+
+        result.forEach {
+            it.speedChange = lastSpeedChange
+        }
         return result
     }
 
@@ -114,30 +169,27 @@ class AdasMessageDecoder {
     /**
      * Each type can has only one message behind the vehicle
      */
-    private fun removeAllBehindMessage(positionMessage: PositionMessage) {
-        removeBehindMessages(positionMessage.pathIndex, positionMessage.offset, SpeedLimitType.TIME)
-        removeBehindMessages(positionMessage.pathIndex, positionMessage.offset, SpeedLimitType.RAINY)
-        removeBehindMessages(positionMessage.pathIndex, positionMessage.offset, SpeedLimitType.FOGGY)
-        removeBehindMessages(positionMessage.pathIndex, positionMessage.offset, SpeedLimitType.FOGGY)
+    private fun removeAllBehindMessage() {
+        removeBehindMessages(lastPathIndex, SpeedLimitType.TIME)
+        removeBehindMessages(lastPathIndex,  SpeedLimitType.RAINY)
+        removeBehindMessages(lastPathIndex,  SpeedLimitType.FOGGY)
+        removeBehindMessages(lastPathIndex,  SpeedLimitType.SNOWY)
     }
 
-    private fun removeBehindMessages(currentIndex: Int, currentOffset: Int, type: Int) {
-        val segmentRemoveList = segmentMessages.filter {
-            currentIndex == it.pathIndex && currentOffset > it.offset && type == it.type
-        }
 
-        if (segmentRemoveList.size > 1) {
-            segmentMessages.removeAll(segmentRemoveList.subList(0, segmentRemoveList.size - 1))
+    private fun removeBehindMessages(currentIndex: Int, type: Int) {
+        val segmentRemoveList = segmentMessages.filter {
+            currentIndex == it.pathIndex && distance - it.distance > DELETE_SAFE_DISTANCE && type == it.type
         }
+        segmentMessages.removeAll(segmentRemoveList)
 
         val profileRemoveList = profileMessages.filter {
-            currentIndex == it.pathIndex && currentOffset > it.offset && type == it.type
+            currentIndex == it.pathIndex && distance - it.distance > DELETE_SAFE_DISTANCE && type == it.type
         }
 
-        if (profileRemoveList.size > 1) {
-            profileMessages.removeAll(profileRemoveList.subList(0, profileRemoveList.size - 1))
-        }
+        profileMessages.removeAll(profileRemoveList)
     }
+
 
 
     /**
@@ -146,7 +198,7 @@ class AdasMessageDecoder {
     private fun mergeSpeedLimitPoint(orderedList: List<SpeedPosition>): List<SpeedPosition> {
         val list = ArrayList<SpeedPosition>()
         // if current position is not in a speed limit region, return empty list
-        if (orderedList.isEmpty() || orderedList[0].distance > 0) {
+        if (orderedList.isEmpty()) {
             return list
         }
 
@@ -201,34 +253,15 @@ class AdasMessageDecoder {
 }
 
 class PositionMessage(content: Long) : BaseMessage(content) {
-    /**
-     * Index of position. 0 means main path, other number means the candidate path.
-     */
-    private val positionIndex = content.shr(38).and(0x3).toInt()
 
     /**
      * Path index must at least 8
      */
     fun isPathAvailable(): Boolean = pathIndex > 7
 
-    companion object {
-        private const val MESSAGE_TYPE_POSITION = 1
-
-        fun getPositionMessage(messageList: List<AdasMessage>): PositionMessage? {
-            return messageList.filter {
-                it.messageType == MESSAGE_TYPE_POSITION
-            }.map {
-                PositionMessage(it.content)
-            }.findLast {
-                // main road
-                it.positionIndex == 0
-            }
-        }
-    }
-
 }
 
-class MetaDataMessage(content: Long) {
+class MetaDataMessage(content: Long) : BaseMessage(content) {
     /**
      * The country code number.
      */
@@ -237,29 +270,15 @@ class MetaDataMessage(content: Long) {
     /**
      * Speed limit unit. 0 means km/h. 1 means mph.
      */
-    val speedUnit = content.shr(8).and(0x1).toInt()
-
-    companion object {
-        private const val MESSAGE_TYPE_PROFILE_META_DATA = 6
-
-        fun getMetaDataMessage(messageList: List<AdasMessage>): MetaDataMessage? {
-            val positionMessage = messageList.findLast {
-                it.messageType == MESSAGE_TYPE_PROFILE_META_DATA
-            }
-            if (positionMessage != null) {
-                return MetaDataMessage(positionMessage.content)
-            }
-            return null
-        }
-    }
+    val speedUnit = content.shr(4).and(0x1).toInt()
 
 }
 
-class ProfileMessage(content: Long, vehicleOffset: Int) : BaseMessage(content) {
+class ProfileMessage(content: Long) : BaseMessage(content) {
     /**
      * The profile type. If equals to 16, the profile contains speed limit information.
      */
-    private val profileType = content.shr(35).and(0x1f).toInt()
+    val profileType = content.shr(35).and(0x1f).toInt()
 
     /**
      * The speed limit value. The unit is in meta-data.
@@ -272,32 +291,19 @@ class ProfileMessage(content: Long, vehicleOffset: Int) : BaseMessage(content) {
     private val speedLimitType = wrapperSpeedLimitType(content.shr(10).and(0x7).toInt())
 
     /**
-     * The actual offset of this message. can be larger than 8192.
+     * If true, this message has already been there.
      */
-    override val offset: Int = getActualOffset(super.offset, vehicleOffset)
+    val update = content.shr(32).and(0x1).toInt() == 1
 
-    companion object {
-        private const val MESSAGE_TYPE_PROFILE_SHORT = 4
-
-        fun getMessages(messageList: List<AdasMessage>, currentVehicleOffset: Int): List<ProfileMessage> {
-            return messageList.filter {
-                it.messageType == MESSAGE_TYPE_PROFILE_SHORT
-            }.map {
-                ProfileMessage(it.content, currentVehicleOffset)
-            }.filter {
-                it.profileType == 16
-            }
-        }
-    }
 
     fun getSpeedLimit(positionMessage: PositionMessage): SpeedPosition? {
         if (pathIndex != positionMessage.pathIndex) {
             return null
         }
         return SpeedPosition(
-                offset - positionMessage.offset,
-                speedLimitValue,
-                speedLimitType)
+            (distance - positionMessage.distance).toInt(),
+            speedLimitValue,
+            speedLimitType)
     }
 
     private fun wrapperSpeedLimitType(type: Int): Int {
@@ -311,7 +317,7 @@ class ProfileMessage(content: Long, vehicleOffset: Int) : BaseMessage(content) {
 
 }
 
-class SegmentMessage(content: Long, vehicleOffset: Int) : BaseMessage(content) {
+class SegmentMessage(content: Long) : BaseMessage(content) {
     /**
      * The speed limit value. The unit is in meta-data.
      */
@@ -328,34 +334,22 @@ class SegmentMessage(content: Long, vehicleOffset: Int) : BaseMessage(content) {
     private val retransmission = content.shr(33).and(0x1).toInt() == 1
 
     /**
-     * The actual offset of this message. can be larger than 8192.
+     * If true, this message has already been there.
      */
-    override val offset: Int = getActualOffset(super.offset, vehicleOffset)
+    val update = content.shr(32).and(0x1).toInt() == 1
 
-    companion object {
-        private const val MESSAGE_TYPE_SEGMENT = 2
-
-        fun getMessages(messageList: List<AdasMessage>, currentVehicleOffset: Int): List<SegmentMessage> {
-            return messageList.filter {
-                it.messageType == MESSAGE_TYPE_SEGMENT
-            }.map {
-                SegmentMessage(it.content, currentVehicleOffset)
-            }.filter {
-                !it.retransmission
-            }
-        }
-
-    }
 
     fun getSpeedLimit(positionMessage: PositionMessage): SpeedPosition? {
-        if (pathIndex != positionMessage.pathIndex && retransmission) {
+        if (pathIndex != positionMessage.pathIndex || retransmission) {
             return null
         }
         return SpeedPosition(
-                offset - positionMessage.offset,
-                speedLimitValue,
-                speedLimitType)
+            (distance - positionMessage.distance).toInt(),
+            speedLimitValue,
+            speedLimitType)
     }
+
+    fun getSpeedLimitValue() = speedLimitValue
 
     private fun wrapperSpeedLimitType(rawType: Int): Int {
         return when (rawType) {
@@ -382,7 +376,17 @@ open class BaseMessage(val content: Long) {
      */
     open val pathIndex = content.shr(40).and(0x3f).toInt()
 
+    /**
+     * The distance the cvp moves
+     */
+    open var distance : Long = 0
+
     companion object {
+        const val MESSAGE_TYPE_POSITION = 1
+        const val MESSAGE_TYPE_SEGMENT = 2
+        const val MESSAGE_TYPE_PROFILE_SHORT = 4
+        const val MESSAGE_TYPE_PROFILE_META_DATA = 6
+
         /**
          * max detect distance in meters
          */
@@ -391,7 +395,12 @@ open class BaseMessage(val content: Long) {
         /**
          * max value of offset
          */
-        const val MAX_OFFSET = 8192
+        const val MAX_OFFSET = 8191
+
+        /**
+         * Trailing length
+         */
+        const val TRAILING_LENGTH = 100
     }
 
     /**
@@ -408,18 +417,6 @@ open class BaseMessage(val content: Long) {
             index <= 29 -> SpeedLimitPoint.UNLIMITED_SPEED
             else -> SpeedLimitPoint.UNLIMITED_SPEED
         }
-    }
-
-    /**
-     * Since the maximum value of offset is 8192, if the new message's offset is smaller than
-     * position's offset, it doesn't mean its behind, the actual offset is current value + 8192
-     */
-    fun getActualOffset(currentOffset: Int, vehicleOffset: Int): Int = if (currentOffset < vehicleOffset &&
-            currentOffset + MAX_OFFSET < vehicleOffset + MAX_DETECT_DISTANCE
-    ) {
-        currentOffset + MAX_OFFSET
-    } else {
-        currentOffset
     }
 }
 
@@ -451,6 +448,6 @@ data class SpeedPosition(var distance: Int, val speed: Int, val type: Int) {
      * Convert to output data structure
      */
     fun convertToSpeedLimitPosition(metaDataMessage: MetaDataMessage?, index: Int): SpeedLimitPoint =
-            SpeedLimitPoint(speed, distance.coerceAtMost(AdasMessageDecoder.MAX_DETECT_DISTANCE), metaDataMessage?.speedUnit
-                    ?: AdasMessageDecoder.DEFAULT_SPEED_UNIT, type, index)
+        SpeedLimitPoint(speed, distance.coerceAtMost(AdasMessageDecoder.MAX_DETECT_DISTANCE), metaDataMessage?.speedUnit
+            ?: AdasMessageDecoder.DEFAULT_SPEED_UNIT, type, index)
 }

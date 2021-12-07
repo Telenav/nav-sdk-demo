@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.MultiMapViewFragment">
+    android:layout_height="match_parent">
 
     <com.telenav.map.views.TnMapView
         android:id="@+id/main_map_view"
@@ -309,6 +308,65 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="Set Cluster Map View State"
+                android:textColor="@color/colorVivid"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_multi_map_annotation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_multi_map_state">
+
+            <Button
+                android:id="@+id/btn_add_main_destination"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Add destination on main map"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_map_annotation" />
+
+            <Button
+                android:id="@+id/btn_add_cluster_destination"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:text="Add destination on cluster"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toTopOf="@+id/btn_clear_all_destination"
+                app:layout_constraintEnd_toEndOf="@+id/btn_add_main_destination"
+                app:layout_constraintStart_toStartOf="@+id/btn_add_main_destination"
+                app:layout_constraintTop_toBottomOf="@+id/btn_add_main_destination" />
+
+            <Button
+                android:id="@+id/btn_clear_all_destination"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:text="Clear all annotations"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_add_cluster_destination"
+                app:layout_constraintStart_toStartOf="@+id/btn_add_cluster_destination"
+                app:layout_constraintTop_toBottomOf="@+id/btn_add_cluster_destination" />
+
+            <TextView
+                android:id="@+id/tv_title_map_annotation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Annotation Operation"
                 android:textColor="@color/colorVivid"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"

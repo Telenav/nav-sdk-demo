@@ -13,7 +13,7 @@ import com.telenav.sdk.common.model.Region
  * @author zhai.xiang on 2021/2/24
  */
 data class InitSDKDataModel(val region: Region, val mapDataPath: String,val key : String, val secret: String,
-                            val url : String ,val tag: String? = null) {
+                            val url : String, val is4WD : Boolean = false, val tag: String? = null) {
 
     fun getDisplayText(): String {
         val isStreamingText = when{

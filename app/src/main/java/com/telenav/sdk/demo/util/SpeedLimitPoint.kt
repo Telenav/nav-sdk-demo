@@ -11,35 +11,41 @@ import com.telenav.sdk.drivesession.model.SpeedLimitType
  * Speed point class which contains speed limit information
  */
 data class SpeedLimitPoint(
-        /**
-         * Speed of the point, if no limit, the value is 0xFFFF.
-         */
-        val speed: Int,
-        /**
-         * The distance from this point to vehicle.
-         */
-        val distance: Int,
-        /**
-         * the speed unit type, 0 means mile per hour,1 means kilo meter per hour.
-         */
-        val speedUnit: Int,
-        /**
-         * the limit type.
-         * @see SpeedLimitType
-         */
-        val limitType: Int,
+    /**
+     * Speed of the point, if no limit, the value is 0xFFFF.
+     */
+    val speed: Int,
+    /**
+     * The distance from this point to vehicle.
+     */
+    val distance: Int,
+    /**
+     * the speed unit type, 1 means mile per hour, 0 means kilo meter per hour.
+     */
+    val speedUnit: Int,
+    /**
+     * the limit type.
+     * @see SpeedLimitType
+     */
+    val limitType: Int,
 
-        /**
-         * the index of list, range from 0 to 2.
-         */
-        val index: Int,
-) {
+    /**
+     * the index of list, range from 0 to 3.
+     */
+    val segmentIndex: Int,
+
+    ) {
     companion object {
         const val NO_VALUE = 0xFFFF
         const val UNLIMITED_SPEED = 0xFFFE
         const val UNKNOWN_SPEED = 0
         const val KPH = 0
     }
+
+    /**
+     * flag about whether current speed limit is changed.
+     */
+    var speedChange: Boolean = false
 
     /**
      * Is the point no speed limit.

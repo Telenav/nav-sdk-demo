@@ -154,7 +154,7 @@ public class SpeedLimitMapInfoBuilder {
         for (AdasMessage message : messageList) {
             SpeedLimitPoint point = decodeSpeedLimitMessage(message,false);
             if (point != null) {
-                return (byte) point.getIndex();
+                return (byte) point.getSegmentIndex();
             }
         }
         return -1;
