@@ -19,17 +19,13 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.telenav.sdk.common.logging.TaLog
 import com.telenav.sdk.common.model.*
-//import com.telenav.sdk.common.broker.Constants
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
 import com.telenav.sdk.datacollector.api.DataCollectorService
-import com.telenav.sdk.demo.util.RegionCachedHelper
-import com.telenav.sdk.demo.util.VehicleProfileHelper
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
-import com.telenav.sdk.examples.BuildConfig.*
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.model.NavSDKOptions
@@ -43,11 +39,13 @@ open class MainActivity : AppCompatActivity() {
     private val permissionRequestCode = 12335
 
     private var initialized = false
+    private val region = Region.NA
+    companion object {
+        const val API_KEY = BuildConfig.SDK_KEY
+        const val API_SECRET = BuildConfig.SDK_SECRET
+        const val API_URL = BuildConfig.SDK_ENDPOINT
+    }
 
-    // TODO change options here
-    private val regionInitList = listOf(
-        InitSDKDataModel(Region.NA, "",SDK_KEY , SDK_SECRET, URL_NA)
-    )
 
     private fun checkUserPermission() {
         val permissionsRequired = arrayOf(
@@ -126,27 +124,19 @@ open class MainActivity : AppCompatActivity() {
         // TaLog.enableWriteLogsToFile(true)
         // TaLog.setLogPath("/sdcard/tasdk.log")
         TaLog.setLogLevel(NavLogLevelType.INFO)
-        val model = RegionCachedHelper.getSDKDataModel(applicationContext) ?: regionInitList[0]
-        val region = model.region
         // TODO set your local embedded map data path
-        val sdkDataDir = model.mapDataPath
-        val url = model.url
-        val key = model.key
-        val secret = model.secret
+        val sdkDataDir = ""
+        val url = API_URL
+        val key = API_KEY
+        val secret = API_SECRET
         // TODO set your local writable path
         val sdkCacheDataDir = getCachedDataDir()
         // TODO set your local writable ota path
         val otaDataDir = "sdcard/test/"
-        val is4WD = model.is4WD
-        val vehicleProfile : VehicleProfile? = if (is4WD) {
-            VehicleProfileHelper.createVehicleProfile(Category.k4WD)
-        } else {
-            null
-        }
 
         val optionsBuilder = SDKOptions.builder()
-            .setApiKey(key)
-            .setApiSecret(secret)
+            .setApiKey(API_KEY)
+            .setApiSecret(API_SECRET)
             .setSdkCacheDataDir(sdkCacheDataDir)
             .setCloudEndPoint(url)
             .setLocale(getLocale(region))    //  if not specified, SDK will assume region EU
@@ -158,8 +148,8 @@ open class MainActivity : AppCompatActivity() {
                 Snackbar.make(layoutContent, "sdkDataDir does not exist",Snackbar.LENGTH_LONG).show()
             }
         }
-        Log.i("MainActivity",filesDir.absolutePath)
-        val success = initSDK(optionsBuilder.build(), region, vehicleProfile)
+
+        val success = initSDK(optionsBuilder.build(), region)
         initEntityService(optionsBuilder.build())
         optionsBuilder
             .setDeviceGuid("AndroidDeviceGuid")
@@ -178,29 +168,19 @@ open class MainActivity : AppCompatActivity() {
         return "$cacheDir/nav-cached/"
     }
 
-    /**
-     * This method is evoked by FirstFragment
-     */
-    fun getRegionInitList() = regionInitList
 
     private suspend fun initSDK(options: SDKOptions, region: Region, vehicleProfile: VehicleProfile? = null) : Boolean {
         val success: Boolean
         withContext(Dispatchers.IO) {
             // Set the fixed port of broker server for example app.
             // To reduce port conflicts, please don't use port in range [20000, 20099].
-//            Os.setenv(Constants.KEY_TASDK_BROKER_SERVER_PORT, "20210", true);
-
-            val peLogDir = File(getExternalFilesDir(null),"peLog");
-            peLogDir.mkdir()
             val navSDKOptions = NavSDKOptions.builder(options, vehicleProfile)
                 //The refresh frequency of the incident is related to the trafficrefreshtime in the configuration,
                 // so improve the traffic refresh rate and facilitate the avoidIncident demo demonstration
-                .setTrafficRefreshTime(20)
-                .setTrafficExpireTime(20)
+                .setTrafficRefreshTime(120)
+                .setTrafficExpireTime(120)
                 .enableTraffic(true)
-                .enablePositionEngineLog(true)
                 .setTrafficFetchRange(3600)
-                .setPositionEngineLogStorePath(peLogDir.absolutePath)
                 .setMapStreamingSpaceLimit(1024*1024*1024)
                 .setRegion(region)
                 .build()
@@ -241,7 +221,6 @@ open class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun getLocale(region: Region): Locale = when (region) {
         Region.CN -> Locale.SIMPLIFIED_CHINESE
@@ -292,9 +271,4 @@ open class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-
-        SDK.getInstance().trimMemory(level)
-    }
 }
