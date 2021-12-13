@@ -26,6 +26,7 @@ import com.telenav.sdk.datacollector.api.DataCollectorService
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
+import com.telenav.sdk.examples.BuildConfig.*
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.model.NavSDKOptions
@@ -41,9 +42,9 @@ open class MainActivity : AppCompatActivity() {
     private var initialized = false
     private val region = Region.NA
     companion object {
-        const val API_KEY = BuildConfig.SDK_KEY
-        const val API_SECRET = BuildConfig.SDK_SECRET
-        const val API_URL = BuildConfig.SDK_ENDPOINT
+        const val API_KEY = SDK_KEY
+        const val API_SECRET = SDK_SECRET
+        const val API_URL = SDK_ENDPOINT
     }
 
 
@@ -253,7 +254,7 @@ open class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = BuildConfig.APPLICATION_ID
+        supportActionBar?.title = APPLICATION_ID
     }
 
     override fun onSupportNavigateUp(): Boolean {
