@@ -95,6 +95,12 @@ class MapViewMenuFragment : Fragment() {
             },
             MenuData(getString(R.string.title_activity_map_view_shapes)) {
                 findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewShapeFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_highlight_ete_bubble)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_highlightedETEBubbleFragment)
+            },
+            MenuData(getString(R.string.title_activity_map_view_poi_annotations)) {
+                findNavController().navigate(R.id.action_mapViewMenuFragment_to_mapViewPOIAnnotationFragment)
             }
         )
     }

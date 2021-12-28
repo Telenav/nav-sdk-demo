@@ -175,13 +175,17 @@ open class MainActivity : AppCompatActivity() {
         withContext(Dispatchers.IO) {
             // Set the fixed port of broker server for example app.
             // To reduce port conflicts, please don't use port in range [20000, 20099].
+            val peLogDir = File(getExternalFilesDir(null),"peLog");
             val navSDKOptions = NavSDKOptions.builder(options, vehicleProfile)
                 //The refresh frequency of the incident is related to the trafficrefreshtime in the configuration,
                 // so improve the traffic refresh rate and facilitate the avoidIncident demo demonstration
                 .setTrafficRefreshTime(120)
                 .setTrafficExpireTime(120)
+                .setTrafficCacheExtendTime(0)
                 .enableTraffic(true)
+                .enablePositionEngineLog(true)
                 .setTrafficFetchRange(3600)
+                .setPositionEngineLogStorePath(peLogDir.absolutePath)
                 .setMapStreamingSpaceLimit(1024*1024*1024)
                 .setRegion(region)
                 .build()

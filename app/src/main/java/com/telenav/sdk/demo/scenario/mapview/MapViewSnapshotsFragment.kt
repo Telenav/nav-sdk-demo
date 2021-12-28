@@ -46,11 +46,17 @@ class MapViewSnapshotsFragment : Fragment() {
             findNavController().navigateUp()
         }
         mapViewInit(savedInstanceState)
-        mapViewSnapshots.setOnClickListener {
-            if (::dialog.isInitialized && dialog!=null && dialog.isShowing){
+        mapOffscreenSnapshots.setOnClickListener {
+            if (::dialog.isInitialized && dialog.isShowing) {
                 dialog.dismiss()
             }
             testOffscreenSnapshot()
+        }
+        mapSnapshots.setOnClickListener {
+            if (::dialog.isInitialized && dialog.isShowing) {
+                dialog.dismiss()
+            }
+            testSnapshot()
         }
     }
 
@@ -71,8 +77,9 @@ class MapViewSnapshotsFragment : Fragment() {
     }
 
     private fun testOffscreenSnapshot() {
-        mapViewSnapshots.text = "Generating screenshots"
-        mapViewSnapshots.isEnabled = false
+        mapOffscreenSnapshots.text = "Generating offscreen screenshots"
+        mapOffscreenSnapshots.isEnabled = false
+        mapSnapshots.isEnabled = false
         mapView.generateOffscreenSnapshot(1000, 1000, {
             // Configure snapshot, set region, add annotations, load styles, etc...
             // Destin, FL
@@ -100,10 +107,10 @@ class MapViewSnapshotsFragment : Fragment() {
             coords.add(coords.first());
 
             val attributes = Attributes.Builder()
-                    .setShapeStyle("route.trace")
-                    .setColor(0xFF00FF00.toInt())
-                    .setLineWidth(100.0f)
-                    .build();
+                .setShapeStyle("route.trace")
+                .setColor(0xFF00FF00.toInt())
+                .setLineWidth(100.0f)
+                .build();
 
             val shape = Shape(Shape.Type.Polyline, attributes, coords)
 
@@ -114,11 +121,26 @@ class MapViewSnapshotsFragment : Fragment() {
             val shapeId = it.shapesController().add(collectionBuilder.build())
         }, {
             activity?.runOnUiThread {
-                mapViewSnapshots.text = "Generate screenshots"
-                mapViewSnapshots.isEnabled = true
+                mapOffscreenSnapshots.text = "Generate offscreen screenshots"
+                mapOffscreenSnapshots.isEnabled = true
+                mapSnapshots.isEnabled = true
                 displayBitmap(it, "Offscreen Snapshot")
             }
         })
+    }
+
+    private fun testSnapshot() {
+        mapSnapshots.text = "Generating screenshots"
+        mapSnapshots.isEnabled = false
+        mapOffscreenSnapshots.isEnabled = false
+        mapView.generateSnapshot {
+            activity?.runOnUiThread {
+                mapSnapshots.text = "Generate screenshots"
+                mapSnapshots.isEnabled = true
+                mapOffscreenSnapshots.isEnabled = true
+                displayBitmap(it, "Screen Snapshot")
+            }
+        }
     }
 
     private fun displayBitmap(bitmap: Bitmap, message: String) {
@@ -127,12 +149,12 @@ class MapViewSnapshotsFragment : Fragment() {
             dialog.setTitle(message)
             //builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog.window?.setBackgroundDrawable(
-                    ColorDrawable(Color.TRANSPARENT))
+                ColorDrawable(Color.TRANSPARENT))
             val imageView = ImageView(context)
             imageView.setImageBitmap(bitmap)
             dialog.addContentView(imageView, RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT))
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT))
             dialog.show()
         }
     }

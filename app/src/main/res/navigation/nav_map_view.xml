@@ -57,6 +57,12 @@
         <action
             android:id="@+id/action_mapViewMenuFragment_to_mapViewShapeFragment"
             app:destination="@id/mapViewShapeFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_highlightedETEBubbleFragment"
+            app:destination="@id/highlightedETEBubbleFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_mapViewPOIAnnotationFragment"
+            app:destination="@id/mapViewPoiAnnotationFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapViewSetUpFragment"
@@ -128,4 +134,14 @@
         android:name="com.telenav.sdk.demo.scenario.mapview.MapViewShapeFragment"
         android:label="map_view_shape_fragment"
         tools:layout="@layout/map_view_shape_fragment" />
+    <fragment
+        android:id="@+id/highlightedETEBubbleFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.HighlightedETEBubbleFragment"
+        android:label="highlighted_e_t_e_bubble_fragment"
+        tools:layout="@layout/highlighted_e_t_e_bubble_fragment" />
+    <fragment
+        android:id="@+id/mapViewPoiAnnotationFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.POIAnnotationFragment"
+        android:label="poi_annotation_fragment"
+        tools:layout="@layout/poi_annotation_fragment" />
 </navigation>

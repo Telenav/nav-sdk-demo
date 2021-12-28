@@ -47,6 +47,8 @@
     <string name="title_activity_map_view_show_region_rect">showRegion Rect</string>
     <string name="title_activity_map_view_multi_map">Multi Map View</string>
     <string name="title_activity_map_view_shapes">Shapes</string>
+    <string name="title_activity_map_view_highlight_ete_bubble">Highlight ETE bubble</string>
+    <string name="title_activity_map_view_poi_annotations">POI Annotations</string>
 
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>

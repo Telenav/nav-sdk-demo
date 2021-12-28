@@ -19,7 +19,6 @@ import com.telenav.sdk.drivesession.model.adas.AdasMessage
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.fragment_adas_message.*
-import kotlinx.android.synthetic.main.fragment_map_view_annotation.*
 
 
 /**

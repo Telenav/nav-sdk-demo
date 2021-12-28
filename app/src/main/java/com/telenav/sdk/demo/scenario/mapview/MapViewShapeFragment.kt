@@ -6,11 +6,14 @@
 
 package com.telenav.sdk.demo.scenario.mapview
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -27,6 +30,9 @@ import kotlinx.android.synthetic.main.map_view_shape_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.BufferedInputStream
+import java.io.IOException
+
 /**
  * This fragment shows how to set Textured on MapView using user attributes or
  * resources which we have in the texture directory.
@@ -56,16 +62,6 @@ class MapViewShapeFragment : Fragment() {
         .setLineWidth(100.0f)
         .build()
 
-    //bytes, needs to be exactly that.. raw bytes r,g,b,a,r,g,b,a,r,g,b,a etc where every one
-    // of those is a byte in a regular byte array
-    private val byteArray =
-        "255,0,0,255,255,0,0,255,255,0,0,255,255,0,0,255,255,0,0,255,255,0,0,255"
-
-    private val worldQuadShapeStyleAttributes = Attributes.Builder()
-        .setShapeStyle(WORLD_QUAD_SHAPE_STYLE)
-        .setClientTexture(ClientTexture(byteArray, 6, 1))
-        .setLineWidth(100.0f)
-        .build()
 
     // Draw a pseudo-home area rectangle
     private val cords = ArrayList<LatLon>().apply {
@@ -118,11 +114,40 @@ class MapViewShapeFragment : Fragment() {
             addTexturedQuadResourceName(cords, resourceNameWorldQuadShapeStyleAttributes)
         }
         addTexturedQuadClientTextureBtn.setOnClickListener {
-            addTexturedQuadClientTexture(cords, worldQuadShapeStyleAttributes)
+            //bytes, needs to be exactly that.. raw bytes r,g,b,a,r,g,b,a,r,g,b,a etc where every one
+            // of those is a byte in a regular byte array
+            try {
+                requireContext().assets.open(CLIENT_PNG_IMAGE_NAME).use { inputStream ->
+                    val bufferedInputStream = BufferedInputStream(inputStream)
+                    val bmp: Bitmap = BitmapFactory.decodeStream(bufferedInputStream)
+                    if (bmp.config == Bitmap.Config.ARGB_8888) {
+                        val worldQuadShapeStyleAttributes = Attributes.Builder()
+                            .setShapeStyle(WORLD_QUAD_SHAPE_STYLE)
+                            .setClientTexture(ClientTexture(bmp, bmp.width, bmp.height))
+                            .build()
+                        addTexturedQuadClientTexture(cords, worldQuadShapeStyleAttributes)
+                    } else {
+                        showToast("Bitmap must be in ARGB_8888 format!")
+                    }
+                }
+            }catch (ex: IOException){
+                showToast("File not found in assets ...")
+            }
+
+
+
         }
         removeAllShapesBtn.setOnClickListener {
             removeAllShapes()
         }
+    }
+
+    private fun showToast(msg: String) {
+        Toast.makeText(
+            requireContext(),
+            msg,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun removeAllShapes() {
@@ -200,6 +225,7 @@ class MapViewShapeFragment : Fragment() {
         private const val TEXTURE_RESOURCE_NAME = "cvp.png"
         private const val CUSTOM_POLYGON_SHAPE_STYLE = "custom-polygon"
         private const val ROUTE_TRACE_SHAPE_STYLE = "route.trace"
+        private const val CLIENT_PNG_IMAGE_NAME = "4-5-5.png"
     }
 
 }
