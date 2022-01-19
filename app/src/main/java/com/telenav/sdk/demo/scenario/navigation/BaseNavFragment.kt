@@ -29,7 +29,12 @@ import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
+import com.telenav.sdk.uikit.turn.TnTurnListItem
 import kotlinx.android.synthetic.main.content_basic_navigation.*
+import kotlinx.android.synthetic.main.content_basic_navigation.iv_camera_fix
+import kotlinx.android.synthetic.main.content_basic_navigation.map_view
+import kotlinx.android.synthetic.main.content_basic_navigation.navButton
+import kotlinx.android.synthetic.main.content_basic_navigation.subViewButton
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -183,6 +188,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             val newPosition = Camera.Position.Builder().setLocation(vehicleLocation).build()
             map_view.cameraController().position = newPosition
             iv_camera_fix.setImageResource(R.drawable.ic_gps_fixed_24)
+            if(navigating)
+                map_view.cameraController().enableFollowVehicleMode(
+                    Camera.FollowVehicleMode.HeadingUp, false)
         }
 
         iv_zoom_in.setOnClickListener {
@@ -306,4 +314,20 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
         betterRouteInfo.betterRouteCandidate?.accept(false)
     }
 
+    protected fun onTurnListItemClicked(tnTurnListItem: TnTurnListItem) {
+        map_view.cameraController().position =
+            Camera.Position.Builder().setZoomLevel(2f).build()
+        map_view.cameraController().disableFollowVehicle()
+
+        map_view.routesController()
+            .showTurnArrow(
+                highlightedRouteId,
+                tnTurnListItem.stepInfo!!.legIndex,
+                tnTurnListItem.stepInfo!!.stepIndex)
+
+        map_view.routesController().moveToTurnArrow(
+            highlightedRouteId,
+            tnTurnListItem.stepInfo!!.legIndex,
+            tnTurnListItem.stepInfo!!.stepIndex)
+    }
 }

@@ -41,6 +41,11 @@ open class MainActivity : AppCompatActivity() {
 
     private var initialized = false
     private val region = Region.NA
+    var is4WD = false
+    var isStreamingEnabled = true
+    var isTrafficEnabled = true
+    var isCloudRoutingEnabled = true
+
     companion object {
         const val API_KEY = SDK_KEY
         const val API_SECRET = SDK_SECRET
@@ -185,6 +190,9 @@ open class MainActivity : AppCompatActivity() {
                 .enableTraffic(true)
                 .enablePositionEngineLog(true)
                 .setTrafficFetchRange(3600)
+                .enableDownloadMapData(isStreamingEnabled)
+                .enableCloudRouting(isCloudRoutingEnabled)
+                .enableTraffic(isTrafficEnabled)
                 .setPositionEngineLogStorePath(peLogDir.absolutePath)
                 .setMapStreamingSpaceLimit(1024*1024*1024)
                 .setRegion(region)

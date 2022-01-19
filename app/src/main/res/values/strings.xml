@@ -49,6 +49,7 @@
     <string name="title_activity_map_view_shapes">Shapes</string>
     <string name="title_activity_map_view_highlight_ete_bubble">Highlight ETE bubble</string>
     <string name="title_activity_map_view_poi_annotations">POI Annotations</string>
+    <string name="title_activity_map_view_cvp_position_on_road">CVP position on the road</string>
 
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>

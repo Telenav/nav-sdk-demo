@@ -34,7 +34,9 @@ class TurnbyturnViewModel(val tnTurnListAdapter: TnTurnListRecyclerViewAdapter) 
 
     val LaneAssets = MutableLiveData<List<ImageItems>>(listOf())
     val laneInfo = MutableLiveData<List<LaneInfo>>(listOf())
+    val lanePatternCustomImages = MutableLiveData<List<ImageItems>>(listOf())
 
+    private var currentLegIndex = 0
     private var currentStepIndex = 0
 
     fun onNavigationEventUpdated(navEvent: NavigationEvent) {
@@ -55,7 +57,7 @@ class TurnbyturnViewModel(val tnTurnListAdapter: TnTurnListRecyclerViewAdapter) 
             turnDirectionDrawable.postValue(getTurnDrawable(it.turnAction))
             nextTurnStreetName.postValue(it.streetName)
             it.laneInfo?.let { laneInfoList -> laneInfo.postValue(laneInfoList) }
-                    ?: laneInfo.postValue(listOf())
+                ?: laneInfo.postValue(listOf())
         }
     }
 
@@ -74,7 +76,8 @@ class TurnbyturnViewModel(val tnTurnListAdapter: TnTurnListRecyclerViewAdapter) 
 
     //private methods
     private fun updateTurnListItem(navEvent: NavigationEvent) {
-        if (currentStepIndex != navEvent.stepIndex) {
+        if (!((currentLegIndex == navEvent.legIndex) && (currentStepIndex == navEvent.stepIndex))) {
+            currentLegIndex = navEvent.legIndex
             currentStepIndex = navEvent.stepIndex
             AndroidThreadUtils.runOnUiThread(Runnable {
                 navigationSession?.let { navSession ->
@@ -89,16 +92,16 @@ class TurnbyturnViewModel(val tnTurnListAdapter: TnTurnListRecyclerViewAdapter) 
     }
 
     private fun getTurnListItem(maneuverList: List<ManeuverInfo>): List<TnTurnListItem> =
-            maneuverList
-                    .filter { it.stepIndex > currentStepIndex }
-                    .map {
-                        TnTurnListItem(
-                            it.streetName,
-                            getMilesOrFeet(it.lengthMeters),
-                            getTurnDrawable(it.turnAction),
-                            it.stepInfo
-                        )
-                    }
+        maneuverList
+            .filter { it.legIndex > currentLegIndex || (it.legIndex == currentLegIndex && it.stepIndex > currentStepIndex) }
+            .map {
+                TnTurnListItem(
+                    it.streetName,
+                    getMilesOrFeet(it.lengthMeters),
+                    getTurnDrawable(it.turnAction),
+                    it.stepInfo
+                )
+            }
 
     private fun getTimeRemainingToArrival(timeToStop: Int): String {
         return if (timeToStop > 60) {
