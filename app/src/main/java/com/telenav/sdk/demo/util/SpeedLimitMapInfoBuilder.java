@@ -113,7 +113,7 @@ public class SpeedLimitMapInfoBuilder {
                 distance = 4096;
                 speed = 0xFFFF;
             }
-            return new SpeedLimitPoint(speed, distance, speedUnit, limitType, index);
+            return new SpeedLimitPoint(speed, distance, speedUnit, limitType, index, 0);
         }
         return null;
     }

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".scenario.mapview.MapViewShapeFragment">
 
     <include
         android:id="@+id/include"
@@ -94,5 +95,50 @@
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addTexturedQuadResourceNameBtn" />
+
+    <Button
+        android:id="@+id/addSquareRRPolygonShape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_round_rect"
+        android:elevation="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="Add square real reach polygon"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addTexturedQuadClientTextureBtn" />
+
+    <Button
+        android:id="@+id/addComplexRRPolygonShape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_round_rect"
+        android:elevation="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="Add complex real reach polygon"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addSquareRRPolygonShape" />
+
+    <Button
+        android:id="@+id/addTestRRPolygonShape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_round_rect"
+        android:elevation="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="Add real reach polygon with custom layer"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addComplexRRPolygonShape" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

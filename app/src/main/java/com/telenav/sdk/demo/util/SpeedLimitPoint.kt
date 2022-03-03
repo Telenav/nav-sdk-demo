@@ -34,6 +34,11 @@ data class SpeedLimitPoint(
      */
     val segmentIndex: Int,
 
+    /**
+     * Form of way, can tell whether it's ramp or not
+     */
+    val formOfWay : Int,
+
     ) {
     companion object {
         const val NO_VALUE = 0xFFFF
@@ -64,6 +69,19 @@ data class SpeedLimitPoint(
      * @return true if the unit is kilo meter per hour.
      */
     fun isMetric() = speedUnit == KPH
+
+    /**
+     * Return the meaningful form of way.
+     */
+    fun getMeaningfulFormOfWay(): MeaningfulWayType {
+        return when(formOfWay){
+            0 -> MeaningfulWayType.NONE
+            4 -> MeaningfulWayType.ROUNDABOUT
+            9 -> MeaningfulWayType.RAMP_ON_FREEWAY
+            10 -> MeaningfulWayType.RAMP_NOT_ON_FREEWAY
+            else -> MeaningfulWayType.NORMAL
+        }
+    }
 
 
     fun getSpeedInTypeOf(isMetricUnit : Boolean) : Int{
