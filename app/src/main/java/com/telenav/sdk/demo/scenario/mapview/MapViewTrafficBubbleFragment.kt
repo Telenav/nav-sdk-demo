@@ -183,6 +183,9 @@ class MapViewTrafficBubbleFragment : Fragment(), NavigationEventListener {
         trafficBar.updateTrafficInfo(alongRouteTraffic)
     }
 
+    override fun onLaneGuidanceUpdated(laneGuidanceEvent: LaneGuidanceEvent) {
+    }
+
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
         if (stopIndex == -1) {
             annotationController?.remove(bubbleList)
@@ -221,7 +224,7 @@ class MapViewTrafficBubbleFragment : Fragment(), NavigationEventListener {
             val middleEdge = edges[(startIndex + lastIndex) / 2]
             val locations = (middleEdge.edge.getEdgeShapePoints() ?: emptyList())
             val poi = PoiModel(middleEdge.legIndex, middleEdge.stepIndex, middleEdge.edgeIndex,
-                    locations[locations.size / 2], flow.congestionLevel)
+                locations[locations.size / 2], flow.congestionLevel)
             modelList.add(poi)
         }
 

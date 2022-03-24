@@ -11,7 +11,6 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
@@ -20,6 +19,7 @@ import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
@@ -198,6 +198,9 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
 
     override fun onAlongRouteTrafficUpdated(alongRouteTraffic: AlongRouteTraffic) {
         trafficBar.updateTrafficInfo(alongRouteTraffic)
+    }
+
+    override fun onLaneGuidanceUpdated(laneGuidanceEvent: LaneGuidanceEvent) {
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {

@@ -3,7 +3,7 @@
  * of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
  * other countries. Other names may be trademarks of their respective owners.
  */
-package com.telenav.sdk.examples.scenario.mapview
+package com.telenav.sdk.demo.scenario.mapview
 
 import android.location.Location
 import android.os.Bundle
@@ -24,6 +24,7 @@ import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel
 import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel.Companion.createRect
 import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel.Companion.createRegionForRoutesInfo
 import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel.Companion.createRouteRequest
@@ -237,6 +238,10 @@ class CVPPositionOnRoadFragment : Fragment(), PositionEventListener, NavigationE
 
     override fun onAlongRouteTrafficUpdated(alongRouteTraffic: AlongRouteTraffic) {
         printDebugLog("onAlongRouteTrafficUpdated")
+    }
+
+    override fun onLaneGuidanceUpdated(laneGuidanceEvent: LaneGuidanceEvent) {
+        printDebugLog("onLaneGuidanceUpdated")
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {

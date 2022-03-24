@@ -18,7 +18,6 @@ import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
@@ -27,6 +26,7 @@ import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import com.telenav.sdk.uikit.turn.TnTurnListItem
@@ -56,6 +56,7 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
     var highlightedRouteId: String? = null
 
     val navigationOn = MutableLiveData(false)
+    val speedLimit = MutableLiveData(0)
     var navigating = false
 
     init {
@@ -259,7 +260,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
     }
 
     override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
-        Log.i(TAG, "current street: $curStreetInfo")
+        curStreetInfo.speedLimit?.let {
+            speedLimit.postValue(it.speedLimit)
+        }
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
@@ -296,6 +299,9 @@ abstract class BaseNavFragment : Fragment(), PositionEventListener, NavigationEv
             }
             navigating = false
         }
+    }
+
+    override fun onLaneGuidanceUpdated(laneGuidanceEvent: LaneGuidanceEvent) {
     }
 
     override fun onNavigationRouteUpdated(route: Route, info: RouteUpdateContext?) {

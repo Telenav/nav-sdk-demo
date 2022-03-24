@@ -6,6 +6,7 @@ import com.telenav.sdk.uikit.ImageItems
 import com.telenav.sdk.uikit.TnLaneGuidanceView
 import com.telenav.sdk.uikit.TnCurrentTurnView
 import com.telenav.sdk.map.direction.model.LaneInfo
+import com.telenav.sdk.uikit.DisplayLaneGuidance
 
 @BindingAdapter("imageResource")
 fun setImageSrc(view: ImageView, imageResource: Int) {
@@ -22,13 +23,20 @@ fun lanePatternChangeData(
     viewLanePattern: TnLaneGuidanceView,
     guideLaneList: List<LaneInfo>
 ) {
-    viewLanePattern.removeAllViews()
-    viewLanePattern.populateImages(guideLaneList)
+    viewLanePattern.renderLaneInfo(guideLaneList)
+}
+
+@BindingAdapter("laneGuidanceChange")
+fun laneGuidanceChangeData(
+    viewLanePattern: TnLaneGuidanceView,
+    laneGuidance: DisplayLaneGuidance?
+) {
+    viewLanePattern.renderLaneGuidance(laneGuidance)
 }
 
 @BindingAdapter("currentTurnNextMiles")
 fun setCurrentTurnNextMiles(view: TnCurrentTurnView?, text: String?) {
-       text?.let{view?.setCurrentTurnNextMiles(it)}
+    text?.let{view?.setCurrentTurnNextMiles(it)}
 }
 
 @BindingAdapter("currentTurnStreetNextTurn")

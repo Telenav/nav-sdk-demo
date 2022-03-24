@@ -243,6 +243,9 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
                 main_map_view.routesController().updateRouteProgress(routeIds[0])
                 main_map_view.cameraController()
                     .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
+
+                clusterMapView?.routesController()?.add(routes)
+                clusterMapView?.routesController()?.highlight(routeIds[0])
                 clusterMapView?.routesController()?.updateRouteProgress(routeIds[0])
                 clusterMapView?.cameraController()
                     ?.enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
@@ -330,6 +333,10 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
 
     override fun onAlongRouteTrafficUpdated(alongRouteTraffic: AlongRouteTraffic) {
         TaLog.d(TAG, "onAlongRouteTrafficUpdated")
+    }
+
+    override fun onLaneGuidanceUpdated(laneGuidanceEvent: LaneGuidanceEvent) {
+        TaLog.d(TAG, "onLaneGuidanceUpdated")
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
