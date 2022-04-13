@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright © 2022 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~
+  ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~
+  ~  other countries. Other names may be trademarks of their respective owners.
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+        android:id="@+id/content_basic_navigation"
+        layout="@layout/content_basic_navigation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cluster_map_view" />
+
+    <SurfaceView
+        android:id="@+id/cluster_map_view"
+        android:layout_width="@dimen/rectangle_map_view_width"
+        android:layout_height="@dimen/rectangle_map_view_height"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/content_basic_navigation" />
+
+    <TextView
+        android:id="@+id/tv_print2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:background="@color/white_semi_transparent"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="@color/color_white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/cluster_map_view"
+        app:layout_constraintStart_toStartOf="@+id/cluster_map_view"
+        app:layout_constraintTop_toTopOf="@+id/cluster_map_view" />
+
+    <Button
+        android:id="@+id/btn_show_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Show Menu"
+        android:textAllCaps="false"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/content_basic_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

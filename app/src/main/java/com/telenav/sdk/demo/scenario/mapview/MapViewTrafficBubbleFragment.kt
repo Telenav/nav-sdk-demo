@@ -28,7 +28,6 @@ import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.examples.scenario.mapview.MapViewNavViewModel
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.content.model.TrafficLevel
 import com.telenav.sdk.map.direction.model.Route

@@ -1,4 +1,4 @@
-package com.telenav.sdk.examples.scenario.mapview
+package com.telenav.sdk.demo.scenario.mapview
 
 import android.app.Application
 import android.location.Location
@@ -27,6 +27,7 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
     val driveSession: DriveSession = DriveSession.Factory.createInstance()
     private var navigationSession: NavigationSession? = null
     var currentVehicleLocation : MutableLiveData<Location>
+    var currentRoute = MutableLiveData<Route?>()
     var route = MutableLiveData<Route?>()
     private val locationProvider = DemoLocationProvider.Factory.createProvider(app,DemoLocationProvider.ProviderType.SIMULATION)
     private var navigationOn = false
@@ -65,11 +66,11 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
 
     fun requestDirection(begin: Location = startLocation, end: Location = stopLocation, result : ((Boolean)->Unit)? = null ) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(begin),
-                GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(begin),
+            GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
-                .routeCount(1)
-                .build()
+            .routeCount(1)
+            .build()
         val task = DirectionClient.Factory.hybridClient().createRoutingTask(request)
         task.runAsync { response ->
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
@@ -86,9 +87,10 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
     fun startNavigation(map: MapView) {
         navigationSession?.stopNavigation()
         if (route.value != null) {
+            currentRoute.postValue(route.value)
             val routeIds = map.routesController().add(listOf(route.value))
             map.routesController().highlight(routeIds[0])
-            navigationSession = driveSession.startNavigation(route.value!!, true, 40.0)
+            navigationSession = driveSession.startNavigation(route.value!!, true, 20.0)
             navigationOn = true
             map.routesController().updateRouteProgress(routeIds[0])
         }
@@ -97,6 +99,7 @@ class MapViewNavViewModel(app: Application) : AndroidViewModel(app), PositionEve
     fun stopNavigation(map: MapView) {
         navigationOn = false
         navigationSession?.stopNavigation()
+        currentRoute.postValue(null)
         map.routesController().clear()
     }
 

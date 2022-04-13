@@ -43,6 +43,7 @@
     <string name="title_activity_map_view_status">Map Diagnosis</string>
     <string name="title_activity_map_view_vehicle">Vehicle icon</string>
     <string name="title_activity_map_view_traffic_bubble">Traffic bubble</string>
+    <string name="free_flow_traffic">Free flow traffic</string>
     <string name="title_activity_map_view_snaps_shots">snaps shots</string>
     <string name="title_activity_map_view_show_region_rect">showRegion Rect</string>
     <string name="title_activity_map_view_multi_map">Multi Map View</string>
@@ -61,5 +62,17 @@
     <string name="title_activity_search_along_route">Search along route</string>
     <string name="title_activity_show_poi_in_camera">Show POI in camera</string>
     <string name="title_activity_search_rgc">RGC Search</string>
+    <string name="title_search_example">Search POI Atlas Resources</string>
     <string name="sub_view_btn_text" translatable="false">SubView</string>
+
+    <string name="title_map_scale">Map scale</string>
+    <string name="input_real_reach_distance">input real reach distance</string>
+    <string name="select_request_mode">select request model</string>
+    <string name="request_real_reach">request real reach</string>
+
+    <string-array name="search_item_list">
+        <item>food</item>
+        <item>parking</item>
+        <item>electric charge station</item>
+    </string-array>
 </resources>

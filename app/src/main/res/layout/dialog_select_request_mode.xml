@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+<data>
+
+    <import type="android.view.View" />
+
+    <variable
+        name="viewModel"
+        type="com.telenav.sdk.demo.scenario.navigation.realReach.RealReachViewModel" />
+
+</data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RadioGroup
+            android:id="@+id/rg_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            tools:ignore="MissingConstraints">
+            <RadioButton
+                android:id="@+id/rb_hybrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="hybrid"/>
+
+            <RadioButton
+                android:id="@+id/rb_cloud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="cloud" />
+
+            <RadioButton
+                android:id="@+id/rb_onbard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="onboard" />
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

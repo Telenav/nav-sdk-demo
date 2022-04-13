@@ -27,6 +27,7 @@ import com.telenav.sdk.drivesession.model.MMFeedbackInfo
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.drivesession.model.StreetInfo
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.fragment_map_view_tune_mode.*
@@ -126,6 +127,27 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     }
 
     private fun setupDrawerOperations() {
+        sc_use_free_flow_traffic.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // enable SDK traffic service
+                SDK.getInstance().enableTraffic(true)
+                mapView.featuresController().freeFlowTraffic().setEnabled()
+            } else {
+                // disable SDK traffic as it is not used for other
+                // purpose at the moment in this fragment
+                SDK.getInstance().enableTraffic(false)
+                mapView.featuresController().freeFlowTraffic().setDisabled()
+            }
+        }
+
+        sc_show_map_scale.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked) {
+                // show map scale at the bottom right corner
+                mapView.cameraController().showMapScale(0.0,0.0)
+            }
+            else mapView.cameraController().hideMapScale()
+        }
+
         sc_follow_vehicle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 rg_follow_model.visibility = View.VISIBLE
@@ -202,11 +224,11 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
     }
 
     private fun getSelectedFollowMode(): Camera.FollowVehicleMode =
-            when (rg_follow_model.checkedRadioButtonId) {
-                R.id.rb_heading_up_3D -> Camera.FollowVehicleMode.HeadingUp
-                R.id.rb_north_up -> Camera.FollowVehicleMode.NorthUp
-                else -> Camera.FollowVehicleMode.Static
-            }
+        when (rg_follow_model.checkedRadioButtonId) {
+            R.id.rb_heading_up_3D -> Camera.FollowVehicleMode.HeadingUp
+            R.id.rb_north_up -> Camera.FollowVehicleMode.NorthUp
+            else -> Camera.FollowVehicleMode.Static
+        }
 
     private fun getUseAutoZoom(): Boolean {
         return sc_use_auto_zoom.isChecked
@@ -257,12 +279,12 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
         mapView.addMapViewListener {
             it.cameraLocation
             val text = String.format(
-                    Locale.getDefault(),"camera position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f\nvertical offset %.1f",
-                    it.cameraLocation.latitude,
-                    it.cameraLocation.longitude,
-                    it.zoomLevel,
-                    it.rangeHorizontal,
-                    currentVerticalOffset, )
+                Locale.getDefault(),"camera position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f\nvertical offset %.1f",
+                it.cameraLocation.latitude,
+                it.cameraLocation.longitude,
+                it.zoomLevel,
+                it.rangeHorizontal,
+                currentVerticalOffset, )
             activity?.runOnUiThread{
                 tv_state?.text = text
             }
@@ -281,11 +303,11 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
 
     private fun requestDirection(begin: Location, end: Location, result: (Boolean) -> Unit) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(begin),
-                GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(begin),
+            GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
-                .routeCount(1)
-                .build()
+            .routeCount(1)
+            .build()
         val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {

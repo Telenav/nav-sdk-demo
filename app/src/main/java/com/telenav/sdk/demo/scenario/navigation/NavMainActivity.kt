@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.telenav.sdk.demo.scenario.navigation.aduio.AudioGuidanceFragment
 import com.telenav.sdk.demo.scenario.navigation.avoid.AvoidIncidentFragment
 import com.telenav.sdk.demo.scenario.navigation.avoid.AvoidStepFragment
+import com.telenav.sdk.demo.scenario.navigation.realReach.RealReachFragment
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.activity_nav_main.*
 
@@ -72,6 +73,9 @@ class NavMainActivity : AppCompatActivity() {
         MenuData("AudioGuidance") {
             showFragment(AudioGuidanceFragment())
         },
+        MenuData("RealReach") {
+            showFragment(RealReachFragment())
+        },
     )
 
     private fun showFragment(fragment: Fragment) {
@@ -95,7 +99,7 @@ class NavMainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (supportFragmentManager.backStackEntryCount != 0) {
+        if (supportFragmentManager.backStackEntryCount!=0) {
             supportFragmentManager.popBackStack()
         } else {
             finish()

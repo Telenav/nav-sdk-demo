@@ -8,49 +8,42 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.telenav.map.api.Annotation
 import com.telenav.map.api.ClusterMapView
-import com.telenav.map.api.controllers.AnnotationsController
+import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
+import com.telenav.map.api.controllers.CameraController
+import com.telenav.map.api.controllers.RoutesController
+import com.telenav.map.api.controllers.VehicleController
+import com.telenav.map.api.touch.TouchPosition
+import com.telenav.map.api.touch.TouchType
 import com.telenav.map.views.TnClusterMapView
 import com.telenav.sdk.common.logging.TaLog
-import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.drivesession.DriveSession
-import com.telenav.sdk.drivesession.NavigationSession
+import com.telenav.map.api.Annotation
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
-import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.map.direction.DirectionClient
-import com.telenav.sdk.map.direction.model.*
+import com.telenav.sdk.map.direction.model.Route
+import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_map_view_multi_map.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
-import java.util.*
+import kotlinx.android.synthetic.main.layout_content_multi_map.*
+import kotlinx.android.synthetic.main.layout_operation_multi_view.*
+import kotlin.math.max
+import kotlin.math.min
 
-class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventListener {
+class MultiMapViewFragment : Fragment(), NavigationEventListener {
     private val TAG = "MultiMapViewFragment"
-    private val driveSession: DriveSession = DriveSession.Factory.createInstance()
-    private var navigationSession: NavigationSession? = null
+    private lateinit var viewModel: MapViewNavViewModel
     private var clusterMapView: ClusterMapView? = null
-
-    /**
-     * location of San Francisco
-     */
-    private val locationA = Location("MOCK").apply {
-        this.latitude = 37.767937
-        this.longitude = -122.429250
-    }
-
-    /**
-     * location of Los Angeles
-     */
-    private val locationB = Location("MOCK").apply {
-        this.latitude = 34.0772327
-        this.longitude = -118.2584544
-    }
+    private var mainCameraController: CameraController? = null
+    private var mainVehicleController: VehicleController? = null
+    private var mainRoutesController: RoutesController? = null
+    private var clusterCameraController: CameraController? = null
+    private var clusterRoutesController: RoutesController? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,24 +55,80 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
+            .get(MapViewNavViewModel::class.java)
+        viewModel.driveSession.eventHub.addNavigationEventListener(this)
+        viewModel.currentVehicleLocation.observe(viewLifecycleOwner) {
+            moveCVPToLocation(it)
+        }
+
+        viewModel.route.observe(viewLifecycleOwner) { route ->
+            updateRoute(route)
+        }
+
+        viewModel.currentRoute.observe(viewLifecycleOwner) { route ->
+            clusterRoutesController?.let {
+                it.clear()
+                if (route != null) {
+                    val routeIds = it.add(listOf(route))
+                    it.highlight(routeIds[0])
+                    it.updateRouteProgress(routeIds[0])
+                }
+            }
+        }
+
         tv_title.text = getString(R.string.title_activity_map_view_multi_map)
         iv_back.setOnClickListener {
             findNavController().navigateUp()
         }
 
+        btn_show_menu.setOnClickListener {
+            drawer_layout.open()
+        }
+
         initMaintMapView(savedInstanceState)
-        initClusterMapView()
         setOnClickListener()
         setMapUpdateListener()
     }
 
     private fun initMaintMapView(savedInstanceState: Bundle?) {
-        main_map_view.initialize(savedInstanceState) {
+        map_view.initialize(savedInstanceState) {
             it.featuresController().traffic().setEnabled()
             it.featuresController().compass().setEnabled()
+            it.featuresController().buildings().setEnabled()
+            it.featuresController().landmarks().setEnabled()
+            it.featuresController().scaleBar().setEnabled()
             it.vehicleController().setIcon(R.drawable.cvp)
-            activity?.runOnUiThread {
-                moveCVPToLocation(locationA)
+            mainCameraController = it.cameraController()
+            mainVehicleController = it.vehicleController()
+            mainRoutesController = it.routesController()
+        }
+
+        map_view.setOnTouchListener { touchType: TouchType, position: TouchPosition ->
+            if (viewModel.isNavigationOn()) {
+                return@setOnTouchListener
+            }
+
+            if (touchType == TouchType.LongClick) {
+                map_view.routesController().clear()
+                activity?.runOnUiThread {
+                    val context = context
+                    if (context != null) {
+                        val factory = map_view.annotationsController().factory()
+                        val annotation = factory.create(context, R.drawable.map_pin_green_icon_unfocused, position.geoLocation!!)
+                        annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+                        map_view.annotationsController().clear()
+                        map_view.annotationsController().add(arrayListOf(annotation))
+                    }
+                }
+
+                viewModel.currentVehicleLocation.value?.let {
+                    viewModel.requestDirection(it, position.geoLocation!!) { result ->
+                        activity?.runOnUiThread {
+                            navButton.isEnabled = result
+                        }
+                    }
+                }
             }
         }
     }
@@ -91,17 +140,16 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
             cluster_map_view.holder.surface,
             requireContext().resources.getDimensionPixelSize(R.dimen.rectangle_map_view_width),
             requireContext().resources.getDimensionPixelSize(R.dimen.rectangle_map_view_height),
-            80f
+            map_view.defaultDpi * 1.2f
         ) {
-            it.featuresController().traffic().setEnabled()
-            it.featuresController().compass().setEnabled()
             it.vehicleController().setIcon(R.drawable.cvp)
             activity?.runOnUiThread {
-                it.cameraController()?.position =
-                    Camera.Position.Builder().setLocation(locationA).build()
-                it.vehicleController()?.setLocation(locationA)
+                clusterCameraController = it.cameraController()
+                clusterRoutesController = it.routesController()
+                it.featuresController().scaleBar().setEnabled()
+                it.layoutController().setVerticalOffset(-0.5)
                 it.cameraController()
-                    .enableFollowVehicleMode(Camera.FollowVehicleMode.NorthUp, false)
+                    .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, false)
                 it.cameraController().position = Camera.Position.Builder().setZoomLevel(0f).build()
                 it.cameraController().renderMode = Camera.RenderMode.M3D
             }
@@ -128,22 +176,34 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
     }
 
     private fun setOnClickListener() {
-        btn_vehicle_location.text = String.format(
-            "Move to San Francisco\n(%.5f,%.5f)",
-            locationA.latitude,
-            locationA.longitude
-        )
-        btn_vehicle_location.setOnClickListener {
-            moveCVPToLocation(locationA)
+        iv_camera_fix.setOnClickListener {
+            val newPosition = Camera.Position.Builder().setLocation(viewModel.currentVehicleLocation.value!!).build()
+            map_view.cameraController().position = newPosition
+            iv_camera_fix.setImageResource(R.drawable.ic_gps_fixed_24)
         }
 
-        btn_start_navigation.text = String.format(
-            "Navigate to Los Angeles\n(%.5f,%.5f)",
-            locationB.latitude,
-            locationB.longitude
-        )
-        btn_start_navigation.setOnClickListener { navigateToLocation(locationA, locationB) }
-        btn_stop_navigation.setOnClickListener { stopNavigation() }
+        iv_zoom_in.setOnClickListener {
+            val currentLevel = map_view.cameraController().position!!.zoomLevel
+            setZoomLevel(currentLevel - 1)
+        }
+
+        iv_zoom_out.setOnClickListener {
+            val currentLevel = map_view.cameraController().position!!.zoomLevel
+            setZoomLevel(currentLevel + 1)
+        }
+
+        navButton.setOnClickListener {
+            navButton.isEnabled = false
+            subViewButton.isEnabled = true
+            viewModel.startNavigation(map_view)
+        }
+
+        subViewButton.setOnClickListener {
+            navButton.isEnabled = true
+            subViewButton.isEnabled = false
+            viewModel.stopNavigation(map_view)
+            updateRoute(null)
+        }
 
         btn_zoom_in.setOnClickListener { setZoomLevelBy(-1f) }
         btn_zoom_out.setOnClickListener { setZoomLevelBy(1f) }
@@ -163,6 +223,9 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
         btn_pause.setOnClickListener { clusterMapView?.onPause() }
         btn_resume.setOnClickListener { clusterMapView?.onResume() }
         btn_destroy.setOnClickListener {
+            clusterCameraController?.disableFollowVehicle()
+            clusterCameraController = null
+            clusterRoutesController = null
             clusterMapView?.onDestroy()
             clusterMapView = null
         }
@@ -176,29 +239,32 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
                 )
             }
         }
-        btn_add_main_destination.setOnClickListener {
-            setDestinationAnnotation(main_map_view.annotationsController(), main_map_view.annotationsController().factory().create(requireContext(), R.drawable.map_pin_green_icon_unfocused, locationB))
-        }
-        btn_add_cluster_destination.setOnClickListener {
-            clusterMapView?.let { cluster ->
-                setDestinationAnnotation(cluster.annotationsController(), cluster.annotationsController().factory().create(requireContext(), R.drawable.map_pin_orange_icon_unfocused, locationB))
-            }
-        }
-        btn_clear_all_destination.setOnClickListener {
-            main_map_view.annotationsController().clear()
-            clusterMapView?.annotationsController()?.clear()
+
+    }
+
+    private fun setZoomLevel(level: Float) {
+        val newLevel = min(max(1f, level), 17f)
+        map_view.cameraController().position = Camera.Position.Builder().setZoomLevel(newLevel).build()
+    }
+
+    private fun updateRoute(route: Route?) {
+        mainRoutesController?.clear()
+        route?.let {
+            val ids = map_view.routesController().add(listOf(it))
+            mainCameraController?.showRegion(mainRoutesController!!.region(ids!!),
+                Margins.Percentages(0.2, 0.2))
         }
     }
 
     override fun onResume() {
         super.onResume()
-        main_map_view.onResume()
+        map_view.onResume()
         clusterMapView?.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        main_map_view.onPause()
+        map_view.onPause()
         clusterMapView?.onPause()
     }
 
@@ -208,74 +274,18 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
         super.onDestroy()
     }
 
-    private fun setDestinationAnnotation(annotationsController: AnnotationsController, destination: Annotation) {
-        destination.style = Annotation.Style.ScreenAnnotationPopup
-        annotationsController.add(listOf(destination))
-    }
-
     private fun moveCVPToLocation(location: Location) {
-        main_map_view.cameraController()?.position =
-            Camera.Position.Builder().setLocation(location).build()
-        main_map_view.vehicleController()?.setLocation(location)
-    }
-
-    private fun navigateToLocation(begin: Location, end: Location) {
-        navigationSession?.stopNavigation()
-        val request: RouteRequest = RouteRequest.Builder(
-            GeoLocation(begin),
-            GeoLocation(LatLon(end.latitude, end.longitude))
-        ).contentLevel(ContentLevel.FULL)
-            .routeCount(2)
-            .startTime(Calendar.getInstance().timeInMillis / 1000)
-            .build()
-        val task = DirectionClient.Factory.hybridClient()
-            .createRoutingTask(request, RequestMode.CLOUD_ONLY)
-        task.runAsync { response ->
-            if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
-                val routes = response.response.result
-                val routeIds = main_map_view.routesController().add(routes)
-                main_map_view.routesController().highlight(routeIds[0])
-                navigationSession = driveSession.startNavigation(routes[0], true, 40.0)
-                driveSession.eventHub?.let {
-                    it.addNavigationEventListener(this)
-                    it.addPositionEventListener(this)
-                }
-                main_map_view.routesController().updateRouteProgress(routeIds[0])
-                main_map_view.cameraController()
-                    .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
-
-                clusterMapView?.routesController()?.add(routes)
-                clusterMapView?.routesController()?.highlight(routeIds[0])
-                clusterMapView?.routesController()?.updateRouteProgress(routeIds[0])
-                clusterMapView?.cameraController()
-                    ?.enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
-
-            }
-            task.dispose()
-        }
-    }
-
-    private fun stopNavigation() {
-        navigationSession?.stopNavigation()
-        driveSession.eventHub?.let {
-            it.removeNavigationEventListener(this)
-            it.removePositionEventListener(this)
-        }
-        main_map_view.run {
-            annotationsController().clear()
-            routesController().clear()
-            cameraController().disableFollowVehicle()
-        }
+        mainVehicleController?.setLocation(location)
     }
 
     private fun setZoomLevelBy(value: Float) {
-        val zoom = clusterMapView?.cameraController()?.position?.zoomLevel ?: 0f
-        clusterMapView?.cameraController()?.position =
+        val zoom = clusterCameraController?.position?.zoomLevel ?: 0f
+        clusterCameraController?.position =
             Camera.Position.Builder().setZoomLevel(zoom + value).build()
     }
 
     private fun setMapUpdateListener() {
-        main_map_view.addMapViewListener {
+        map_view.addMapViewListener {
             it.cameraLocation
             val text = String.format(
                 "Main Map\ncamera position: [%.4f , %.4f]\nvehicle position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f",
@@ -287,40 +297,9 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
                 it.rangeHorizontal
             )
             activity?.runOnUiThread {
-                tv_print?.text = text
+                tv_tip?.text = text
             }
         }
-        clusterMapView?.addMapViewListener {
-            it.cameraLocation
-            val text = String.format(
-                "Cluster Map\ncamera position: [%.4f , %.4f]\nvehicle position: [%.4f , %.4f]\nzoom level: %.1f\nrange horizontal: %.3f",
-                it.cameraLocation.latitude,
-                it.cameraLocation.longitude,
-                it.carLocation.latitude,
-                it.carLocation.longitude,
-                it.zoomLevel,
-                it.rangeHorizontal
-            )
-            activity?.runOnUiThread {
-                tv_print2?.text = text
-            }
-        }
-    }
-
-    override fun onLocationUpdated(vehicleLocation: Location) {
-        main_map_view.vehicleController().setLocation(vehicleLocation)
-    }
-
-    override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
-        TaLog.d(TAG, "onStreetUpdated")
-    }
-
-    override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
-        TaLog.d(TAG, "onCandidateRoadDetected")
-    }
-
-    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
-        TaLog.d(TAG, "onMMFeedbackUpdated")
     }
 
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {
@@ -342,14 +321,12 @@ class MultiMapViewFragment : Fragment(), PositionEventListener, NavigationEventL
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
         TaLog.d(TAG, "onNavigationStopReached: stopIndex=$stopIndex, stopLocation:$stopLocation")
         if (stopIndex == -1) {  //-1 means reach destination
-            main_map_view.annotationsController().clear()
-            main_map_view.routesController().clear()
-            main_map_view.cameraController().disableFollowVehicle()
+            map_view.cameraController().disableFollowVehicle()
         }
     }
 
     override fun onNavigationRouteUpdated(route: Route, betterRouteContext: BetterRouteContext?) {
-        route.dispose()
+        viewModel.route.postValue(route)
     }
 
     override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext?) {

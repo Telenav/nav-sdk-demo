@@ -25,12 +25,14 @@ import kotlinx.android.synthetic.main.layout_action_bar.*
  * @author zhai.xiang on 2021/3/15
  */
 class SearchMenuFragment : Fragment() {
-    private lateinit var menuList : List<MenuData>
+    private lateinit var menuList: List<MenuData>
 
-    private lateinit var menuAdapter : MenuAdapter
+    private lateinit var menuAdapter: MenuAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_scenario_menu, container, false)
     }
 
@@ -44,44 +46,58 @@ class SearchMenuFragment : Fragment() {
         menuAdapter = MenuAdapter(recycleView, menuList)
         recycleView.adapter = menuAdapter
         recycleView.layoutManager = LinearLayoutManager(activity)
-        recycleView.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
-    }
-
-    private fun initMenuData(){
-        menuList = listOf(
-                MenuData(getString(R.string.title_activity_search_show_POI)) {
-                    findNavController().navigate(R.id.action_searchMenuFragment_to_searchShowPoiFragment)
-                },
-                MenuData(getString(R.string.title_activity_search_along_route)) {
-                    findNavController().navigate(R.id.action_searchMenuFragment_to_searchAlongRouteFragment)
-                },
-                MenuData(getString(R.string.title_activity_show_poi_in_camera)) {
-                    findNavController().navigate(R.id.action_searchMenuFragment_to_showPoiInCameraFragment)
-                },
-                MenuData(getString(R.string.title_activity_search_rgc)) {
-                    findNavController().navigate(R.id.action_searchMenuFragment_to_searchRgcFragment)
-                },
+        recycleView.addItemDecoration(
+            DividerItemDecoration(
+                activity,
+                DividerItemDecoration.VERTICAL
+            )
         )
     }
 
-    private class MenuAdapter(val recyclerView : RecyclerView,
-                              val menuList : List<MenuData>) : RecyclerView.Adapter<MenuViewHolder>() {
+    private fun initMenuData() {
+        menuList = listOf(
+            MenuData(getString(R.string.title_activity_search_show_POI)) {
+                findNavController().navigate(R.id.action_searchMenuFragment_to_searchShowPoiFragment)
+            },
+            MenuData(getString(R.string.title_activity_search_along_route)) {
+                findNavController().navigate(R.id.action_searchMenuFragment_to_searchAlongRouteFragment)
+            },
+            MenuData(getString(R.string.title_activity_show_poi_in_camera)) {
+                findNavController().navigate(R.id.action_searchMenuFragment_to_showPoiInCameraFragment)
+            },
+            MenuData(getString(R.string.title_activity_search_rgc)) {
+                findNavController().navigate(R.id.action_searchMenuFragment_to_searchRgcFragment)
+            },
+            MenuData(getString(R.string.title_search_example)) {
+                findNavController().navigate(R.id.action_searchMenuFragment_to_searchExampleFragment)
+            }
+        )
+    }
+
+    private class MenuAdapter(
+        val recyclerView: RecyclerView,
+        val menuList: List<MenuData>
+    ) : RecyclerView.Adapter<MenuViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
-                MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
-                        parent, false)).apply {
-                    this.root.setOnClickListener(onClickListener)
-                }
+            MenuViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.layout_scenario_menu_item,
+                    parent, false
+                )
+            ).apply {
+                this.root.setOnClickListener(onClickListener)
+            }
 
         override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
             holder.tvTitle.text = menuList[position].text
-            holder.tvIndex.text = (position+1).toString()
+            holder.tvIndex.text = (position + 1).toString()
         }
 
         override fun getItemCount(): Int = menuList.size
 
-        val onClickListener = View.OnClickListener{
+        val onClickListener = View.OnClickListener {
             val pos = recyclerView.getChildAdapterPosition(it)
-            if (pos >= 0 && pos < menuList.size){
+            if (pos >= 0 && pos < menuList.size) {
                 menuList[pos].onClick()
             }
         }
@@ -94,5 +110,5 @@ class SearchMenuFragment : Fragment() {
         val tvIndex: TextView = root.findViewById(R.id.tv_index)
     }
 
-    private data class MenuData(val text:String, val onClick : ()->Unit)
+    private data class MenuData(val text: String, val onClick: () -> Unit)
 }

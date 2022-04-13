@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_searchMenuFragment_to_searchRgcFragment"
             app:destination="@id/searchRgcFragment" />
+        <action
+            android:id="@+id/action_searchMenuFragment_to_searchExampleFragment"
+            app:destination="@id/searchExampleFragment" />
     </fragment>
 
     <fragment
@@ -43,4 +46,9 @@
         android:id="@+id/searchRgcFragment"
         android:name="com.telenav.sdk.demo.scenario.search.SearchRgcFragment"
         android:label="SearchRgcFragment" />
+    <fragment
+        android:id="@+id/searchExampleFragment"
+        android:name="com.telenav.sdk.demo.scenario.search.fragments.SearchExampleFragment"
+        android:label="search_example_fragment"
+        tools:layout="@layout/search_example_fragment" />
 </navigation>

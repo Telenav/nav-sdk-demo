@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.map.api.controllers.Feature
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.examples.scenario.mapview.MapViewNavViewModel
 import kotlinx.android.synthetic.main.fragment_map_view_elements.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.layout_content_map.*
