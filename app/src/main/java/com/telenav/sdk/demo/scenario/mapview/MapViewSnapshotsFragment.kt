@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,6 @@ import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.geo.Attributes
 import com.telenav.map.geo.Shape
-import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_snapshot.*
@@ -99,34 +99,48 @@ class MapViewSnapshotsFragment : Fragment() {
             it.cameraController().showRegion(region, Margins.Percentages(0.20, 0.20))
 
             // Draw a pseudo-home area rectangle
-            val coords = ArrayList<LatLon>()
-            coords.add(LatLon(30.3935, -86.4958));
-            coords.add(LatLon(30.3935, -86.5958));
-            coords.add(LatLon(30.4935,-86.5958));
-            coords.add(LatLon(30.4935,-86.4958));
-            coords.add(coords.first());
+            val coords = ArrayList<Location>()
+
+            val rightDownCorner = Location("")
+            rightDownCorner.latitude = 30.3935
+            rightDownCorner.longitude = -86.4958
+            coords.add(rightDownCorner)
+
+            val leftDownCorner = Location("")
+            leftDownCorner.latitude = 30.3935
+            leftDownCorner.longitude = -86.5958
+            coords.add(leftDownCorner)
+
+            val leftUpCorner = Location("")
+            leftUpCorner.latitude = 30.4935
+            leftUpCorner.longitude = -86.5958
+            coords.add(leftUpCorner)
+
+            val rightUpcorner = Location("")
+            rightUpcorner.latitude = 30.4935
+            rightUpcorner.longitude = -86.4958
+            coords.add(rightUpcorner)
+
+            coords.add(coords.first())
 
             val attributes = Attributes.Builder()
                 .setShapeStyle("route.trace")
                 .setColor(0xFF00FF00.toInt())
                 .setLineWidth(100.0f)
-                .build();
+                .build()
 
-            val shape = Shape(Shape.Type.Polyline, attributes, coords)
-
-            val collectionBuilder = Shape.Collection.Builder()
-            collectionBuilder.addShape(shape)
+            val shape = Shape(Shape.Type.Polyline, coords, attributes)
 
             // Don't have to keep track of shapeId since entire view will be closed
-            val shapeId = it.shapesController().add(collectionBuilder.build())
-        }, {
-            activity?.runOnUiThread {
-                mapOffscreenSnapshots.text = "Generate offscreen screenshots"
-                mapOffscreenSnapshots.isEnabled = true
-                mapSnapshots.isEnabled = true
-                displayBitmap(it, "Offscreen Snapshot")
-            }
-        })
+            it.shapesController().add(Shape.Collection.Builder()
+                .addShape(shape)
+                .build())
+        }, {activity?.runOnUiThread {
+            mapOffscreenSnapshots.text = "Generate offscreen screenshots"
+            mapOffscreenSnapshots.isEnabled = true
+            mapSnapshots.isEnabled = true
+            displayBitmap(it, "Offscreen Snapshot")
+        }})
     }
 
     private fun testSnapshot() {

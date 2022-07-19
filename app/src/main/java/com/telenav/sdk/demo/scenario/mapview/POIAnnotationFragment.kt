@@ -4,7 +4,7 @@
  * other countries. Other names may be trademarks of their respective owners.
  */
 
-package com.telenav.sdk.examples.scenario.mapview
+package com.telenav.sdk.demo.scenario.mapview
 
 import android.os.Bundle
 import android.view.LayoutInflater

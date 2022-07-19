@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".scenario.mapview.POIAnnotationFragment">
+    tools:context="com.telenav.sdk.demo.scenario.mapview.POIAnnotationFragment">
 
     <include
         android:id="@+id/include"
@@ -67,14 +67,28 @@
             app:layout_constraintTop_toBottomOf="@+id/et_annotation_style" />
 
 
+        <EditText
+            android:id="@+id/et_bubble_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="bubble type"
+            android:inputType="textNoSuggestions"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_annotation_text" />
+
         <Button
             android:id="@+id/btn_clear_annotations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Clear Annotations"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_annotation_text"/>
+            app:layout_constraintTop_toBottomOf="@id/et_bubble_type" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_ev_styles"

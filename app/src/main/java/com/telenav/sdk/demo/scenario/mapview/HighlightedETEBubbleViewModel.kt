@@ -123,18 +123,29 @@ class HighlightedETEBubbleViewModel : ViewModel() {
 
     fun showRouteAnnotation(routeId: String, annotationsController: AnnotationsController) {
         val factory = getAnnotationFactory(annotationsController)
+        //create route annotation, you can create a lot of route annotations
+        //but you have to store all your annotations, after annotations will be added to the engine
+        //you will use it to update annotation view
         val annotation = createRouteAnnotation(
             routeId,
             style = styleIdSelected,
             bubbleType = getSelectedBubbleType(),
             factory
-        )
-        val text = createAnnotationTextInfo("Selected Route")
-        displayAnnotationTextInfo(text, annotation)
+        ).apply {
+            displayText = createAnnotationTextInfo("Selected Route")
+        }
+        //region managing annotations instances
+        //checking that we don't have the same annotation in the local list
         removeAnnotationElementFromList(annotation)
+        //so here we are saving the route annotation that we created
         addRouteAnnotation(annotation)
+        //just make sure that we don't put two annotations that will associate with one route id
         removeRouteAnnotationFromMap(routeId)
+        //associate smart-bubble annotation with a route id
+        // after you will know which smart-bubble annotation you should update if you want
         putRouteAnnotation(routeId, annotation)
+        //endregion
+        //all annotations that were created you have to add to the engine
         addAnnotationList(annotationsController, getRouteAnnotationList())
     }
 
@@ -145,6 +156,18 @@ class HighlightedETEBubbleViewModel : ViewModel() {
         printDebugLog("before annotationsController.add $annotations")
         annotationsController.add(annotations)
     }
+
+    /**
+     * `createRouteAnnotation` creates a route annotation
+     *
+     * @param routeId The id of the route to be annotated.
+     * @param style The style of the annotation. This is a string that is used to identify the style of
+     * the annotation.
+     * @param bubbleType This is the type of bubble that will be displayed when the user taps on the
+     * annotation.
+     * @param factory AnnotationFactory
+     * @return Annotation
+     */
     fun createRouteAnnotation(
         routeId: String,
         style: String,
@@ -167,13 +190,6 @@ class HighlightedETEBubbleViewModel : ViewModel() {
 
     private fun createAnnotationTextInfo(text: String): Annotation.TextDisplayInfo {
         return Annotation.TextDisplayInfo.Centered(text)
-    }
-
-    private fun displayAnnotationTextInfo(
-        textDisplayInfo: Annotation.TextDisplayInfo,
-        annotation: Annotation
-    ) {
-        annotation.displayText = textDisplayInfo
     }
 
     fun requestDirection(
@@ -213,6 +229,8 @@ class HighlightedETEBubbleViewModel : ViewModel() {
                     val marginsPercentages = createMarginsPercentages(0.20, 0.20)
                     showRegion(region, marginsPercentages, cameraController)
                     routeIdList.forEach { id ->
+                        //this is one of the most important steps
+                        //here we will create a smart-bubble annotation and associate the route with it
                         showRouteAnnotation(id, annotationsController)
                     }
                     addRoteIdList(routeIdList)
