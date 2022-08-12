@@ -10,12 +10,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.MapView
 import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.controllers.*
+import com.telenav.map.api.touch.TouchPosition
+import com.telenav.map.api.touch.TouchType
+import com.telenav.map.api.touch.TouchedAnnotation
+import com.telenav.map.internal.AnnotationLayerIndex
 import com.telenav.map.views.TnMapView
 import com.telenav.sdk.common.logging.TaLog
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
@@ -51,6 +56,7 @@ class CVPPositionOnRoadFragment : Fragment(), PositionEventListener, NavigationE
     }
 
     private val viewModel: CVPPositionOnRoadViewModel by viewModels()
+    private val jobList = mutableListOf<Job>()
     private val backListener = View.OnClickListener { _: View ->
         findNavController().navigateUp()
     }
@@ -79,6 +85,7 @@ class CVPPositionOnRoadFragment : Fragment(), PositionEventListener, NavigationE
         )
 
     }
+    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private val remainingWayListener = View.OnClickListener {
         disableFollowVehicle(getCameraController())
         setRenderMode(getCameraController(), Camera.RenderMode.M2D)
@@ -133,6 +140,7 @@ class CVPPositionOnRoadFragment : Fragment(), PositionEventListener, NavigationE
         setOnClickListener(iv_back, backListener)
         setOnClickListener(btn_navigate, navigateListener)
         setOnClickListener(btn_remaining_way, remainingWayListener)
+        mapView.setOnAnnotationTouchListener(onAnnotationTouchListener)
     }
 
     private fun setBearing(
@@ -175,10 +183,34 @@ class CVPPositionOnRoadFragment : Fragment(), PositionEventListener, NavigationE
         vehicleController().setLocation(location)
     }
 
+    private val onAnnotationTouchListener: (TouchType, TouchPosition, List<TouchedAnnotation>) -> Unit =
+        { touchType, position, touchedAnnotations ->
+            printDebugLog("touchType: $touchType, data: $position, touchedAnnotations: $touchedAnnotations")
+            touchedAnnotations.forEach { touchedAnnotation ->
+                if (touchedAnnotation.annotation.layer.rawValue == AnnotationLayerIndex.VEHICLE_LAYER) {
+                    val job = runInMain {
+                        showToast("clicked CVP!")
+                    }
+                    jobList.add(job)
+                    printDebugLog("annotation_layer_rawValue = ${touchedAnnotation.annotation.layer.rawValue}")
+                }
+            }
+        }
+
+    private fun showToast(msg: String) {
+        Toast.makeText(
+            requireContext(),
+            msg,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
     private fun runInMain(run: () -> Unit): Job {
-        return CoroutineScope(Dispatchers.Main).launch {
+        val job = mainScope.launch {
             run()
         }
+        jobList.add(job)
+        return job
     }
 
     private fun disableFollowVehicle(cameraController: CameraController) {

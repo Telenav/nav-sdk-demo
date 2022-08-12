@@ -141,7 +141,7 @@
         tools:layout="@layout/highlighted_e_t_e_bubble_fragment" />
     <fragment
         android:id="@+id/mapViewPoiAnnotationFragment"
-        android:name="com.telenav.sdk.examples.scenario.mapview.POIAnnotationFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.POIAnnotationFragment"
         android:label="poi_annotation_fragment"
         tools:layout="@layout/poi_annotation_fragment" />
 </navigation>

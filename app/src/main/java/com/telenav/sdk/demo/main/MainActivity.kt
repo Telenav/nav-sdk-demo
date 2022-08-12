@@ -25,7 +25,6 @@ import com.telenav.sdk.core.SDKOptions
 import com.telenav.sdk.datacollector.api.DataCollectorService
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
-import com.telenav.sdk.examples.BuildConfig
 import com.telenav.sdk.examples.BuildConfig.*
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
@@ -176,7 +175,7 @@ open class MainActivity : AppCompatActivity() {
 
 
     private suspend fun initSDK(options: SDKOptions, region: Region, vehicleProfile: VehicleProfile? = null) : Boolean {
-        val success: Boolean
+        var success: Boolean = false
         withContext(Dispatchers.IO) {
             // Set the fixed port of broker server for example app.
             // To reduce port conflicts, please don't use port in range [20000, 20099].
@@ -187,6 +186,7 @@ open class MainActivity : AppCompatActivity() {
                 .setTrafficRefreshTime(120)
                 .setTrafficExpireTime(120)
                 .setTrafficCacheExtendTime(0)
+                .enableSelfPropellingUponWeakGPS(true)
                 .enableTraffic(true)
                 .enablePositionEngineLog(true)
                 .setTrafficFetchRange(3600)

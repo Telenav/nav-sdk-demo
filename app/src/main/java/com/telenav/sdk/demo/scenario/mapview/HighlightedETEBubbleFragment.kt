@@ -15,8 +15,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
+import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.CameraController
@@ -48,7 +51,8 @@ class HighlightedETEBubbleFragment : Fragment() {
         private const val DEFAULT_VALUE_NOT_SELECTED = 0F
     }
 
-    private lateinit var viewModel: HighlightedETEBubbleViewModel
+    private val viewModel by viewModels<HighlightedETEBubbleViewModel>()
+    private val mainCoroutineScope = CoroutineScope(Dispatchers.Main)
     private val poiTouchListener = object : POITouchListener {
         override fun pressEvent(
             touchType: TouchType,
@@ -57,13 +61,26 @@ class HighlightedETEBubbleFragment : Fragment() {
         ) {
             printDebugLog(
                 "HighlightedETEBubbleFragment touchType = $touchType," +
-                        " position = $position, poiDescription = $poiDescription"
+                    " position = $position, poiDescription = $poiDescription"
             )
-            runInMain { showToast("poiDescription = $poiDescription") }
+            runInMain { showToast("poiDescription = $poiDescription, Position: latitude = ${position.geoLocation?.latitude}, longitude = ${position.geoLocation?.longitude}") }
         }
-
+    }
+    private val mapViewReadyListener = MapViewReadyListener<MapView> {
+        runInMain {
+            mapView.cameraController()?.position =
+                Camera.Position.Builder().setLocation(viewModel.startLocation).build()
+            mapView.vehicleController()?.setLocation(viewModel.startLocation)
+        }
     }
 
+    private val mapViewConfig: MapViewInitConfig by lazy {
+        MapViewInitConfig(
+            context = requireContext(),
+            defaultLocation = viewModel.startLocation,
+            readyListener = mapViewReadyListener
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,10 +97,13 @@ class HighlightedETEBubbleFragment : Fragment() {
         ).show()
     }
 
+    private var defaultSmartBubbleType = DEFAULT_VALUE_NOT_SELECTED
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HighlightedETEBubbleViewModel::class.java)
-        val makeRequestOnClickListener = { view: View ->
+        val makeRequestOnClickListener = { _: View ->
+            //remember current smart-bubble type
+            defaultSmartBubbleType = viewModel.getSelectedBubbleType()
+            //before we can create a route smart-bubble annotation we have to request the route
             requestDirection(
                 getRoutesController(),
                 getCameraController(),
@@ -96,17 +116,25 @@ class HighlightedETEBubbleFragment : Fragment() {
                 }
             }
         }
+
         val onRouteTouchListener =
-            { touchType: TouchType, position: TouchPosition, routeID: String ->
+            { _: TouchType, _: TouchPosition, routeID: String ->
                 highlightRoute(routeID, getRoutesController())
+                //here we can manage updating of route smart-bubble annotations
+                //iterate our local annotations that we have created before
                 viewModel.getRouteAnnotationMap().forEach { routeAnnotationMap ->
                     printDebugLog("map key -> ${routeAnnotationMap.key}, routeId -> $routeID")
                     when (routeAnnotationMap.value) {
                         is GLMapAnnotation -> {
                             val routeAnnotation = routeAnnotationMap.value as GLMapRouteAnnotation
+                            //now we can compare the route id that was clicked  and what we have
+                            // in our local storage in the viewModel
                             if (routeAnnotationMap.key != routeID) {
-                                routeAnnotation.update(DEFAULT_VALUE_NOT_SELECTED)
+                                //if it is not selected set the smart-bubble type that we took before
+                                // we made the route request
+                                routeAnnotation.update(defaultSmartBubbleType)
                             } else {
+                                //otherwise set the smart-bubble type that we selected
                                 routeAnnotation.update(viewModel.getSelectedBubbleType())
                             }
                         }
@@ -195,14 +223,15 @@ class HighlightedETEBubbleFragment : Fragment() {
         iv_back.setOnClickListener {
             findNavController().navigateUp()
         }
-        mapViewInit(savedInstanceState)
+        // the initialize function must be called after SDK is initialized
+        mapView.initialize(mapViewConfig)
         btn_make_request.setOnClickListener(makeRequestOnClickListener)
         mapView.setOnRouteTouchListener(onRouteTouchListener)
         mapView.setOnAnnotationTouchListener { touchType, position, touchedAnnotations ->
             printDebugLog("HighlightedETEBubbleFragment touchType = $touchType," +
-                    " position = $position," +
-                    " touchedAnnotations size = ${touchedAnnotations.size}," +
-                    " touchedAnnotations = $touchedAnnotations")
+                " position = $position," +
+                " touchedAnnotations size = ${touchedAnnotations.size}," +
+                " touchedAnnotations = $touchedAnnotations")
             touchedAnnotations.forEach { touchAnnotation ->
                 for ((key, value) in viewModel.getRouteAnnotationMap()) {
                     printDebugLog("map key -> $key, value = $value")
@@ -237,19 +266,8 @@ class HighlightedETEBubbleFragment : Fragment() {
         TaLog.d(TAG, msg)
     }
 
-    // the initialize function must be called after SDK is initialized
-    private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            runInMain {
-                mapView.cameraController()?.position =
-                    Camera.Position.Builder().setLocation(viewModel.startLocation).build()
-                mapView.vehicleController()?.setLocation(viewModel.startLocation)
-            }
-        }
-    }
-
     private fun runInMain(run: () -> Unit): Job {
-        return CoroutineScope(Dispatchers.Main).launch {
+        return mainCoroutineScope.launch {
             run()
         }
     }
