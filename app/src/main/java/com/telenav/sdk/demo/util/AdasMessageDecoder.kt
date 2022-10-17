@@ -18,7 +18,7 @@ class AdasMessageDecoder {
         /**
          * maximum detection distance
          */
-        const val MAX_DETECT_DISTANCE = 4096
+        const val MAX_DETECT_DISTANCE = 2000
 
         /**
          * The max value of the message fall behind the cvp, or it will be removed.
@@ -56,26 +56,32 @@ class AdasMessageDecoder {
         }.forEach {
             when (it) {
                 is PositionMessage -> {
-                    if (it.isPathAvailable()) {
-                        val newDistance = calculateCVPDistance(distance, positionMessage?.offset?:0, it.offset)
-                        it.distance = newDistance
-                        if (lastPathIndex != it.pathIndex) {
-                            index = (1 + index) % MAX_CYCLIC_INDEX
-                            removeMessageByPath(lastPathIndex)
+                    if (it.isCurrentRoad()) {
+                        if (it.isPathAvailable()) {
+                            val newDistance = calculateCVPDistance(
+                                distance,
+                                positionMessage?.offset ?: 0,
+                                it.offset
+                            )
+                            it.distance = newDistance
+                            if (lastPathIndex != it.pathIndex) {
+                                index = (1 + index) % MAX_CYCLIC_INDEX
+                                removeMessageByPath(lastPathIndex)
+                                segmentMessages.clear()
+                                profileMessages.clear()
+                            }
+
+                            positionMessage = it
+                            lastPathIndex = it.pathIndex
+                            distance = newDistance
+                        } else {
+                            positionMessage = null
+                            metaDataMessage = null
                             segmentMessages.clear()
                             profileMessages.clear()
+                            lastPathIndex = -1
+                            distance = 0
                         }
-
-                        positionMessage = it
-                        lastPathIndex = it.pathIndex
-                        distance = newDistance
-                    } else {
-                        positionMessage = null
-                        metaDataMessage = null
-                        segmentMessages.clear()
-                        profileMessages.clear()
-                        lastPathIndex = -1
-                        distance = 0
                     }
                 }
 
@@ -84,14 +90,22 @@ class AdasMessageDecoder {
                 }
 
                 is ProfileMessage -> {
-                    if (it.pathIndex == lastPathIndex && !it.update && it.active && it.profileType == 16 ) {
+                    if (it.pathIndex == lastPathIndex && it.active && it.profileType == 16 ) {
+                        if (it.offset == 0) {
+                            profileMessages.clear()
+                        }
+
                         it.distance = calculateSpeedDistance(distance, positionMessage?.offset?:0, it.offset)
                         profileMessages.add(it)
                     }
                 }
 
                 is SegmentMessage -> {
-                    if (it.pathIndex == lastPathIndex && !it.update) {
+                    if (it.pathIndex == lastPathIndex) {
+                        if (it.offset == 0) {
+                            segmentMessages.clear()
+                        }
+
                         it.distance = calculateSpeedDistance(distance, positionMessage?.offset?:0, it.offset)
                         segmentMessages.add(it)
                     }
@@ -121,7 +135,7 @@ class AdasMessageDecoder {
         }
     }
 
-    private fun decodeSingleMessage(content : Long) : BaseMessage? {
+    fun decodeSingleMessage(content : Long) : BaseMessage? {
         when(BaseMessage(content).type) {
             BaseMessage.MESSAGE_TYPE_POSITION -> {
                 return PositionMessage(content)
@@ -271,11 +285,18 @@ class AdasMessageDecoder {
 }
 
 class PositionMessage(content: Long) : BaseMessage(content) {
+    val positionIndex = content.shr(38).and(0x3).toInt()
 
     /**
      * Path index must at least 8
      */
     fun isPathAvailable(): Boolean = pathIndex > 7
+
+    fun isCurrentRoad(): Boolean = positionIndex == 0
+
+    override fun toString(): String {
+        return "PositionMessage [path: ${pathIndex}, offset: $offset, distance: $distance]"
+    }
 
 }
 
@@ -290,6 +311,10 @@ class MetaDataMessage(content: Long) : BaseMessage(content) {
      */
     val speedUnit = content.shr(4).and(0x1).toInt()
 
+
+    override fun toString(): String {
+        return "MetaDataMessage [countryCode: $countryCode]"
+    }
 }
 
 class ProfileMessage(content: Long) : BaseMessage(content) {
@@ -388,6 +413,10 @@ class SegmentMessage(content: Long) : BaseMessage(content) {
             else -> SpeedLimitType.TIME
         }
     }
+
+    override fun toString(): String {
+        return "SegmentMessage [path: ${pathIndex}, offset: $offset, distance: $distance，speedLimit:$speedLimitValue, update:${update}, retransmission: $retransmission]"
+    }
 }
 
 open class BaseMessage(val content: Long) {
@@ -420,7 +449,7 @@ open class BaseMessage(val content: Long) {
         /**
          * max detect distance in meters
          */
-        const val MAX_DETECT_DISTANCE = 4096
+        const val MAX_DETECT_DISTANCE = 2000
 
         /**
          * max value of offset

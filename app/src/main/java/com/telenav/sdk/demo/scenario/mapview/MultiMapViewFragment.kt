@@ -10,23 +10,26 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.Annotation
 import com.telenav.map.api.ClusterMapView
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.CameraController
 import com.telenav.map.api.controllers.RoutesController
 import com.telenav.map.api.controllers.VehicleController
+import com.telenav.map.api.models.ClusterMapViewParams
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.map.views.TnClusterMapView
 import com.telenav.sdk.common.logging.TaLog
-import com.telenav.map.api.Annotation
+import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.map.direction.model.Route
+import com.telenav.sdk.map.direction.model.*
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_map_view_multi_map.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
@@ -86,12 +89,66 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
             drawer_layout.open()
         }
 
-        initMaintMapView(savedInstanceState)
+        initMainMapViewV2()
         setOnClickListener()
         setMapUpdateListener()
     }
 
-    private fun initMaintMapView(savedInstanceState: Bundle?) {
+    private fun initMainMapViewV2() {
+
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            dpi = map_view.defaultDpi,
+            defaultLocation = viewModel.startLocation,
+            readyListener = {
+                it.featuresController().traffic().setEnabled()
+                it.featuresController().compass().setEnabled()
+                it.featuresController().buildings().setEnabled()
+                it.featuresController().landmarks().setEnabled()
+                it.featuresController().scaleBar().setEnabled()
+                mainCameraController = it.cameraController()
+                mainVehicleController = it.vehicleController()
+                mainRoutesController = it.routesController()
+                it.vehicleController().setIcon(R.drawable.cvp)
+                it.vehicleController().setLocation(viewModel.startLocation)
+                it.cameraController().position = Camera.Position.Builder().setZoomLevel(0f).build()
+            },
+            createCvp = false,
+            defaultZoomLevel = 17F
+        )
+        map_view.initialize(mapViewConfig)
+
+        map_view.setOnTouchListener { touchType: TouchType, position: TouchPosition ->
+            if (viewModel.isNavigationOn()) {
+                return@setOnTouchListener
+            }
+
+            if (touchType == TouchType.LongClick) {
+                map_view.routesController().clear()
+                activity?.runOnUiThread {
+                    val context = context
+                    if (context != null) {
+                        val factory = map_view.annotationsController().factory()
+                        val annotation = factory.create(context, R.drawable.map_pin_green_icon_unfocused, position.geoLocation!!)
+                        annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+                        map_view.annotationsController().clear()
+                        map_view.annotationsController().add(arrayListOf(annotation))
+                    }
+                }
+
+                viewModel.currentVehicleLocation.value?.let {
+                    viewModel.requestDirection(it, position.geoLocation!!) { result ->
+                        activity?.runOnUiThread {
+                            navButton.isEnabled = result
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initMainMapViewV1(savedInstanceState: Bundle?) {
+
         map_view.initialize(savedInstanceState) {
             it.featuresController().traffic().setEnabled()
             it.featuresController().compass().setEnabled()
@@ -133,7 +190,7 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
         }
     }
 
-    private fun initClusterMapView() {
+    private fun initClusterMapViewV1() {
         clusterMapView = TnClusterMapView()
         clusterMapView!!.initialize(
             requireContext(),
@@ -154,6 +211,54 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
                 it.cameraController().renderMode = Camera.RenderMode.M3D
             }
         }
+        cluster_map_view.holder.addCallback(object : SurfaceHolder.Callback {
+            override fun surfaceCreated(holder: SurfaceHolder) {
+                clusterMapView!!.onSurfaceCreated()
+            }
+
+            override fun surfaceChanged(
+                holder: SurfaceHolder,
+                format: Int,
+                width: Int,
+                height: Int
+            ) {
+                clusterMapView!!.onSurfaceChanged(width, height)
+            }
+
+            override fun surfaceDestroyed(holder: SurfaceHolder) {
+                clusterMapView!!.onSurfaceDestroyed()
+            }
+
+        })
+    }
+
+    private fun initClusterMapViewV2() {
+
+        clusterMapView = TnClusterMapView()
+        val clusterMapViewParams = ClusterMapViewParams(
+            context = requireContext(),
+            surface = cluster_map_view.holder.surface,
+            width =  requireContext().resources.getDimensionPixelSize(R.dimen.rectangle_map_view_width),
+            height = requireContext().resources.getDimensionPixelSize(R.dimen.rectangle_map_view_height),
+            density = map_view.defaultDpi * 1.2f,
+            defaultLocation = LatLon(viewModel.currentVehicleLocation.value?.latitude ?: 0.0,viewModel.currentVehicleLocation.value?.longitude ?: 0.0),
+            createCVP = false,
+            zoomLevel = 17F,
+        ){ clusterMapView ->
+            activity?.runOnUiThread {
+                clusterMapView!!.vehicleController().setIcon(R.drawable.cvp)
+                clusterCameraController = clusterMapView.cameraController()
+                clusterRoutesController = clusterMapView.routesController()
+                clusterMapView.featuresController().scaleBar().setEnabled()
+                clusterMapView.layoutController().setVerticalOffset(-0.5)
+                clusterMapView.cameraController()
+                    .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, false)
+                clusterMapView.cameraController().position = Camera.Position.Builder().setZoomLevel(0f).build()
+                clusterMapView.cameraController().renderMode = Camera.RenderMode.M3D
+            }
+        }
+        clusterMapView?.initialize(clusterMapViewParams)
+
         cluster_map_view.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 clusterMapView!!.onSurfaceCreated()
@@ -231,7 +336,7 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
         }
         btn_create.setOnClickListener {
             if (clusterMapView == null) {
-                initClusterMapView()
+                initClusterMapViewV2()
                 clusterMapView!!.onSurfaceCreated()
                 clusterMapView!!.onSurfaceChanged(
                     requireContext().resources.getDimensionPixelSize(R.dimen.rectangle_map_view_width),
