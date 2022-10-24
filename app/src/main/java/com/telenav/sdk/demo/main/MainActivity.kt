@@ -23,6 +23,7 @@ import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
 import com.telenav.sdk.datacollector.api.DataCollectorService
+import com.telenav.sdk.demo.util.RegionCachedHelper
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig.*
@@ -138,7 +139,7 @@ open class MainActivity : AppCompatActivity() {
         val sdkCacheDataDir = getCachedDataDir()
         // TODO set your local writable ota path
         val otaDataDir = "sdcard/test/"
-
+        RegionCachedHelper.saveSDKDataModel(this,InitSDKDataModel(region, "", key, secret, url, "stage"))
         val optionsBuilder = SDKOptions.builder()
             .setApiKey(API_KEY)
             .setApiSecret(API_SECRET)
