@@ -35,6 +35,7 @@ import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel.Comp
 import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel.Companion.createRouteRequest
 import com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadViewModel.Companion.createRoutingTask
 import com.telenav.sdk.map.direction.model.Route
+import com.telenav.sdk.map.model.AlongRouteTraffic
 import kotlinx.android.synthetic.main.c_v_p_position_on_road_fragment.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.coroutines.CoroutineScope

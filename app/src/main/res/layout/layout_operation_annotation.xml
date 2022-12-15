@@ -36,6 +36,17 @@
             android:textColor="@color/colorVivid"
             android:textSize="16sp"/>
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sc_forceCopy"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:checked="true"
+            android:paddingStart="16dp"
+            android:paddingEnd="10dp"
+            android:text="Bitmap forceCopy"
+            android:theme="@style/MapViewActivityStyle" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_create"

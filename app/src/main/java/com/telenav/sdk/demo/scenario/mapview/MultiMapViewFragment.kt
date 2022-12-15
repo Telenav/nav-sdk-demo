@@ -30,6 +30,7 @@ import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.direction.model.*
+import com.telenav.sdk.map.model.AlongRouteTraffic
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_map_view_multi_map.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
@@ -149,17 +150,22 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
 
     private fun initMainMapViewV1(savedInstanceState: Bundle?) {
 
-        map_view.initialize(savedInstanceState) {
-            it.featuresController().traffic().setEnabled()
-            it.featuresController().compass().setEnabled()
-            it.featuresController().buildings().setEnabled()
-            it.featuresController().landmarks().setEnabled()
-            it.featuresController().scaleBar().setEnabled()
-            it.vehicleController().setIcon(R.drawable.cvp)
-            mainCameraController = it.cameraController()
-            mainVehicleController = it.vehicleController()
-            mainRoutesController = it.routesController()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            readyListener = {
+                it.featuresController().traffic().setEnabled()
+                it.featuresController().compass().setEnabled()
+                it.featuresController().buildings().setEnabled()
+                it.featuresController().landmarks().setEnabled()
+                it.featuresController().scaleBar().setEnabled()
+                it.vehicleController().setIcon(R.drawable.cvp)
+                mainCameraController = it.cameraController()
+                mainVehicleController = it.vehicleController()
+                mainRoutesController = it.routesController()
+            }
+        )
+        map_view.initialize(mapViewConfig)
+
 
         map_view.setOnTouchListener { touchType: TouchType, position: TouchPosition ->
             if (viewModel.isNavigationOn()) {

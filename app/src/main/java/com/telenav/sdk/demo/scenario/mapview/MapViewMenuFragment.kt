@@ -29,8 +29,10 @@ class MapViewMenuFragment : Fragment() {
 
     private lateinit var menuAdapter: MenuAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_scenario_menu, container, false)
     }
 
@@ -110,8 +112,12 @@ class MapViewMenuFragment : Fragment() {
         val menuList: List<MenuData>
     ) : RecyclerView.Adapter<MenuViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
-            MenuViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_scenario_menu_item,
-                parent, false)).apply {
+            MenuViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.layout_scenario_menu_item,
+                    parent, false
+                )
+            ).apply {
                 this.root.setOnClickListener(onClickListener)
             }
 

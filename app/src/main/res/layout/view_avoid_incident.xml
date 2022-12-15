@@ -11,7 +11,7 @@
         <import type="com.telenav.sdk.demo.scenario.navigation.NavigationUtils"/>
         <variable
             name="alongRouteTrafficIncidentInfo"
-            type="com.telenav.sdk.drivesession.model.AlongRouteTrafficIncidentInfo" />
+            type="com.telenav.sdk.map.model.AlongRouteTrafficIncidentInfo" />
     </data>
     <LinearLayout
         android:layout_marginBottom="@dimen/dim_10dp"

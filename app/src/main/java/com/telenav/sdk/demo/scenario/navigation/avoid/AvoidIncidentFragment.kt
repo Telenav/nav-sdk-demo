@@ -23,12 +23,12 @@ import com.telenav.sdk.demo.scenario.search.SearchAlongRouteFragment
 import com.telenav.sdk.demo.util.AndroidThreadUtils
 import com.telenav.sdk.demo.util.BitmapUtils
 import com.telenav.sdk.drivesession.callback.AvoidRouteRequestCallback
-import com.telenav.sdk.drivesession.model.AlongRouteTraffic
-import com.telenav.sdk.drivesession.model.AlongRouteTrafficIncidentInfo
 import com.telenav.sdk.drivesession.model.avoid.AvoidRouteStatus
 import com.telenav.sdk.drivesession.model.avoid.FailReason
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.examples.databinding.FragmentAvoidIncidentBinding
+import com.telenav.sdk.map.model.AlongRouteTraffic
+import com.telenav.sdk.map.model.AlongRouteTrafficIncidentInfo
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.fragment_avoid_incident.*
 import android.location.Location as Location1

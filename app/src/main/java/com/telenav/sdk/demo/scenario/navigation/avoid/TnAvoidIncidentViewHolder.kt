@@ -7,8 +7,8 @@
 package com.telenav.sdk.demo.scenario.navigation.avoid
 
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.drivesession.model.AlongRouteTrafficIncidentInfo
 import com.telenav.sdk.examples.databinding.ViewAvoidIncidentBinding
+import com.telenav.sdk.map.model.AlongRouteTrafficIncidentInfo
 
 /**
  * TnAvoidIncidentViewHolder class is used for binding  to TnAvoidIncidentRecyclerViewAdapter

@@ -33,7 +33,7 @@ class RequestRouteFragment : BaseNavFragment(), RadioGroup.OnCheckedChangeListen
 
     var requestMode: RequestMode = RequestMode.CLOUD_ONLY
     var routeStyle: Int = RouteStyle.FASTEST
-    var routeCount: Int = 2
+    var routeCount: Int = 1
     var contentLevel: Int = ContentLevel.FULL
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

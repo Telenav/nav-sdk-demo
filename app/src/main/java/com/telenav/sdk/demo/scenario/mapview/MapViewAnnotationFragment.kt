@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.Annotation
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.map.api.touch.TouchedAnnotation
@@ -69,7 +70,10 @@ class MapViewAnnotationFragment : Fragment() {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState, null)
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     /**
@@ -119,7 +123,7 @@ class MapViewAnnotationFragment : Fragment() {
 
     private fun updateAnnotation(resourceId :Int){
         val bitmap = BitmapUtils.getBitmapFromVectorDrawable(requireContext(), resourceId)
-        var userGraphic = Annotation.UserGraphic(bitmap!!)
+        var userGraphic = Annotation.UserGraphic(bitmap!!,sc_forceCopy.isChecked)
         for (annotation in annotationList){
 
             annotation.setUserGraphic(userGraphic)
@@ -189,13 +193,13 @@ class MapViewAnnotationFragment : Fragment() {
     private fun createAnnotationWithBitmap(position: TouchPosition): Annotation {
         val factory = mapView.annotationsController().factory()
         val bitmap = createBitmapFromView(createView(position))
-        return factory.create(requireContext(), Annotation.UserGraphic(bitmap), position.geoLocation!!)
+        return factory.create(requireContext(), Annotation.UserGraphic(bitmap,sc_forceCopy.isChecked), position.geoLocation!!)
     }
 
     private fun createAnnotationWithText(position: TouchPosition) : Annotation {
         val factory = mapView.annotationsController().factory()
         val offset = getTextOffset()
-        return factory.create(requireContext(), Annotation.UserGraphic(getBitmap()), position.geoLocation!!).apply {
+        return factory.create(requireContext(), Annotation.UserGraphic(getBitmap(),sc_forceCopy.isChecked), position.geoLocation!!).apply {
             this.displayText = Annotation.TextDisplayInfo("Text", offset.first, offset.second).apply {
                 this.textColor = Color.RED
             }
@@ -234,9 +238,9 @@ class MapViewAnnotationFragment : Fragment() {
      */
     private fun createView(position: TouchPosition): View {
         val layout = LayoutInflater.from(requireContext()).inflate(R.layout.layout_complex_annotation,
-                null, false)
+            null, false)
         layout.findViewById<TextView>(R.id.tv_position).text = String.format(Locale.getDefault(),"[ %.6f , %.6f ]",
-                position.geoLocation?.latitude ?: 0f, position.geoLocation?.longitude ?: 0f)
+            position.geoLocation?.latitude ?: 0f, position.geoLocation?.longitude ?: 0f)
         return layout
     }
 
