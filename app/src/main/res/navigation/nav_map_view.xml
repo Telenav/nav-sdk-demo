@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_mapViewMenuFragment_to_mapViewPOIAnnotationFragment"
             app:destination="@id/mapViewPoiAnnotationFragment" />
+        <action
+            android:id="@+id/action_mapViewMenuFragment_to_multimapViewsFragment"
+            app:destination="@id/multimapViewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapViewSetUpFragment"
@@ -144,4 +147,9 @@
         android:name="com.telenav.sdk.demo.scenario.mapview.POIAnnotationFragment"
         android:label="poi_annotation_fragment"
         tools:layout="@layout/poi_annotation_fragment" />
+    <fragment
+        android:id="@+id/multimapViewsFragment"
+        android:name="com.telenav.sdk.demo.scenario.mapview.multimapViews.MultimapViewsFragment"
+        android:label="fragment_multimap_views"
+        tools:layout="@layout/fragment_multimap_views" />
 </navigation>

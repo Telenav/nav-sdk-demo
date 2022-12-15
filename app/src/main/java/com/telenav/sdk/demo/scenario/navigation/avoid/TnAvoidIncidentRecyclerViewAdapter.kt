@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.telenav.sdk.drivesession.model.AlongRouteTrafficIncidentInfo
 import com.telenav.sdk.examples.databinding.ViewAvoidIncidentBinding
+import com.telenav.sdk.map.model.AlongRouteTrafficIncidentInfo
 
 /**
  * AvoidIncidentRecyclerViewAdapter

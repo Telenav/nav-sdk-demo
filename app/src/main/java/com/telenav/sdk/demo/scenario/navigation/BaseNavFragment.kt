@@ -29,6 +29,7 @@ import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
+import com.telenav.sdk.map.model.AlongRouteTraffic
 import com.telenav.sdk.uikit.turn.TnTurnListItem
 import kotlinx.android.synthetic.main.content_basic_navigation.*
 import kotlinx.android.synthetic.main.content_basic_navigation.iv_camera_fix

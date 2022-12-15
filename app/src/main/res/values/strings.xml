@@ -43,7 +43,6 @@
     <string name="title_activity_map_view_status">Map Diagnosis</string>
     <string name="title_activity_map_view_vehicle">Vehicle icon</string>
     <string name="title_activity_map_view_traffic_bubble">Traffic bubble</string>
-    <string name="free_flow_traffic">Free flow traffic</string>
     <string name="title_activity_map_view_snaps_shots">snaps shots</string>
     <string name="title_activity_map_view_show_region_rect">showRegion Rect</string>
     <string name="title_activity_map_view_multi_map">Multi Map View</string>
@@ -51,6 +50,7 @@
     <string name="title_activity_map_view_highlight_ete_bubble">Highlight ETE bubble</string>
     <string name="title_activity_map_view_poi_annotations">POI Annotations</string>
     <string name="title_activity_map_view_cvp_position_on_road">CVP position on the road</string>
+    <string name="title_activity_map_view_multimap_views">Multimap views</string>
 
     <string name="set_vehicle_icon">Set vehicle icon</string>
     <string name="set_vehicle_icon_bitmap">Set vehicle icon Bitmap</string>
@@ -58,21 +58,41 @@
     <string name="locate_map_center">Locate map center</string>
 
     <string name="title_activity_search_menu">Search Menu</string>
-    <string name="title_activity_search_show_POI">Show POI</string>
+    <string name="title_activity_search_show_POI">Show POI User Graphic</string>
     <string name="title_activity_search_along_route">Search along route</string>
     <string name="title_activity_show_poi_in_camera">Show POI in camera</string>
     <string name="title_activity_search_rgc">RGC Search</string>
     <string name="title_search_example">Search POI Atlas Resources</string>
     <string name="sub_view_btn_text" translatable="false">SubView</string>
-
     <string name="title_map_scale">Map scale</string>
+    <string name="free_flow_traffic">Free flow traffic</string>
     <string name="input_real_reach_distance">input real reach distance</string>
     <string name="select_request_mode">select request model</string>
     <string name="request_real_reach">request real reach</string>
+    <string name="set_time_of_day">Set time of day(%1$s)</string>
+    <string name="set_shape_alpha">Set shape alpha(%1$s)</string>
+    <string name="set_text_scale">Set text scale(%1$s)</string>
+    <string name="get_time_of_day">Get time of day(%1$s)</string>
+    <string name="set_vertical_offset">Set Vertical offset(%1$s)</string>
+    <string name="set_horizontal_offset">Set Horizontal offset(%1$s)</string>
+    <string name="three_d">3D</string>
+    <string name="two_d">2D</string>
+    <string name="title_first_map_view">First Map View</string>
+    <string name="title_second_map_view">Second Map View</string>
 
     <string-array name="search_item_list">
         <item>food</item>
         <item>parking</item>
         <item>electric charge station</item>
     </string-array>
+    <string-array name="log_level_array">
+        <item>INFO</item>
+        <item>VERBOSE</item>
+        <item>WARNING</item>
+        <item>ERROR</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

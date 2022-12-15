@@ -32,6 +32,7 @@ import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.content.model.TrafficLevel
 import com.telenav.sdk.map.direction.model.Route
 import com.telenav.sdk.map.direction.model.RouteEdge
+import com.telenav.sdk.map.model.AlongRouteTraffic
 import kotlinx.android.synthetic.main.fragment_map_view_traffic_bubble.*
 import kotlinx.android.synthetic.main.fragment_map_view_traffic_bubble.ivFix
 import kotlinx.android.synthetic.main.fragment_map_view_traffic_bubble.mapView

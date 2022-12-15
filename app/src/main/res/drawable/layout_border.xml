@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ Copyright © 2022 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+  ~ of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+  ~ other countries. Other names may be trademarks of their respective owners.
+  -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF" />
+    <stroke
+        android:width="3dip"
+        android:color="#B1BCBE" />
+    <corners android:radius="10dip" />
+    <padding
+        android:bottom="0dip"
+        android:left="0dip"
+        android:right="0dip"
+        android:top="0dip" />
+</shape>

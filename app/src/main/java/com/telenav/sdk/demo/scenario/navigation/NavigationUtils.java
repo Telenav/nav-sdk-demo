@@ -8,8 +8,8 @@ package com.telenav.sdk.demo.scenario.navigation;
 
 import com.google.gson.Gson;
 import com.telenav.sdk.common.model.LatLon;
-import com.telenav.sdk.drivesession.model.AlongRouteTrafficIncidentInfo;
-import com.telenav.sdk.drivesession.model.TrafficIncidentLocation;
+import com.telenav.sdk.map.model.AlongRouteTrafficIncidentInfo;
+import com.telenav.sdk.map.model.TrafficIncidentLocation;
 
 /**
  * Navigation tool class

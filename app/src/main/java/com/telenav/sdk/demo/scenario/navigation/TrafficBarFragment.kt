@@ -22,11 +22,10 @@ import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
-import kotlinx.android.synthetic.main.content_basic_navigation.*
+import com.telenav.sdk.map.model.AlongRouteTraffic
 import kotlinx.android.synthetic.main.fragment_traffic_bar.*
 import kotlinx.android.synthetic.main.fragment_traffic_bar.mapView
 import kotlinx.android.synthetic.main.fragment_traffic_bar.navButton
-import kotlinx.android.synthetic.main.layout_action_bar.*
 
 /**
  * @author zhai.xiang on 2021/2/25
