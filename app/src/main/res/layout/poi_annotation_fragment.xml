@@ -4,7 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.POIAnnotationFragment">
+    tools:context=".scenario.mapview.POIAnnotationFragment">
+
+    <Button
+        android:id="@+id/btn_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove annotation"
+        app:layout_constraintStart_toEndOf="@+id/btn_refresh"
+        app:layout_constraintTop_toTopOf="@+id/btn_refresh" />
+
+    <Button
+        android:id="@+id/btn_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="REFRESH SIZE"
+        app:layout_constraintBottom_toBottomOf="@+id/mapView"
+        app:layout_constraintEnd_toEndOf="@+id/mapView"
+        app:layout_constraintStart_toStartOf="@+id/mapView" />
 
     <include
         android:id="@+id/include"
@@ -17,7 +35,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+    </com.telenav.map.views.TnMapView>
+
+    <TextView
+        android:id="@+id/tv_annotattion_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="0"
+        android:textColor="@color/color_white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_refresh"
+        app:layout_constraintEnd_toEndOf="@+id/btn_refresh"
+        app:layout_constraintStart_toStartOf="@+id/btn_refresh" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

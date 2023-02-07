@@ -99,6 +99,7 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
 
         val mapViewConfig = MapViewInitConfig(
             context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
             dpi = map_view.defaultDpi,
             defaultLocation = viewModel.startLocation,
             readyListener = {
@@ -152,6 +153,7 @@ class MultiMapViewFragment : Fragment(), NavigationEventListener {
 
         val mapViewConfig = MapViewInitConfig(
             context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
             readyListener = {
                 it.featuresController().traffic().setEnabled()
                 it.featuresController().compass().setEnabled()

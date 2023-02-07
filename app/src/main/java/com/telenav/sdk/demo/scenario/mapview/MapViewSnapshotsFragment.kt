@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.geo.Attributes
@@ -69,11 +70,17 @@ class MapViewSnapshotsFragment : Fragment() {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?){
-        mapView.initialize(savedInstanceState){
-            activity?.runOnUiThread {
-                mapView.vehicleController().setLocation(locationProvider.lastKnownLocation)
+
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                activity?.runOnUiThread {
+                    mapView.vehicleController().setLocation(locationProvider.lastKnownLocation)
+                }
             }
-        }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     private fun testOffscreenSnapshot() {

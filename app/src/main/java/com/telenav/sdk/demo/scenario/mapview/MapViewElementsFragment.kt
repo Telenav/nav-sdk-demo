@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Feature
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_elements.*
@@ -30,31 +31,31 @@ import kotlinx.android.synthetic.main.layout_operation_elements.navButton
 class MapViewElementsFragment : Fragment() {
     private lateinit var viewModel: MapViewNavViewModel
     private val elementOperations = listOf(
-            ElementOperationItem("Traffic"){
-                setTraffic(it)
-            },
-            ElementOperationItem("Landmarks"){
-                setLandmarks(it)
-            },
-            ElementOperationItem("Buildings"){
-                setBuildings(it)
-            },
-            ElementOperationItem("Flat Terrain"){
-                setFlatTerrain(it)
-            },
-            ElementOperationItem("Globe"){
-                setGlobe(it)
-            },
-            ElementOperationItem("Compass"){
-                setCompass(it)
-            },
-            ElementOperationItem("ADI Line"){
-                //@TODO: Requires location value to enable
-                //setADILine(it)
-            },
-            ElementOperationItem("Scale Bar"){
-                setScaleBar(it)
-            },
+        ElementOperationItem("Traffic"){
+            setTraffic(it)
+        },
+        ElementOperationItem("Landmarks"){
+            setLandmarks(it)
+        },
+        ElementOperationItem("Buildings"){
+            setBuildings(it)
+        },
+        ElementOperationItem("Flat Terrain"){
+            setFlatTerrain(it)
+        },
+        ElementOperationItem("Globe"){
+            setGlobe(it)
+        },
+        ElementOperationItem("Compass"){
+            setCompass(it)
+        },
+        ElementOperationItem("ADI Line"){
+            //@TODO: Requires location value to enable
+            //setADILine(it)
+        },
+        ElementOperationItem("Scale Bar"){
+            setScaleBar(it)
+        },
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,23 +66,29 @@ class MapViewElementsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))
-                .get(MapViewNavViewModel::class.java)
+            .get(MapViewNavViewModel::class.java)
         tv_title.text = getString(R.string.title_activity_map_view_elements)
 
-        mapView.initialize(savedInstanceState) {
-            activity?.runOnUiThread {
-                viewModel.route.observe(owner = viewLifecycleOwner) {
-                    if (it != null) {
-                        navButton.isEnabled = true
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                activity?.runOnUiThread {
+                    viewModel.route.observe(owner = viewLifecycleOwner) {
+                        if (it != null) {
+                            navButton.isEnabled = true
+                        }
                     }
-                }
-                viewModel.currentVehicleLocation.observe(owner = viewLifecycleOwner) {
-                    mapView.vehicleController().setLocation(it)
-                }
+                    viewModel.currentVehicleLocation.observe(owner = viewLifecycleOwner) {
+                        mapView.vehicleController().setLocation(it)
+                    }
 
-                viewModel.requestDirection()
+                    viewModel.requestDirection()
+                }
             }
-        }
+        )
+        mapView.initialize(mapViewConfig)
+
 
         iv_back.setOnClickListener {
             findNavController().navigateUp()

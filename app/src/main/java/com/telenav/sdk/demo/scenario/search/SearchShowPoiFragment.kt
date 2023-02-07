@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.map.api.Annotation
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.VehicleController
@@ -31,10 +32,8 @@ import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.model.search.EntitySearchResponse
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
-import kotlinx.android.synthetic.main.fragment_search_along_route.*
 import kotlinx.android.synthetic.main.fragment_search_show_poi.*
 import kotlinx.android.synthetic.main.layout_action_bar.*
-import kotlinx.android.synthetic.main.layout_content_map_nav.*
 import kotlinx.android.synthetic.main.layout_content_map_nav.btnStartNav
 import kotlinx.android.synthetic.main.layout_content_map_nav.btnStopNav
 import kotlinx.android.synthetic.main.layout_content_map_nav.btn_show_menu
@@ -64,9 +63,9 @@ class SearchShowPoiFragment : Fragment() {
     private var destinationAnnotation : Annotation? = null
 
     private val searchList = listOf(
-            CheckBoxData("School",  R.drawable.baseline_school_24),
-            CheckBoxData("Hotel", R.drawable.baseline_apartment_24),
-            CheckBoxData("Hospital", R.drawable.baseline_local_hospital_24),
+        CheckBoxData("School",  R.drawable.baseline_school_24),
+        CheckBoxData("Hotel", R.drawable.baseline_apartment_24),
+        CheckBoxData("Hospital", R.drawable.baseline_local_hospital_24),
     )
 
     private lateinit var adapter: CheckBoxAdapter
@@ -107,10 +106,15 @@ class SearchShowPoiFragment : Fragment() {
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
-        mapView.initialize(savedInstanceState) {
-            vehicleController = mapView.vehicleController()
-            searchList()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                vehicleController = mapView.vehicleController()
+                searchList()
+            }
+        )
+        mapView.initialize(mapViewConfig)
 
         mapView.setOnAnnotationTouchListener { touchType, position, touchedAnnotations ->
             if (viewModel.isNavigationOn()){
@@ -200,7 +204,7 @@ class SearchShowPoiFragment : Fragment() {
         for (item in list){
             val location = item.geoLocation
             val bitmap = BitmapUtils.getBitmapFromVectorDrawable(requireContext(), searchList[index].icon) ?:
-                BitmapFactory.decodeResource(resources,R.drawable.map_pin_green_icon_unfocused)
+            BitmapFactory.decodeResource(resources,R.drawable.map_pin_green_icon_unfocused)
             val annotation = mapView.annotationsController().factory().create(requireContext(), Annotation.UserGraphic(bitmap), location)
             annotation.extraInfo = Bundle().apply {
                 this.putInt(INDEX, index)
@@ -233,19 +237,19 @@ class SearchShowPoiFragment : Fragment() {
             val entityClient = EntityService.getClient()
             val text = searchList[index].text
             entityClient.searchRequest()
-                    .setQuery(text)
-                    .setLocation(currentLocation.latitude, currentLocation.longitude)
-                    .asyncCall(object : Callback<EntitySearchResponse> {
+                .setQuery(text)
+                .setLocation(currentLocation.latitude, currentLocation.longitude)
+                .asyncCall(object : Callback<EntitySearchResponse> {
 
-                        override fun onSuccess(response: EntitySearchResponse) {
-                            onSearchSuccess(index, response)
-                        }
+                    override fun onSuccess(response: EntitySearchResponse) {
+                        onSearchSuccess(index, response)
+                    }
 
-                        override fun onFailure(t: Throwable) {
-                            t.printStackTrace()
-                            onSearchFail(index)
-                        }
-                    })
+                    override fun onFailure(t: Throwable) {
+                        t.printStackTrace()
+                        onSearchFail(index)
+                    }
+                })
         }
     }
 
@@ -272,12 +276,12 @@ class SearchShowPoiFragment : Fragment() {
     }
 
     private class CheckBoxAdapter(val recyclerView: RecyclerView,
-                                  val checkBoxDataList: List<CheckBoxData>, val checkedChanged: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CheckBoxViewHolder>() {
+                                  val checkBoxDataList: List<CheckBoxData>,val checkedChanged: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CheckBoxViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckBoxViewHolder =
-                CheckBoxViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_search_check_box_item,
-                        parent, false)).apply {
-                    this.cb.setOnCheckedChangeListener(onCheckedChanged)
-                }
+            CheckBoxViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_search_check_box_item,
+                parent, false)).apply {
+                this.cb.setOnCheckedChangeListener(onCheckedChanged)
+            }
 
         override fun onBindViewHolder(holder: CheckBoxViewHolder, position: Int) {
             holder.cb.text = checkBoxDataList[position].text

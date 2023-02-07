@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.controllers.*
 import com.telenav.map.api.touch.TouchPosition
@@ -172,7 +173,13 @@ class CVPPositionOnRoadFragment : Fragment(), PositionEventListener, NavigationE
         mapViewReadyListener: MapViewReadyListener<MapView>,
         tnMapView: TnMapView = this.mapView
     ) {
-        tnMapView.initialize(savedInstanceState, mapViewReadyListener)
+
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = mapViewReadyListener
+        )
+        tnMapView.initialize(mapViewConfig)
     }
 
     private fun moveCVPToLocation(

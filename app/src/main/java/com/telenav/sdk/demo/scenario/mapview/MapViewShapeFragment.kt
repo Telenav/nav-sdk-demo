@@ -18,13 +18,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.ShapesController
 import com.telenav.map.geo.Attributes
 import com.telenav.map.geo.Shape
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.map.geo.newImpl.ClientTexture
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.demo.util.KmlParser
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.layout_action_bar.*
@@ -242,10 +243,10 @@ class MapViewShapeFragment : Fragment() {
     }
 
     private fun addShape(type: Shape.Type, attributes: Attributes, cords: List<Location>) {
-       // val shape = Shape(type, cords, attributes)
+        val shape = Shape(type, cords, attributes)
 
         val collectionBuilder = Shape.Collection.Builder()
-        //collectionBuilder.addShape(shape)
+        collectionBuilder.addShape(shape)
         addModel(collectionBuilder)
     }
 
@@ -263,13 +264,18 @@ class MapViewShapeFragment : Fragment() {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            CoroutineScope(Dispatchers.Main).launch {
-                mapView.cameraController()?.position =
-                    Camera.Position.Builder().setLocation(location).build()
-                mapView.vehicleController()?.setLocation(location)
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                CoroutineScope(Dispatchers.Main).launch {
+                    mapView.cameraController()?.position =
+                        Camera.Position.Builder().setLocation(location).build()
+                    mapView.vehicleController()?.setLocation(location)
+                }
             }
-        }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     /** Show the region for the shape with unknown amount of lat-lon points */
@@ -339,7 +345,7 @@ class MapViewShapeFragment : Fragment() {
         private const val REAL_REACH_POLY_SHAPE_STYLE = "real-reach-poly"
         private const val REAL_REACH_TEST_SHAPE_STYLE = "rrtest"
         private const val ROUTE_TRACE_SHAPE_STYLE = "route.trace"
-        private const val CLIENT_PNG_IMAGE_NAME = "4-5-5.png"
+        private const val CLIENT_PNG_IMAGE_NAME = "polygon_cvp.png"
 
         private const val LAT_SOUTH_POLE = -90.0
         private const val LAT_NORTH_POLE = 90.0

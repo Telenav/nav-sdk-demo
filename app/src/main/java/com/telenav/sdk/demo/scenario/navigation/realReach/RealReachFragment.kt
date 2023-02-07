@@ -5,6 +5,7 @@
  */
 package com.telenav.sdk.demo.scenario.navigation.realReach
 
+import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -100,6 +101,7 @@ class RealReachFragment : BaseNavFragment() {
         viewModel.origin.postValue(GeoLocation(vehicleLocation))
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun drawRealReach(mapView: MapView, points: List<LatLon>) {
 
         if (testShapeId == null) {

@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Camera
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_camera.mapView
@@ -55,10 +56,15 @@ class VehicleFragment : Fragment() {
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            moveCameraToLocation(location)
-            mapView.vehicleController().setLocation(location)
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                moveCameraToLocation(location)
+                mapView.vehicleController().setLocation(location)
+            }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     private fun setOnClickListener() {

@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.views.TnMapView
 import com.telenav.sdk.demo.main.SecondViewModel
@@ -93,16 +94,20 @@ class MapViewStateFragment : Fragment() {
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState){
-            moveCameraToLocation(locationA)
-            setLocationAnnotations()
-            mapView.mapDiagnosis().addMapViewListener {
-                mapView.mapDiagnosis().mapViewStatus?.let { //viewModel.setUpVehicleDetails(it)
-                    binding.tvTitlePositionSet.post(Runnable {
-                        val text = String.format(Locale.getDefault(),
+
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                moveCameraToLocation(locationA)
+                setLocationAnnotations()
+                mapView.mapDiagnosis().addMapViewListener {
+                    mapView.mapDiagnosis().mapViewStatus?.let { //viewModel.setUpVehicleDetails(it)
+                        binding.tvTitlePositionSet.post(Runnable {
+                            val text = String.format(Locale.getDefault(),
                                 "Camera latitude : %.4f\nCamera longitude : %.4f\n" +
-                                        "Camera heading : %.2f\nCar latitude : %.4f\nCar longitude : %.4f\nZoom level : %s\nIs animating : " +
-                                        "%s\nInteraction mode :%s\nRender mode val : %s\nIsAutoZoomAnimationRunning : %s",
+                                    "Camera heading : %.2f\nCar latitude : %.4f\nCar longitude : %.4f\nZoom level : %s\nIs animating : " +
+                                    "%s\nInteraction mode :%s\nRender mode val : %s\nIsAutoZoomAnimationRunning : %s",
                                 it.cameraLatitude,
                                 it.cameraLongitude,
                                 it.cameraHeading,
@@ -113,20 +118,22 @@ class MapViewStateFragment : Fragment() {
                                 it.interactionMode,
                                 it.renderModeval,
                                 it.isAutoZoomAnimationRunning
-                        )
-                        binding.tvTitlePositionSet.text = text
-                    })
+                            )
+                            binding.tvTitlePositionSet.text = text
+                        })
+                    }
+                    Log.i(TAG, "onMapFirstFrameDraw ")
                 }
-                Log.i(TAG, "onMapFirstFrameDraw ")
             }
-        }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     private fun setLocationAnnotations() {
         val factory = mapView.annotationsController().factory()
         val annotation = factory.create(requireContext(),R.drawable.map_pin_green_icon_unfocused,locationA)
 
-       mapView.annotationsController().add(listOf(annotation))
+        mapView.annotationsController().add(listOf(annotation))
     }
 
     override fun onResume() {

@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.Annotation
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
@@ -30,6 +31,7 @@ import com.telenav.sdk.entity.utils.EntityJsonConverter
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.fragment_search_rgc.*
+import kotlinx.android.synthetic.main.fragment_search_rgc.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.coroutines.*
 
@@ -67,9 +69,14 @@ class SearchRgcFragment : Fragment() {
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
-        mapView.initialize(savedInstanceState) {
-            annotationController = it.annotationsController()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                annotationController = it.annotationsController()
+            }
+        )
+        mapView.initialize(mapViewConfig)
 
         mapView.setOnTouchListener { touchType: TouchType, position: TouchPosition ->
             if (touchType == TouchType.LongClick) {
@@ -87,14 +94,14 @@ class SearchRgcFragment : Fragment() {
 
     private fun CoroutineScope.searchRgc(location: Location) = async(Dispatchers.Default) {
         val searchOptions = SearchOptions.builder()
-                .setIntent(SearchOptions.Intent.REVERSE_GEOCODING)
-                .build()
+            .setIntent(SearchOptions.Intent.REVERSE_GEOCODING)
+            .build()
         val entityClient = EntityService.getClient()
         try {
             return@async entityClient.searchRequest()
-                    .setSearchOptions(searchOptions)
-                    .setLocation(location.latitude, location.longitude)
-                    .execute()
+                .setSearchOptions(searchOptions)
+                .setLocation(location.latitude, location.longitude)
+                .execute()
         } catch (e: Throwable) {
             e.printStackTrace()
             return@async null
@@ -120,34 +127,34 @@ class SearchRgcFragment : Fragment() {
 
         response.results?.let { list ->
             annotationList.addAll(
-                    list.map { entity ->
-                        val layout: View = LayoutInflater.from(requireActivity()).inflate(R.layout.layout_annotation_rgc,
-                                null, false)
-                        layout.findViewById<TextView>(R.id.tvSource).text = response.responseType?.name
-                                ?: ""
-                        layout.findViewById<TextView>(R.id.tvType).text = entity.type?.name
-                                ?: "Type UnKnown"
-                        val location = Location("")
-                        if (entity.type == EntityType.ADDRESS) {
-                            layout.findViewById<TextView>(R.id.tvAddress).text = entity.address?.formattedAddress
-                                    ?: ""
-                            location.longitude = entity.address?.geoCoordinates?.longitude ?: 0.0
-                            location.latitude = entity.address?.geoCoordinates?.latitude ?: 0.0
-                        } else if (entity.type == EntityType.PLACE) {
-                            layout.findViewById<TextView>(R.id.tvAddress).text = entity.place?.address?.formattedAddress
-                                    ?: ""
-                            location.longitude = entity.place?.address?.geoCoordinates?.longitude
-                                    ?: 0.0
-                            location.latitude = entity.place?.address?.geoCoordinates?.latitude
-                                    ?: 0.0
-                        }
-
-                        val bitmap = BitmapUtils.createBitmapFromView(layout)
-                        return@map factory.create(requireContext(), Annotation.UserGraphic(bitmap), location).apply {
-                            this.style = Annotation.Style.ScreenAnnotationFlagNoCulling
-                            this.iconY = -0.5
-                        }
+                list.map { entity ->
+                    val layout: View = LayoutInflater.from(requireActivity()).inflate(R.layout.layout_annotation_rgc,
+                        null, false)
+                    layout.findViewById<TextView>(R.id.tvSource).text = response.responseType?.name
+                        ?: ""
+                    layout.findViewById<TextView>(R.id.tvType).text = entity.type?.name
+                        ?: "Type UnKnown"
+                    val location = Location("")
+                    if (entity.type == EntityType.ADDRESS) {
+                        layout.findViewById<TextView>(R.id.tvAddress).text = entity.address?.formattedAddress
+                            ?: ""
+                        location.longitude = entity.address?.geoCoordinates?.longitude ?: 0.0
+                        location.latitude = entity.address?.geoCoordinates?.latitude ?: 0.0
+                    } else if (entity.type == EntityType.PLACE) {
+                        layout.findViewById<TextView>(R.id.tvAddress).text = entity.place?.address?.formattedAddress
+                            ?: ""
+                        location.longitude = entity.place?.address?.geoCoordinates?.longitude
+                            ?: 0.0
+                        location.latitude = entity.place?.address?.geoCoordinates?.latitude
+                            ?: 0.0
                     }
+
+                    val bitmap = BitmapUtils.createBitmapFromView(layout)
+                    return@map factory.create(requireContext(), Annotation.UserGraphic(bitmap), location).apply {
+                        this.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+                        this.iconY = -0.5
+                    }
+                }
             )
 
             annotationController?.add(annotationList)

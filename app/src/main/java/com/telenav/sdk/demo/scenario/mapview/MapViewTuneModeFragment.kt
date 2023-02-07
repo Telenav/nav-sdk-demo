@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.diagnosis.RenderMode
 import com.telenav.sdk.common.model.LatLon
@@ -119,9 +120,14 @@ class MapViewTuneModeFragment : Fragment(), PositionEventListener {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            mapView.cameraController().position = Camera.Position.Builder().setLocation(startLocation).build()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                it.cameraController().position = Camera.Position.Builder().setLocation(startLocation).build()
+            }
+        )
+        mapView.initialize(mapViewConfig)
 
         setCameraUpdateListener()
     }
