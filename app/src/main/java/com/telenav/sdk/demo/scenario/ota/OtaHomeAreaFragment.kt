@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.ShapesController
 import com.telenav.map.api.touch.TouchPosition
@@ -66,8 +67,10 @@ class OtaHomeAreaFragment : Fragment() {
 
     private val spannableStringBuilder = SpannableStringBuilder()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_ota_home_area, container, false)
     }
 
@@ -86,11 +89,17 @@ class OtaHomeAreaFragment : Fragment() {
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
-        mapView.initialize(savedInstanceState) {
-            mapView.cameraController().position = Camera.Position.Builder().setLocation(locationA).setZoomLevel(10f).build()
-            mapView.vehicleController().setLocation(locationA)
-            initAnnotation()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                mapView.cameraController().position =
+                    Camera.Position.Builder().setLocation(locationA).setZoomLevel(10f).build()
+                mapView.vehicleController().setLocation(locationA)
+                initAnnotation()
+            }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     private fun initAnnotation() {
@@ -125,11 +134,13 @@ class OtaHomeAreaFragment : Fragment() {
         }
         iv_zoom_in.setOnClickListener {
             zoomLevel += 1
-            mapView.cameraController().position = Camera.Position.Builder().setLocation(locationA).setZoomLevel(zoomLevel).build()
+            mapView.cameraController().position =
+                Camera.Position.Builder().setLocation(locationA).setZoomLevel(zoomLevel).build()
         }
         iv_zoom_out.setOnClickListener {
             zoomLevel -= 1
-            mapView.cameraController().position = Camera.Position.Builder().setLocation(locationA).setZoomLevel(zoomLevel).build()
+            mapView.cameraController().position =
+                Camera.Position.Builder().setLocation(locationA).setZoomLevel(zoomLevel).build()
         }
         mapView.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
             if (touchType == TouchType.LongClick && data.geoLocation != null) {
@@ -147,18 +158,18 @@ class OtaHomeAreaFragment : Fragment() {
         addLog("start ota updating...")
         addLog("location: [${homeAreaLocation.latitude},${homeAreaLocation.longitude}]")
         client.updateRequest()
-                .setCurrentLocation(homeAreaLocation.latitude, homeAreaLocation.longitude)
-                .setTimeout(TIME_OUT)
-                .asyncCall(object : Callback<AreaStatus> {
-                    override fun onFailure(error: Throwable?) {
-                        addLog("ota update fail: ${error?.message}", Color.RED)
-                    }
+            .setCurrentLocation(homeAreaLocation.latitude, homeAreaLocation.longitude)
+            .setTimeout(TIME_OUT)
+            .asyncCall(object : Callback<AreaStatus> {
+                override fun onFailure(error: Throwable?) {
+                    addLog("ota update fail: ${error?.message}", Color.RED)
+                }
 
-                    override fun onSuccess(areaStatus: AreaStatus) {
-                        addLog("ota update ${objectToString(areaStatus)}", Color.BLUE)
-                        showArea(areaStatus)
-                    }
-                })
+                override fun onSuccess(areaStatus: AreaStatus) {
+                    addLog("ota update ${objectToString(areaStatus)}", Color.BLUE)
+                    showArea(areaStatus)
+                }
+            })
     }
 
     /**
@@ -191,31 +202,32 @@ class OtaHomeAreaFragment : Fragment() {
     private fun setHomeArea(location: Location) {
         addLog("setting home area...")
         val event = SetHomeEvent.builder()
-                .setActionType(SetHomeEvent.ActionType.SET)
-                .setEntityId("EntityId")
-                .setLabel("setHomeArea")
-                .setLat(homeAreaLocation.latitude)
-                .setLon(homeAreaLocation.longitude)
+            .setActionType(SetHomeEvent.ActionType.SET)
+            .setEntityId("EntityId")
+            .setLabel("setHomeArea")
+            .setLat(homeAreaLocation.latitude)
+            .setLon(homeAreaLocation.longitude)
         DataCollectorService.getClient()
-                .sendEventRequest()
-                .setEvent(event.setActionType(SetHomeEvent.ActionType.REMOVE).build())
-                .execute()
+            .sendEventRequest()
+            .setEvent(event.setActionType(SetHomeEvent.ActionType.REMOVE).build())
+            .execute()
         DataCollectorService
-                .getClient()
-                .sendEventRequest()
-                .setEvent(event.setActionType(SetHomeEvent.ActionType.SET).build())
-                .asyncCall(object : Callback<SendEventResponse> {
-                    override fun onSuccess(reponse: SendEventResponse) {
-                        addLog("Set home area success!", Color.BLUE)
-                        homeAreaLocation = location
-                        showAnnotation(location)
-                    }
+            .getClient()
+            .sendEventRequest()
+            .setEvent(event.setActionType(SetHomeEvent.ActionType.SET).build())
+            .asyncCall(object : Callback<SendEventResponse> {
+                override fun onSuccess(reponse: SendEventResponse) {
+                    addLog("Set home area success!", Color.BLUE)
+                    homeAreaLocation = location
+                    showAnnotation(location)
+                }
 
-                    override fun onFailure(e: Throwable) {
-                        addLog("Set home area failed!", Color.RED)
-                        Toast.makeText(requireContext(), "Set home area failed!", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                override fun onFailure(e: Throwable) {
+                    addLog("Set home area failed!", Color.RED)
+                    Toast.makeText(requireContext(), "Set home area failed!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
     }
 
 
@@ -233,8 +245,10 @@ class OtaHomeAreaFragment : Fragment() {
         activity?.runOnUiThread {
             val time = DateFormat.format("HH:mm:ss", Calendar.getInstance())
             val appendText = "$time: $text\n"
-            spannableStringBuilder.append(appendText, ForegroundColorSpan(color),
-                    SpannableString.SPAN_INCLUSIVE_INCLUSIVE)
+            spannableStringBuilder.append(
+                appendText, ForegroundColorSpan(color),
+                SpannableString.SPAN_INCLUSIVE_INCLUSIVE
+            )
             tv_log?.text = spannableStringBuilder
             nestedScrollView.fullScroll(View.FOCUS_DOWN)
         }
@@ -272,13 +286,18 @@ class OtaHomeAreaFragment : Fragment() {
         }
     }
 
-    private fun requestDirection(begin: Location, end: Location, model: RequestMode, result: (Boolean) -> Unit) {
+    private fun requestDirection(
+        begin: Location,
+        end: Location,
+        model: RequestMode,
+        result: (Boolean) -> Unit
+    ) {
         val request: RouteRequest = RouteRequest.Builder(
-                GeoLocation(begin),
-                GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(begin),
+            GeoLocation(LatLon(end.latitude, end.longitude))
         ).contentLevel(ContentLevel.FULL)
-                .routeCount(1)
-                .build()
+            .routeCount(1)
+            .build()
         val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, model)
         showRoute()
         task.runAsync { response ->
@@ -319,7 +338,8 @@ class OtaHomeAreaFragment : Fragment() {
     private fun showAnnotation(location: Location) {
         mapView.annotationsController().clear()
         val factory = mapView.annotationsController().factory()
-        val annotation = factory.create(requireContext(), R.drawable.map_pin_green_icon_unfocused, location)
+        val annotation =
+            factory.create(requireContext(), R.drawable.map_pin_green_icon_unfocused, location)
         mapView.annotationsController().add(listOf(annotation))
     }
 
@@ -338,10 +358,10 @@ class OtaHomeAreaFragment : Fragment() {
             }
             coords.add(coords.first())
             val attributes = Attributes.Builder()
-                    .setShapeStyle("route.trace")
-                    .setColor(Color.BLACK)
-                    .setLineWidth(100.0f)
-                    .build();
+                .setShapeStyle("route.trace")
+                .setColor(Color.BLACK)
+                .setLineWidth(100.0f)
+                .build();
 
             val shape = Shape(Shape.Type.Polyline, attributes, coords)
 

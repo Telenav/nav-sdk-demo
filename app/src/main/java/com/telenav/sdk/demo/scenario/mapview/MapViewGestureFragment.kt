@@ -16,6 +16,7 @@ import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchType
@@ -40,8 +41,10 @@ class MapViewGestureFragment : Fragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_map_view_gesture, container, false)
     }
 
@@ -60,11 +63,17 @@ class MapViewGestureFragment : Fragment() {
     }
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            mapView.vehicleController().setLocation(location)
-            mapView.cameraController().position = Camera.Position.Builder().setLocation(location).build()
-            resetGestureState()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                it.vehicleController().setLocation(location)
+                it.cameraController().position =
+                    Camera.Position.Builder().setLocation(location).build()
+                resetGestureState()
+            }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     private fun operationInit() {
@@ -92,14 +101,19 @@ class MapViewGestureFragment : Fragment() {
             when (type) {
                 TouchType.LongClick -> {
                     activity?.runOnUiThread {
-                        Toast.makeText(requireActivity(),
-                                "Long Click", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireActivity(),
+                            "Long Click", Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 TouchType.Click -> {
                     activity?.runOnUiThread {
-                        Toast.makeText(requireActivity(),
-                                "Click [${touchPosition.geoLocation?.latitude}, ${touchPosition.geoLocation?.longitude}]", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireActivity(),
+                            "Click [${touchPosition.geoLocation?.latitude}, ${touchPosition.geoLocation?.longitude}]",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         location.bearing = (location.bearing + 90) % 360
                     }
                 }
@@ -114,12 +128,12 @@ class MapViewGestureFragment : Fragment() {
      * This function shows how to set view touch listener.
      * Notice: This listener will make map's default gesture unavailable.
      */
-    private fun setAndroidTouchListener(on : Boolean){
-        if (on){
+    private fun setAndroidTouchListener(on: Boolean) {
+        if (on) {
             mapView.setOnViewTouchListener(viewTouchListener)
             tv_state.visibility = View.VISIBLE
             tv_state.text = "Use Two fingers to change the head angle of the vehicle"
-        }else{
+        } else {
             tv_state.visibility = View.GONE
             mapView.setOnViewTouchListener(null)
         }
@@ -130,7 +144,7 @@ class MapViewGestureFragment : Fragment() {
         resetGestureTitleText()
     }
 
-    private val viewTouchListener = ViewTouchListener{
+    private val viewTouchListener = ViewTouchListener {
         rotateGestureDetector.onTouch(it)
         true
     }
@@ -146,7 +160,7 @@ class MapViewGestureFragment : Fragment() {
     private val rotateGestureDetector = RotateGestureDetector {
         if (it >= 0) {
             location.bearing = (location.bearing + it) % 360
-        }else{
+        } else {
             location.bearing = (location.bearing + it + 360) % 360
         }
         mapView.vehicleController().setLocation(location)
@@ -227,8 +241,8 @@ class MapViewGestureFragment : Fragment() {
                     firstPointerId = event.getPointerId(event.actionIndex)
 
                 }
-                MotionEvent.ACTION_POINTER_DOWN ->{
-                    if (firstPointerId == INVALID_POINTER_ID){
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                    if (firstPointerId == INVALID_POINTER_ID) {
                         firstPointerId = event.getPointerId(event.actionIndex)
                     } else if (secondPointerId == INVALID_POINTER_ID) {
                         secondPointerId = event.getPointerId(event.actionIndex)
@@ -240,15 +254,15 @@ class MapViewGestureFragment : Fragment() {
                 MotionEvent.ACTION_MOVE -> {
                     if (isValid()) {
                         val newAngle = getSlope(event)
-                        angleBy(newAngle -lastAngle)
+                        angleBy(newAngle - lastAngle)
                         lastAngle = newAngle
                     }
                 }
-                MotionEvent.ACTION_POINTER_UP ->{
+                MotionEvent.ACTION_POINTER_UP -> {
                     val pointer = event.getPointerId(event.actionIndex)
-                    if (firstPointerId == pointer){
+                    if (firstPointerId == pointer) {
                         firstPointerId = INVALID_POINTER_ID
-                    }else if (secondPointerId == pointer){
+                    } else if (secondPointerId == pointer) {
                         secondPointerId = INVALID_POINTER_ID
                     }
                 }
@@ -264,19 +278,26 @@ class MapViewGestureFragment : Fragment() {
          * If there are two fingers touch the screen.
          */
         private fun isValid(): Boolean = firstPointerId != INVALID_POINTER_ID &&
-                secondPointerId != INVALID_POINTER_ID
+            secondPointerId != INVALID_POINTER_ID
 
         /**
          * get slope of two fingers.
          */
-        private fun getSlope(x1: Float, y1: Float, x2: Float, y2: Float): Float = atan2((x2 - x1),(y1 - y2)) * 180 / PI.toFloat()
+        private fun getSlope(x1: Float, y1: Float, x2: Float, y2: Float): Float =
+            atan2((x2 - x1), (y1 - y2)) * 180 / PI.toFloat()
+
         /**
          * get slope of two fingers.
          */
         private fun getSlope(event: MotionEvent): Float {
             val index1 = event.findPointerIndex(firstPointerId)
             val index2 = event.findPointerIndex(secondPointerId)
-            return getSlope(event.getX(index1),event.getY(index1),event.getX(index2),event.getY(index2))
+            return getSlope(
+                event.getX(index1),
+                event.getY(index1),
+                event.getX(index2),
+                event.getY(index2)
+            )
         }
     }
 }

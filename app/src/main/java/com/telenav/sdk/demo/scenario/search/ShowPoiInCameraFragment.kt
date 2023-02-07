@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.Annotation
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.VehicleController
@@ -30,6 +31,10 @@ import com.telenav.sdk.entity.model.search.*
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
 import kotlinx.android.synthetic.main.fragment_show_poi_in_camera.*
+import kotlinx.android.synthetic.main.fragment_show_poi_in_camera.btnStartNav
+import kotlinx.android.synthetic.main.fragment_show_poi_in_camera.btnStopNav
+import kotlinx.android.synthetic.main.fragment_show_poi_in_camera.ivFix
+import kotlinx.android.synthetic.main.fragment_show_poi_in_camera.mapView
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.coroutines.*
 
@@ -106,9 +111,14 @@ class ShowPoiInCameraFragment : Fragment() {
 
     private fun mapViewInit(savedInstanceState: Bundle?) {
         SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
-        mapView.initialize(savedInstanceState) {
-            vehicleController = mapView.vehicleController()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                vehicleController = mapView.vehicleController()
+            }
+        )
+        mapView.initialize(mapViewConfig)
 
         mapView.setOnTouchListener { touchType: TouchType, position ->
             if (viewModel.isNavigationOn()){
@@ -249,24 +259,24 @@ class ShowPoiInCameraFragment : Fragment() {
         val bottomLeftLocation = getLocation(center, -CAMERA_LATITUDE_SCOPE, -CAMERA_LONGITUDE_SCOPE)
         val topRightLocation = getLocation(center, CAMERA_LATITUDE_SCOPE, CAMERA_LONGITUDE_SCOPE)
         val bBox = BBox
-                .builder()
-                .setBottomLeft(bottomLeftLocation.latitude,bottomLeftLocation.longitude)
-                .setTopRight(topRightLocation.latitude,topRightLocation.longitude)
-                .build()
+            .builder()
+            .setBottomLeft(bottomLeftLocation.latitude,bottomLeftLocation.longitude)
+            .setTopRight(topRightLocation.latitude,topRightLocation.longitude)
+            .build()
         val geoFilter = BBoxGeoFilter
-                .builder(bBox)
-                .build()
+            .builder(bBox)
+            .build()
         val geoSearchFilters = SearchFilters
-                .builder()
-                .setGeoFilter(geoFilter)
-                .build()
+            .builder()
+            .setGeoFilter(geoFilter)
+            .build()
         val entityClient = EntityService.getClient()
         try {
             return@async entityClient.searchRequest()
-                    .setQuery(text)
-                    .setFilters(geoSearchFilters)
-                    .setLocation(center.latitude, center.longitude)
-                    .execute()
+                .setQuery(text)
+                .setFilters(geoSearchFilters)
+                .setLocation(center.latitude, center.longitude)
+                .execute()
         }catch (e: Throwable){
             e.printStackTrace()
             return@async null

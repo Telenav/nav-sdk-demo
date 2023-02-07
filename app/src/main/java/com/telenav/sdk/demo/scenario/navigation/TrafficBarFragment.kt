@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
@@ -19,13 +21,13 @@ import com.telenav.sdk.drivesession.model.*
 import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.examples.R
-import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import com.telenav.sdk.map.model.AlongRouteTraffic
-import kotlinx.android.synthetic.main.fragment_traffic_bar.*
+import kotlinx.android.synthetic.main.fragment_traffic_bar.ivFix
 import kotlinx.android.synthetic.main.fragment_traffic_bar.mapView
 import kotlinx.android.synthetic.main.fragment_traffic_bar.navButton
+import kotlinx.android.synthetic.main.fragment_traffic_bar.trafficBar
 
 /**
  * @author zhai.xiang on 2021/2/25
@@ -67,9 +69,14 @@ class TrafficBarFragment : Fragment(), PositionEventListener, NavigationEventLis
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            mapView.featuresController().traffic().setEnabled()
-        }
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                mapView.featuresController().traffic().setEnabled()
+            }
+        )
+        mapView.initialize(mapViewConfig)
 
         mapView.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
             if (navigationOn){

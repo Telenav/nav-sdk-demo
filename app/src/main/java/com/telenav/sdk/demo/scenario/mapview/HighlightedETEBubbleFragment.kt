@@ -77,6 +77,7 @@ class HighlightedETEBubbleFragment : Fragment() {
     private val mapViewConfig: MapViewInitConfig by lazy {
         MapViewInitConfig(
             context = requireContext(),
+            lifecycleOwner = viewLifecycleOwner,
             defaultLocation = viewModel.startLocation,
             readyListener = mapViewReadyListener
         )

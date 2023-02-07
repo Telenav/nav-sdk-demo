@@ -19,6 +19,8 @@ class POIAnnotationViewModel : ViewModel() {
      * Example only, values can change in any time
      */
     val poiCategories = listOf(
+        "smart-bubble",
+        "ev-bubble",
         "poi_annotations.default",
 
         "poi_annotations.atm",
@@ -68,11 +70,21 @@ class POIAnnotationViewModel : ViewModel() {
         annotationsController: AnnotationsController,
         location: Location,
         styleKey: String,
-        text: String
+        text: String,
+        bubbleType: Float = BUBBLE_TYPE_NOT_INIT
     ): Annotation {
         val factory = annotationsController.factory()
-        return factory.create(POIAnnotationParams(styleKey, location, text))
+        return factory.create(
+            POIAnnotationParams(
+                styleKey = styleKey,
+                location = location,
+                text = text,
+                bubbleType = bubbleType
+            )
+        )
     }
-
+    companion object{
+        const val BUBBLE_TYPE_NOT_INIT = -1F
+    }
 
 }

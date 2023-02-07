@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.sdk.demo.provider.DemoLocationProvider
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.fragment_map_view_set_up.mapView
@@ -49,11 +50,16 @@ class MapViewSetUpFragment : Fragment() {
      * the initialize function must be called after SDK is initialized
      */
     private fun mapViewInit(savedInstanceState: Bundle?){
-        mapView.initialize(savedInstanceState){
-            activity?.runOnUiThread {
-                mapView.vehicleController().setLocation(locationProvider.lastKnownLocation)
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                activity?.runOnUiThread {
+                    mapView.vehicleController().setLocation(locationProvider.lastKnownLocation)
+                }
             }
-        }
+        )
+        mapView.initialize(mapViewConfig)
     }
 
     override fun onResume() {

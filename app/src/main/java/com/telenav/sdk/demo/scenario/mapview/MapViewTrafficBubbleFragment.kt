@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.Annotation
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.*
 import com.telenav.map.api.touch.TouchPosition
@@ -73,12 +74,18 @@ class MapViewTrafficBubbleFragment : Fragment(), NavigationEventListener {
 
         SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
         tv_title.setText(R.string.title_activity_map_view_traffic_bubble)
-        mapView.initialize(savedInstanceState) {
-            cameraController = mapView.cameraController()
-            annotationController = mapView.annotationsController()
-            vehicleController = mapView.vehicleController()
-            routesController = mapView.routesController()
-        }
+
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = {
+                cameraController = mapView.cameraController()
+                annotationController = mapView.annotationsController()
+                vehicleController = mapView.vehicleController()
+                routesController = mapView.routesController()
+            }
+        )
+        mapView.initialize(mapViewConfig)
 
         trafficBar.setOrientation(false)
         viewModel.driveSession.eventHub.addNavigationEventListener(this)

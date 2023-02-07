@@ -72,6 +72,7 @@ class MapViewAnnotationFragment : Fragment() {
     private fun mapViewInit(savedInstanceState: Bundle?) {
         val mapViewConfig = MapViewInitConfig(
             context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
         )
         mapView.initialize(mapViewConfig)
     }

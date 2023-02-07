@@ -12,22 +12,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
+import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.map.api.touch.listeners.TouchListener
 import com.telenav.sdk.common.logging.TaLog
+import com.telenav.sdk.demo.scenario.mapview.POIAnnotationViewModel.Companion.BUBBLE_TYPE_NOT_INIT
 import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.poi_annotation_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
@@ -43,8 +48,28 @@ class POIAnnotationFragment : Fragment() {
         fun newInstance() = POIAnnotationFragment()
     }
 
-    private lateinit var viewModel: POIAnnotationViewModel
-    private lateinit var annotationsController: AnnotationsController
+    private val mainCoroutineScope = CoroutineScope(Dispatchers.Main)
+    private val viewModel by viewModels<POIAnnotationViewModel>()
+    private var annotationsController: AnnotationsController? = null
+    private val mapViewReadyListener = MapViewReadyListener<MapView>() {
+        runInMain {
+            mapView.cameraController()?.position =
+                Camera.Position.Builder().setLocation(viewModel.baseLocation).build()
+            mapView.vehicleController()?.setLocation(viewModel.baseLocation)
+            annotationsController = mapView.annotationsController()
+            mapView.setOnTouchListener(TouchListener { touchType, position ->
+                handleMapTouch(touchType, position)
+            })
+        }
+    }
+    private val mapViewConfig: MapViewInitConfig by lazy {
+        MapViewInitConfig(
+            context = requireContext(),
+            lifecycleOwner = viewLifecycleOwner,
+            defaultLocation = viewModel.baseLocation,
+            readyListener = mapViewReadyListener
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,11 +80,11 @@ class POIAnnotationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(POIAnnotationViewModel::class.java)
         iv_back.setOnClickListener {
             findNavController().navigateUp()
         }
-        mapViewInit(savedInstanceState)
+        // the initialize function must be called after SDK is initialized
+        mapView.initialize(mapViewConfig)
 
         val onItemClickListener = View.OnClickListener {
             updateStyleTextValue((it as TextView).text)
@@ -79,36 +104,40 @@ class POIAnnotationFragment : Fragment() {
             )
         )
         btn_clear_annotations.setOnClickListener(clearAnnotationsClickListener)
+        btn_refresh.setOnClickListener {
+            tv_annotattion_size.text = "${mapView.annotationsController().current().size}"
+        }
+        btn_remove.setOnClickListener {
+            if (annotationsCache.isEmpty()) return@setOnClickListener
+            mapView.annotationsController().remove(listOf(annotationsCache.last()))
+            annotationsCache.remove(annotationsCache.last())
+        }
     }
 
     private fun handleMapTouch(touchType: TouchType, touchPosition: TouchPosition) {
         TaLog.d(TAG, "handleMapTouch touchType = $touchType, touchPosition = $touchPosition")
         if (touchType == TouchType.Click) {
-            val annotation = viewModel.createPOIAnnotation(
-                annotationsController = annotationsController,
-                location = touchPosition.geoLocation ?: viewModel.defaultAnnotationLocation,
-                styleKey = et_annotation_style.text.toString(),
-                text = et_annotation_text.text.toString()
-            )
-            mapView.annotationsController().add(mutableListOf(annotation))
-        }
-    }
-
-    // the initialize function must be called after SDK is initialized
-    private fun mapViewInit(savedInstanceState: Bundle?) {
-        mapView.initialize(savedInstanceState) {
-            CoroutineScope(Dispatchers.Main).launch {
-                mapView.cameraController()?.position =
-                    Camera.Position.Builder().setLocation(viewModel.baseLocation).build()
-                mapView.vehicleController()?.setLocation(viewModel.baseLocation)
-                annotationsController = mapView.annotationsController()
-                mapView.setOnTouchListener(TouchListener { touchType, position ->
-                    handleMapTouch(touchType, position)
-                })
+            annotationsController?.let { annotationsControllerNonNull ->
+                try {
+                    val annotation = viewModel.createPOIAnnotation(
+                        annotationsController = annotationsControllerNonNull,
+                        location = touchPosition.geoLocation ?: viewModel.defaultAnnotationLocation,
+                        styleKey = et_annotation_style.text.toString(),
+                        text = et_annotation_text.text.toString(),
+                        bubbleType = if (et_bubble_type.text.toString()
+                                .isNotEmpty()
+                        ) et_bubble_type.text.toString().toFloat() else BUBBLE_TYPE_NOT_INIT
+                    )
+                    mapView.annotationsController().add(listOf(annotation))
+                    annotationsCache.add(annotation)
+                } catch (ex: Exception) {
+                    TaLog.e(TAG, "${ex.message}", ex)
+                }
             }
         }
     }
 
+    private val annotationsCache = mutableListOf<com.telenav.map.api.Annotation>()
     private fun updateStyleTextValue(text: CharSequence) {
         et_annotation_style.setText(text)
     }
@@ -136,6 +165,12 @@ class POIAnnotationFragment : Fragment() {
 
     private class POIListViewHolder(root: View) : RecyclerView.ViewHolder(root) {
         val text: TextView = root.findViewById(android.R.id.text1)
+    }
+
+    private fun runInMain(run: () -> Unit): Job {
+        return mainCoroutineScope.launch {
+            run()
+        }
     }
 
 }

@@ -21,18 +21,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.controllers.AnnotationsController
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.SearchController
 import com.telenav.map.api.controllers.VehicleController
 import com.telenav.sdk.common.logging.TaLog
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.demo.scenario.search.fragments.searchComponents.poiFactory.PoiExampleFactoryUsingStyles
 import com.telenav.sdk.demo.scenario.search.fragments.searchComponents.searchEngine.SearchEngineExample
 import com.telenav.sdk.demo.scenario.search.fragments.searchComponents.searchEngine.SearchLoading
+import com.telenav.sdk.examples.R
 import kotlinx.android.synthetic.main.layout_action_bar.*
 import kotlinx.android.synthetic.main.search_example_fragment.*
+import kotlinx.android.synthetic.main.search_example_fragment.mapView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -108,7 +110,12 @@ class SearchExampleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         tv_title.text = getString(R.string.title_search_example)
         // the initialize function must be called after SDK is initialized
-        mapView.initialize(savedInstanceState, mapViewReadyListener)
+        val mapViewConfig = MapViewInitConfig(
+            context = requireContext().applicationContext,
+            lifecycleOwner = viewLifecycleOwner,
+            readyListener = mapViewReadyListener
+        )
+        mapView.initialize(mapViewConfig)
 
         searchEngine = SearchEngineExample(requireContext().applicationContext)
         searchEngine?.vehicleLocation = viewModel.startLocation
