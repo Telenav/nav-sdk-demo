@@ -1,3 +1,203 @@
+## **Version 1.4.35.1**
+2023-03-17
+
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.34.1**
+2023-02-10
+
+* MapView:
+  * Map engine CPU consumption improvement in the idle state
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.33.7**
+2023-01-10
+
+* MapView:
+  * GetNearest API improvement to avoid ANR
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.32.1**
+2022-12-15
+
+* MapView:
+  * Expose AutoZoom on/off API
+  * Fix AutoZoom controller did not handle ramps properly
+  * Inject LifecycleOwner to TnMapView
+* Misc.
+  * Correct log print in BrokerServerHelper
+  * General bugfixes
+
+## **Version 1.4.31.4**
+2022-11-27
+
+* MapView:
+  * Fix: Map element could not update to corresponding language
+  * Override UserGraphic construct to avoid bitmap copy
+  * Support front passenger screen
+* Misc.
+  * Support native log level setting by topic
+  * Traffic display improvement
+  * General bugfixes
+
+## **Version 1.4.30.1**
+2022-10-23
+
+* DriveSession:
+  * Update phoneme language information in TTS output
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.29.1**
+2022-09-25
+
+* MapView:
+  * CVP icon could not be shown at the first time without GPS
+* DriveSession:
+  * Add Shield icons for MEA region
+* Misc.
+  * New region RN ( ISC) support
+  * Support jni log level setting
+  * Expose the api of setting log of ADAS
+  * General bugfixes and performance improvements
+
+
+## **Version 1.4.27.3**
+2022-08-26
+
+* DriveSession:
+  * Disable shield icon to be rendered by default
+  * Add sorted signpost names in maneuverInfo
+  * Support Toll booth audio prompt switch
+* Misc.
+  * General bugfixes and performance improvements
+
+
+## **Version 1.4.26.6**
+2022-07-28
+
+* MapView:
+  * Support map element POI on map clickable
+  * Notify the current render mode when tilt gesture ends
+* DriveSession:
+  * Add HighVigilanceArea alert type
+  * Destination distance threshold adjustment
+* Misc.
+  * General bugfixes
+
+
+## **Version 1.4.25.8**
+2022-06-30
+
+* MapView:
+  * Expose interface to set cluster style independently
+  * Make the CVP a tappable annotation
+* DriveSession:
+  * Add API to disable/enable navigation status to be prompted by audio
+  * Support different verbosity level in audio guidance
+* Direction:
+  * Add road type/road subtype in route response model
+  * Support config the numbers of onboard route when network disconnected
+* Misc.
+  * General bugfixes
+
+
+## **Version 1.4.24.1**
+2022-05-19
+
+* DriveSession:
+  * Send available satellite count into Position Engine
+  * Exposing shield icon from navigation maneuver info
+* Direction:
+  * Add controlled access information in route response
+* Misc.
+  * Provide a method to disconnect all the cloud service
+  * General bugfixes
+
+## **Version 1.4.23.1**
+2022-04-20
+
+* MapView:
+  * Expose api to check mapview is FinishedLoading
+* Direction:
+  * Add a timeoutForOldEmbeddedDataVersion configuration parameter in the HybridClientConfig
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.22.3**
+2022-03-31
+
+* MapView:
+  * Expose api to enable/disable free flow traffic
+* DriveSession:
+  * Provide traffic light signal in alert service
+* Misc.
+  * Add map version update listener
+  * General bugfixes
+
+## **Version 1.4.21.2**
+2022-03-09
+
+* DriveSession:
+  * Lane guidance for passing cross in AGV
+  * Send satellite number into Position Engine
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.19.5**
+2022-02-07
+
+* MapView:
+  * Expose real reach API's in Android layer
+  * Expose API for tappable map data POI's in java layer
+* Direction:
+  * Real reach polygon feature
+* DriveSession:
+  * DriveSession can be initialized with services disable
+* Misc.
+  * Provide a set of APIs to disable/enable all cloud services dynamically
+  * General bugfixes
+
+## **Version 1.4.18.3**
+2022-01-07
+
+* MapView:
+  * Auto Zoom - Animation speed improvement
+* DriveSession:
+  * DriveSessionException formatting
+* Misc.
+  * Provide a set of APIs to disable/enable all cloud services when initialization
+  * Support Android11+ storage permission requesting
+  * General bugfixes
+
+## **Version 1.4.15.6**
+2021-11-08
+
+* MapView:
+  * Rewrite the AutoZoom which introduced the json file to control revolved status
+  * Use physical dpi (xdpi/ydpi) instead of logical dpi (densityDpi)
+* DriveSession:
+  * Support exposing more error events from better route feature
+* Misc.
+  * Atlas configuration independence
+  * General bugfixes
+
+## **Version 1.4.14.2**
+2021-10-13
+
+* MapView:
+  * Change the type of traffic incident to V2
+  * Optimize the order of touched annotations
+  * Implement route characteristic 'out of range'
+  * Support cluster map view
+  * Support getting eating route tail point
+* Misc.
+  * Support ANZ region
+  * General bugfixes
+
 ## **Version 1.4.13.1**
 2021-09-21
 
@@ -11,7 +211,7 @@
   * Change the default log level from INFO to WARNING
   * Support the client to set the Region when initializing the SDK
   * General bugfixes
-  
+
 ## **Version 1.4.12.1**
 2021-08-30
 
