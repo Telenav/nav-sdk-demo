@@ -1,3 +1,9 @@
+## **Version 1.4.37.1**
+2023-05-22
+
+* Misc.
+  * General bugfixes
+  
 ## **Version 1.4.36.10**
 2023-05-05
 
