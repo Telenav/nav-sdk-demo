@@ -1,3 +1,10 @@
+## **Version 1.4.40.2**
+2023-09-05
+
+* Misc.
+  * General bugfixes and performance improvements
+  * Update native third-party libraries
+
 ## **Version 1.4.39.2**
 2023-07-26
 
