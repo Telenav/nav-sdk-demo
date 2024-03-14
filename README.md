@@ -14,11 +14,6 @@ Set parameters in gradle.properties
 ```kotlin
 // SDK version
 telenavSdkVersion=1.4.16.4
-// repo url
-MAVEN_PUBLIC=https://telenav.jfrog.io/artifactory/telenav-maven-releases/
-// Please obtain user name and password from Telenav and set them here.
-REPO_USER_NAME=XXXX
-REPO_PASSWD=XXXX
 // please obtatin API key and secret from Telenav and set them here. (double quotes is needed here)
 API_KEY="Your API key"
 API_SECRET="Your API secret"

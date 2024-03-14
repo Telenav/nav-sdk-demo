@@ -1,3 +1,15 @@
+## **Version 1.4.42.2**
+2023-02-05
+
+* Misc.
+  * General bugfixes
+
+## **Version 1.4.41.4**
+2023-10-23
+
+* Misc.
+  * General bugfixes
+  
 ## **Version 1.4.40.2**
 2023-09-05
 

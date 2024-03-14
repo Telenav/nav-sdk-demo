@@ -17,19 +17,26 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 
-        // for release version
         maven {
-            url "${MAVEN_PUBLIC}"
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
             credentials {
-                username "${REPO_USER_NAME}"
-                password "${REPO_PASSWD}"
+                username '62c2522fb0b331d638db5e1a'
+                password 'c1JvK-BKkqnI'
             }
+            url 'https://packages.aliyun.com/maven/repository/2457159-release-uGelON/'
+        }
+        maven {
+            credentials {
+                username '62c2522fb0b331d638db5e1a'
+                password 'c1JvK-BKkqnI'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2457159-snapshot-WnmJT6/'
         }
 
-        // for develop version
-        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
     }
 }
 
