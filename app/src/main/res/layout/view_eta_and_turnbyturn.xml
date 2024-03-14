@@ -9,10 +9,11 @@
 
         <variable
             name="viewModel"
-            type="com.telenav.sdk.demo.scenario.navigation.TurnbyturnViewModel" />
+            type="com.telenav.sdk.examples.scenario.navigation.TurnbyturnViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
+        app:cardElevation="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="@dimen/dimens_5dp">
@@ -90,6 +91,7 @@
                 app:layout_constraintStart_toEndOf="@id/divide_dot_time_left_distance_to_cover"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginRight="@dimen/dimens_10dp"
+
                 tools:text="12 Mi" />
 
 
@@ -110,7 +112,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:padding="3dp"
-                app:laneImages="@{viewModel.laneAssets}"
+                app:laneImages="@{viewModel.lanePatternCustomImages}"
                 app:lanePatternChange="@{viewModel.laneInfo}"
                 app:layout_constraintBottom_toTopOf="@id/next_turn_miles_to_go"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -124,59 +126,24 @@
                 android:layout_marginRight="@dimen/dimens_10dp"
                 android:alpha=".7"
                 android:background="#383E44"
-                app:layout_constraintBottom_toTopOf="@+id/currentTurn"
+                app:layout_constraintBottom_toTopOf="@+id/next_turn_miles_to_go"
                 app:layout_constraintTop_toBottomOf="@+id/dynamicContainer" />
+
             <com.telenav.sdk.uikit.TnCurrentTurnView
-                android:id="@+id/currentTurn"
+                android:id="@+id/next_turn_miles_to_go"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
-                app:layout_constraintBottom_toTopOf="@+id/street_to_take_next_turn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/next_turn_miles_to_go"
                 app:currentTurnNextMiles="@{viewModel.distanceRemainingToNextTurn}"
                 app:currentTurnStreetNextTurn="@{viewModel.nextTurnStreetName}"
-                app:currentTurnDrawable="@{viewModel.turnDirectionDrawable}"
-                />
-            <ImageView
-                android:id="@+id/turn_direction"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                app:imageResource="@{viewModel.turnDirectionDrawable}"
-                app:layout_constraintEnd_toStartOf="@+id/next_turn_miles_to_go"
-                app:layout_constraintHorizontal_bias="0.621"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/next_turn_miles_to_go"
-                tools:src="@drawable/ic_turn_left_white" />
-
-            <TextView
-                android:id="@+id/next_turn_miles_to_go"
-                style="@style/RegularTextStyle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@{viewModel.distanceRemainingToNextTurn}"
-                app:layout_constraintBottom_toTopOf="@+id/street_to_take_next_turn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nav_details_background"
-                app:layout_constraintVertical_chainStyle="packed"
-                tools:text="0.2 mi" />
-
-            <TextView
-                android:id="@+id/street_to_take_next_turn"
-                style="@style/RegularTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.nextTurnStreetName}"
-                app:layout_constraintStart_toStartOf="@id/next_turn_miles_to_go"
-                app:layout_constraintTop_toBottomOf="@id/next_turn_miles_to_go"
-                tools:text="Michigan Ave" />
+                app:currentTurnDrawable="@{viewModel.turnDirectionDrawable}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
 </layout>

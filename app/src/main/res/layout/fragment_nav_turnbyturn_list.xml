@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.telenav.sdk.demo.scenario.navigation.TurnbyturnViewModel" />
+            type="com.telenav.sdk.examples.scenario.navigation.TurnbyturnViewModel" />
 
     </data>
 

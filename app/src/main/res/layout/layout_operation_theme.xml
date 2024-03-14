@@ -5,118 +5,156 @@
   ~ other countries. Other names may be trademarks of their respective owners.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_white"
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/color_white"
     android:orientation="vertical">
 
     <RadioGroup
         android:id="@+id/rg_mode"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
-            android:text="Set mode"
-            android:textSize="16sp"
-            android:textColor="@color/colorVivid"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Set mode"
+            android:textColor="@color/colorVivid"
+            android:textSize="16sp" />
 
         <RadioButton
-            android:layout_marginTop="4dp"
             android:id="@+id/rb_night"
-            android:text="Night mode"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Night mode" />
 
         <RadioButton
             android:id="@+id/rb_day"
-            android:text="Day mode"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Day mode" />
 
         <RadioButton
             android:id="@+id/rb_auto"
-            android:text="Auto mode"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Auto mode" />
     </RadioGroup>
 
     <RadioGroup
         android:id="@+id/rg_load_tss"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Load TSS sheet"
-            android:textSize="16sp"
             android:textColor="@color/colorVivid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textSize="16sp" />
 
         <RadioButton
-            android:id="@+id/rb_load1"
-            android:text="Load TSS 1"
+            android:id="@+id/rb_load_cluster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:text="Load cluster TSS" />
 
         <RadioButton
-            android:id="@+id/rb_load2"
-            android:text="Load TSS 2"
+            android:id="@+id/rb_load_default"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Load default TSS" />
+
+        <RadioButton
+            android:id="@+id/rb_load_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Load intersection TSS" />
+
+        <RadioButton
+            android:id="@+id/rb_load_hud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Load hud TSS " />
+
+        <RadioButton
+            android:id="@+id/rb_load_hud_warm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Load hud warm TSS" />
+
+        <RadioButton
+            android:id="@+id/rb_load_invalid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Load invalid TSS" />
+
+        <RadioButton
+            android:id="@+id/rb_load_local_warm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Load local warm TSS" />
+
+        <RadioButton
+            android:id="@+id/rb_load_default_full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Load default full TSS" />
 
     </RadioGroup>
 
 
     <RadioGroup
         android:id="@+id/rg_text_size"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
-            android:text="Change Text Size"
-            android:textSize="16sp"
-            android:textColor="@color/colorVivid"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Change Text Size"
+            android:textColor="@color/colorVivid"
+            android:textSize="16sp" />
 
         <RadioButton
             android:id="@+id/rb_text_size_large"
-            android:text="Large"
-            android:layout_marginTop="4dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Large" />
 
         <RadioButton
             android:id="@+id/rb_text_size_normal"
-            android:text="Normal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Normal" />
 
 
         <RadioButton
             android:id="@+id/rb_text_size_small"
-            android:text="Small"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Small" />
     </RadioGroup>
 
 </LinearLayout>

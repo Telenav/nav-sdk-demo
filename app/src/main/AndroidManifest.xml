@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.telenav.sdk.examples">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,8 +19,9 @@
         android:preserveLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.telenav.sdk.demo.main.MainActivity"
+            android:name="com.telenav.sdk.examples.main.MainActivity"
             android:label="@string/app_name"
+            android:exported="true"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -28,24 +32,28 @@
         </activity>
 
         <activity
-            android:name="com.telenav.sdk.demo.scenario.navigation.NavMainActivity"
+            android:name="com.telenav.sdk.examples.scenario.navigation.NavMainActivity"
+            android:exported="false"
             android:label="scenario of navigation"/>
 
         <activity
-            android:name="com.telenav.sdk.demo.scenario.ScenarioMenuActivity"
+            android:name="com.telenav.sdk.examples.scenario.ScenarioMenuActivity"
+            android:exported="false"
             android:label="@string/title_activity_scenario_menu"/>
 
         <activity
-            android:name="com.telenav.sdk.demo.scenario.mapview.MapViewActivity"
+            android:name="com.telenav.sdk.examples.scenario.mapview.MapViewActivity"
             android:theme="@style/MapViewActivityStyle"
             android:label="@string/title_activity_map_view_menu"/>
 
         <activity
-            android:name="com.telenav.sdk.demo.scenario.ota.OtaActivity"
+            android:name="com.telenav.sdk.examples.scenario.ota.OtaActivity"
+            android:exported="false"
             android:theme="@style/MapViewActivityStyle" />
 
         <activity
-            android:name="com.telenav.sdk.demo.scenario.search.SearchActivity"
+            android:name="com.telenav.sdk.examples.scenario.search.SearchActivity"
+            android:exported="false"
             android:theme="@style/MapViewActivityStyle"/>
     </application>
 

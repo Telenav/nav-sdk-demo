@@ -8,7 +8,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <import type="com.telenav.sdk.demo.scenario.navigation.NavigationUtils"/>
+        <import type="com.telenav.sdk.examples.scenario.navigation.NavigationUtils"/>
         <variable
             name="alongRouteTrafficIncidentInfo"
             type="com.telenav.sdk.map.model.AlongRouteTrafficIncidentInfo" />

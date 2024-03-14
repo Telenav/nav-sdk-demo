@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.telenav.sdk.demo.scenario.navigation.realReach.RealReachViewModel" />
+            type="com.telenav.sdk.examples.scenario.navigation.realReach.RealReachViewModel" />
 
     </data>
 
@@ -33,15 +32,14 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:title="real reach" />
 
-        <include
-            android:id="@+id/content_basic_navigation"
-            layout="@layout/content_basic_navigation"
+        <com.telenav.map.views.TnMapView
+            android:id="@+id/map_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/drawer_layout_toolbar" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,6 +52,29 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="real reach type:  "
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/real_reach_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16dp"
+                    android:text="@{viewModel.realReachType.name()}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="@{viewModel.realReachType.index ==1 ? View.GONE : View.VISIBLE }"
+                android:layout_marginTop="@dimen/dim_20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -75,6 +96,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="@{viewModel.realReachType.index ==1 ? View.GONE : View.VISIBLE }"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dim_10dp"
@@ -98,7 +120,19 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/selectRealReachType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Select real reach type"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/selectRequestMode"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
             android:id="@+id/selectRequestMode"
+            android:visibility="@{viewModel.realReachType.index ==1 ? View.GONE : View.VISIBLE }"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -110,6 +144,7 @@
 
         <Button
             android:id="@+id/btInputDistance"
+            android:visibility="@{viewModel.realReachType.index ==1 ? View.GONE : View.VISIBLE }"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -158,7 +193,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/progressBar" />
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.MapViewAnnotationFragment">
+    tools:context="com.telenav.sdk.examples.scenario.mapview.MapViewAnnotationFragment">
 
     <include
         android:id="@+id/action_bar"
@@ -24,9 +24,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/action_bar">
 
-        <include layout="@layout/layout_content_map_nav" />
+        <include
+            android:id="@+id/includeContent"
+            layout="@layout/layout_content_map_nav" />
 
         <include
+            android:id="@+id/includeOperation"
             layout="@layout/layout_operation_annotation"
             android:layout_width="300dp"
             android:layout_height="match_parent"

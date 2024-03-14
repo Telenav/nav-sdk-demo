@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchMenuFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.SearchMenuFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.SearchMenuFragment"
         tools:layout="@layout/fragment_scenario_menu"
         android:label="SearchMenuFragment" >
         <action
@@ -29,26 +29,26 @@
 
     <fragment
         android:id="@+id/searchShowPoiFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.SearchShowPoiFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.SearchShowPoiFragment"
         android:label="SearchShowPoiFragment"
         tools:layout="@layout/fragment_search_show_poi" />
     <fragment
         android:id="@+id/searchAlongRouteFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.SearchAlongRouteFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.SearchAlongRouteFragment"
         android:label="fragment_search_along_route"
         tools:layout="@layout/fragment_search_along_route" />
     <fragment
         android:id="@+id/showPoiInCameraFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.ShowPoiInCameraFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.ShowPoiInCameraFragment"
         tools:layout="@layout/fragment_show_poi_in_camera"
         android:label="ShowPoiInCameraFragment" />
     <fragment
         android:id="@+id/searchRgcFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.SearchRgcFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.SearchRgcFragment"
         android:label="SearchRgcFragment" />
     <fragment
         android:id="@+id/searchExampleFragment"
-        android:name="com.telenav.sdk.demo.scenario.search.fragments.SearchExampleFragment"
+        android:name="com.telenav.sdk.examples.scenario.search.fragments.SearchExampleFragment"
         android:label="search_example_fragment"
         tools:layout="@layout/search_example_fragment" />
 </navigation>

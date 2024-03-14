@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.telenav.sdk.demo.main.FirstFragment">
+    tools:context="com.telenav.sdk.examples.main.FirstFragment">
 
     <Button
         android:id="@+id/btn_scenario"

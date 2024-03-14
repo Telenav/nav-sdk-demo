@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.telenav.sdk.demo.scenario.navigation.avoid.AvoidStepViewModel" />
+            type="com.telenav.sdk.examples.scenario.navigation.avoid.AvoidStepViewModel" />
 
     </data>
 

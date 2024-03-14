@@ -7,7 +7,7 @@
     <data>
         <variable
             name="audioRequestTypeInfo"
-            type="com.telenav.sdk.demo.scenario.navigation.aduio.AudioRequestTypeInfo" />
+            type="com.telenav.sdk.examples.scenario.navigation.aduio.AudioRequestTypeInfo" />
     </data>
     <LinearLayout
         android:orientation="vertical"

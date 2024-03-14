@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.MapViewThemeFragment">
+    tools:context=".scenario.mapview.MapViewThemeFragment">
 
     <include
         android:id="@+id/action_bar"
@@ -26,9 +26,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/action_bar">
 
-        <include layout="@layout/layout_content_map" />
+        <include
+            android:id="@+id/includeContent"
+            layout="@layout/layout_content_map" />
 
         <include
+            android:id="@+id/includeOperation"
             layout="@layout/layout_operation_theme"
             android:layout_width="300dp"
             android:layout_height="match_parent"

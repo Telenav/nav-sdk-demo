@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/otaMenuFragment"
-        android:name="com.telenav.sdk.demo.scenario.ota.OtaMenuFragment"
+        android:name="com.telenav.sdk.examples.scenario.ota.OtaMenuFragment"
         android:label="OtaMenuFragment" >
         <action
             android:id="@+id/action_otaMenuFragment_to_otaHomeareaFragment"
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/otaHomeareaFragment"
-        android:name="com.telenav.sdk.demo.scenario.ota.OtaHomeAreaFragment"
+        android:name="com.telenav.sdk.examples.scenario.ota.OtaHomeAreaFragment"
         android:label="fragment_ota_homearea"
         tools:layout="@layout/fragment_ota_home_area" />
 </navigation>

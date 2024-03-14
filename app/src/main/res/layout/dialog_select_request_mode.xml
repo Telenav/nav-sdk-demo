@@ -9,7 +9,7 @@
 
     <variable
         name="viewModel"
-        type="com.telenav.sdk.demo.scenario.navigation.realReach.RealReachViewModel" />
+        type="com.telenav.sdk.examples.scenario.navigation.realReach.RealReachViewModel" />
 
 </data>
     <androidx.constraintlayout.widget.ConstraintLayout

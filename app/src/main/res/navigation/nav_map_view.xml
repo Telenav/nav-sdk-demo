@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/mapViewMenuFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewMenuFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewMenuFragment"
         android:label="MapViewMenuFragment" >
         <action
             android:id="@+id/action_mapViewMenuFragment_to_mapViewSetUpFragment"
@@ -64,92 +64,94 @@
             android:id="@+id/action_mapViewMenuFragment_to_mapViewPOIAnnotationFragment"
             app:destination="@id/mapViewPoiAnnotationFragment" />
         <action
-            android:id="@+id/action_mapViewMenuFragment_to_multimapViewsFragment"
-            app:destination="@id/multimapViewsFragment" />
+            android:id="@+id/action_mapViewMenuFragment_to_CVPPositionOnRoad"
+            app:destination="@id/CVPPositionOnRoad" />
+
     </fragment>
     <fragment
         android:id="@+id/mapViewSetUpFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewSetUpFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewSetUpFragment"
         android:label="fragment_map_view_set_up"
         tools:layout="@layout/fragment_map_view_set_up" />
     <fragment
         android:id="@+id/mapViewCameraFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewCameraFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewCameraFragment"
         android:label="fragment_map_view_camera"
         tools:layout="@layout/fragment_map_view_camera" />
     <fragment
         android:id="@+id/annotationFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewAnnotationFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewAnnotationFragment"
         android:label="fragment_annotation"
         tools:layout="@layout/fragment_map_view_annotation" />
     <fragment
         android:id="@+id/mapViewTuneModeFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewTuneModeFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewTuneModeFragment"
         android:label="fragment_map_view_tune_mode"
         tools:layout="@layout/fragment_map_view_tune_mode" />
     <fragment
         android:id="@+id/mapViewGestureFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewGestureFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewGestureFragment"
         android:label="fragment_map_view_gesture"
         tools:layout="@layout/fragment_map_view_gesture" />
     <fragment
         android:id="@+id/mapViewElementsFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewElementsFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewElementsFragment"
         android:label="fragment_map_view_elements"
         tools:layout="@layout/fragment_map_view_elements" />
     <fragment
         android:id="@+id/mapViewThemeFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewThemeFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewThemeFragment"
         android:label="fragment_map_view_theme"
         tools:layout="@layout/fragment_map_view_theme" />
     <fragment
         android:id="@+id/mapViewStateFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewStateFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewStateFragment"
         android:label="fragment_map_view_state"
         tools:layout="@layout/fragment_map_view_state" />
     <fragment
         android:id="@+id/vehicleFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.VehicleFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.VehicleFragment"
         android:label="fragment_map_view_vehicle"
         tools:layout="@layout/fragment_map_view_vehicle" />
     <fragment
         android:id="@+id/mapViewTrafficBubbleFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewTrafficBubbleFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewTrafficBubbleFragment"
         android:label="MapViewTrafficBubbleFragment"
         tools:layout="@layout/fragment_map_view_traffic_bubble"/>
     <fragment
         android:id="@+id/mapViewSnapshotsFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewSnapshotsFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewSnapshotsFragment"
         android:label="MapViewTrafficBubbleFragment"
         tools:layout="@layout/fragment_map_view_traffic_bubble"/>
     <fragment
         android:id="@+id/mapViewShowRegionRectFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewShowRegionRectFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewShowRegionRectFragment"
         android:label="MapViewShowRegionFragment"
         tools:layout="@layout/fragment_map_view_show_region"/>
     <fragment
         android:id="@+id/multiMapViewFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MultiMapViewFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MultiMapViewFragment"
         android:label="MultiMapViewFragment"
         tools:layout="@layout/fragment_map_view_multi_map" />
     <fragment
         android:id="@+id/mapViewShapeFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.MapViewShapeFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.MapViewShapeFragment"
         android:label="map_view_shape_fragment"
         tools:layout="@layout/map_view_shape_fragment" />
     <fragment
         android:id="@+id/highlightedETEBubbleFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.HighlightedETEBubbleFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.HighlightedETEBubbleFragment"
         android:label="highlighted_e_t_e_bubble_fragment"
         tools:layout="@layout/highlighted_e_t_e_bubble_fragment" />
     <fragment
         android:id="@+id/mapViewPoiAnnotationFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.POIAnnotationFragment"
+        android:name="com.telenav.sdk.examples.scenario.mapview.POIAnnotationFragment"
         android:label="poi_annotation_fragment"
         tools:layout="@layout/poi_annotation_fragment" />
     <fragment
-        android:id="@+id/multimapViewsFragment"
-        android:name="com.telenav.sdk.demo.scenario.mapview.multimapViews.MultimapViewsFragment"
-        android:label="fragment_multimap_views"
-        tools:layout="@layout/fragment_multimap_views" />
+        android:id="@+id/CVPPositionOnRoad"
+        android:name="com.telenav.sdk.examples.scenario.mapview.CVPPositionOnRoadFragment"
+        android:label="c_v_p_position_on_road_fragment"
+        tools:layout="@layout/c_v_p_position_on_road_fragment" />
+
 </navigation>

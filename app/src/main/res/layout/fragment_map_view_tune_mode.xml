@@ -10,7 +10,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.telenav.sdk.examples.scenario.mapview.MapViewTuneModeFragment">
 
     <include
         android:id="@+id/action_bar"
@@ -25,9 +26,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/action_bar">
 
-        <include layout="@layout/layout_content_map_with_text" />
+        <include
+            android:id="@+id/includeContent"
+            layout="@layout/layout_content_map_with_text" />
 
         <include
+            android:id="@+id/includeOperation"
             layout="@layout/layout_operation_tune_mode"
             android:layout_width="300dp"
             android:layout_height="match_parent"

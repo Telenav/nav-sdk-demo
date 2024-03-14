@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.telenav.sdk.demo.scenario.search.SearchShowPoiFragment">
+    tools:context="com.telenav.sdk.examples.scenario.search.SearchShowPoiFragment">
 
     <include
         android:id="@+id/action_bar"

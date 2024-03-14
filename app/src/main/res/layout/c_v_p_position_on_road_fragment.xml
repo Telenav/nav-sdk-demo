@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.CVPPositionOnRoadFragment">
+    tools:context=".scenario.mapview.CVPPositionOnRoadFragment">
 
 
     <Button
@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:visibility="gone"
         android:text="remaining way"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btn_navigate"
         app:layout_constraintEnd_toEndOf="@+id/btn_navigate"
         app:layout_constraintStart_toStartOf="@+id/btn_navigate" />
@@ -51,6 +51,54 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+    </com.telenav.map.views.TnMapView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mapRect">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_grid_aligned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gridAligned"
+            android:textColor="#F4EDED"
+            android:textColorHint="#EAE7E7" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_show_full_route_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="showFullRouteOverview"
+            android:textColor="#F4EDED" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_include_cvp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="includeCVP"
+            android:textColor="#F4EDED" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_nearest_leg_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="nearestLegMode"
+            android:textColor="#F4EDED" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

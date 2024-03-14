@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.telenav.sdk.demo.scenario.mapview.HighlightedETEBubbleFragment">
+    tools:context="com.telenav.sdk.examples.scenario.mapview.HighlightedETEBubbleFragment">
 
 
     <include
@@ -115,6 +115,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner_smart_buble" />
+
+        <RadioGroup
+            android:id="@+id/rb_api_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_make_request">
+
+            <RadioButton
+                android:id="@+id/rb_new_api"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="New API" />
+
+            <RadioButton
+                android:id="@+id/rb_old_api"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Old API" />
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

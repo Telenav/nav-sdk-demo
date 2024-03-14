@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/addTexturedQuadResourceNameBtn" />
 
     <Button
-        android:id="@+id/addSquareRRPolygonShape"
+        android:id="@+id/addDynamicPolygonShapeWithAttrs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -105,7 +105,7 @@
         android:elevation="8dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="Add square real reach polygon"
+        android:text="Add dynamic polygon shape"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addTexturedQuadClientTextureBtn" />
@@ -123,10 +123,10 @@
         android:text="Add complex real reach polygon"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addSquareRRPolygonShape" />
+        app:layout_constraintTop_toBottomOf="@+id/addDynamicPolygonShapeWithAttrs" />
 
     <Button
-        android:id="@+id/addTestRRPolygonShape"
+        android:id="@+id/addOuterRRPolygonShape"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -135,7 +135,7 @@
         android:elevation="8dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="Add real reach polygon with custom layer"
+        android:text="Add outer real reach polygon"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addComplexRRPolygonShape" />

@@ -10,7 +10,8 @@
         android:id="@+id/btn_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove annotation"
+        android:textSize="12sp"
+        android:text="Remove all"
         app:layout_constraintStart_toEndOf="@+id/btn_refresh"
         app:layout_constraintTop_toTopOf="@+id/btn_refresh" />
 
@@ -18,11 +19,21 @@
         android:id="@+id/btn_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="14dp"
+        android:textSize="12sp"
         android:text="REFRESH SIZE"
         app:layout_constraintBottom_toBottomOf="@+id/mapView"
         app:layout_constraintEnd_toEndOf="@+id/mapView"
         app:layout_constraintStart_toStartOf="@+id/mapView" />
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:textSize="12sp"
+        android:text="update resources"
+        app:layout_constraintStart_toEndOf="@+id/btn_remove"
+        app:layout_constraintTop_toTopOf="@+id/btn_remove" />
 
     <include
         android:id="@+id/include"
@@ -51,7 +62,6 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_refresh"
         app:layout_constraintEnd_toEndOf="@+id/btn_refresh"
         app:layout_constraintStart_toStartOf="@+id/btn_refresh" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -99,7 +109,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_annotation_style" />
 
-
         <EditText
             android:id="@+id/et_bubble_type"
             android:layout_width="wrap_content"
@@ -112,6 +121,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_annotation_text" />
+
 
         <Button
             android:id="@+id/btn_clear_annotations"
@@ -127,10 +137,11 @@
             android:id="@+id/recyclerview_ev_styles"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:maxWidth="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_clear_annotations"/>
+            app:layout_constraintTop_toBottomOf="@id/btn_clear_annotations" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

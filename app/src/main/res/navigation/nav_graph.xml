@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.telenav.sdk.demo.main.FirstFragment"
+        android:name="com.telenav.sdk.examples.main.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
     </fragment>
