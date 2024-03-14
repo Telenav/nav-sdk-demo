@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = "1.4.10"
+    ext.kotlin_version = "1.6.10"
     repositories {
         google()
         jcenter()
@@ -17,19 +17,26 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 
-        // for release version
         maven {
-            url "${MAVEN_PUBLIC}"
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
             credentials {
-                username "${REPO_USER_NAME}"
-                password "${REPO_PASSWD}"
+                username '65e59bbc4a11045b1cffe4b9'
+                password 'Zrsd_D-7iY-W'
             }
+            url 'https://packages.aliyun.com/maven/repository/2457159-release-uGelON/'
+        }
+        maven {
+            credentials {
+                username '65e59bbc4a11045b1cffe4b9'
+                password 'Zrsd_D-7iY-W'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2457159-snapshot-WnmJT6/'
         }
 
-        // for develop version
-        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
     }
 }
 
