@@ -71,5 +71,5 @@ dependencies {
     implementation "com.telenav.sdk:telenav-android-uikit-${ndkVersion}:${telenavSdkVersion}"
     implementation "com.telenav.sdk:telenav-entity-cloud:1.6.0"
 
-    implementation "com.telenav.sdk:telenav-android-ngx-r15c:${mapPluginVersion}"
+    implementation "com.telenav.sdk:telenav-android-ngx-${ndkVersion}:${mapPluginVersion}"
 }
