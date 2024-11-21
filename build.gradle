@@ -3,7 +3,7 @@ buildscript {
     ext.kotlin_version = "1.6.10"
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
@@ -19,6 +19,7 @@ allprojects {
         google()
         mavenCentral()
 
+        // aliyun maven repo
         maven {
             url 'https://maven.aliyun.com/repository/public'
         }
@@ -36,6 +37,9 @@ allprojects {
             }
             url 'https://packages.aliyun.com/maven/repository/2457159-snapshot-WnmJT6/'
         }
+
+        // telenav internal maven repo
+        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
 
     }
 }
