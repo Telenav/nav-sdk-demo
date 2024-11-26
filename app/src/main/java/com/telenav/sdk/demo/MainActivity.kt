@@ -27,10 +27,12 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
 import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
+import com.telenav.sdk.map.model.AlongRouteTraffic
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -278,21 +280,24 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {
-        //  TODO("Not yet implemented")
     }
 
     override fun onJunctionViewUpdated(junctionViewInfo: JunctionViewInfo) {
-        //  TODO("Not yet implemented")
     }
 
     override fun onAlongRouteTrafficUpdated(alongRouteTraffic: AlongRouteTraffic) {
-        //  TODO("Not yet implemented")
+    }
+
+    override fun onLaneGuidanceUpdated(p0: LaneGuidanceEvent) {
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
         if (stopIndex == -1) {// -1 means reach destination
             handleNavigationSessionEnd(false)
         }
+    }
+
+    override fun onNavigationRouteUpdated(p0: Route, p1: BetterRouteContext?) {
     }
 
     override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext) {
@@ -309,6 +314,10 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         activeRouteId = route.id
     }
 
+    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
+        TODO("Not yet implemented")
+    }
+
     override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
                                        betterRouteCandidate: BetterRouteCandidate?) {
         //  TODO("one can decide accept or not according value of status")
@@ -323,14 +332,11 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
-        //  TODO("Not yet implemented")
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
-        //  TODO("Not yet implemented")
     }
 
     override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
-        //  TODO("Not yet implemented")
     }
 }

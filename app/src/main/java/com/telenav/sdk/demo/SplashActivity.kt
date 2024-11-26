@@ -118,9 +118,9 @@ class SplashActivity : AppCompatActivity() {
             .setApiKey(SDK_KEY)
             .setApiSecret(SDK_SECRET)
             .setSdkCacheDataDir(sdkCacheDataDir)
-            .setCloudEndPoint("https://restapistage.telenav.com")
+            .setCloudEndPoint("https://apinastg.telenav.com")
             .setLocale(Locale.EN_US)    //  if not specified, SDK will assume region EU
-            .setUserId("AndroidSampleTest")
+            .setUserId("AndroidDemoTest")
             .setDeviceGuid("AndroidDeviceGuid")
             .setApplicationInfo(ApplicationInfo.builder("demo", "1").build())
             .build()
