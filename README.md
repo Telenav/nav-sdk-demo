@@ -1,6 +1,8 @@
 # Introduction
 This is a sample app to demonstrate how to integrate Telenav navigation SDK with basic features.
 
+The SDK package is hosted on Alibaba Cloud, allowing seamless integration via Maven or Gradle.
+
 
 ## Key Project Resources
 | Resource     |     Description                                                    |
@@ -13,7 +15,7 @@ This is a sample app to demonstrate how to integrate Telenav navigation SDK with
 |*[app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt)* | Navigation SDK initialization |
 |*[app/src/main/java/com/telenav/sdk/demo/MainActivity.kt.kt](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/java/com/telenav/sdk/demo/MainActivity.kt)* | Majority part of logic on showing map, route request, start and stop navigation |
 
-# Quick Start
+# Getting Started
 
 ## Prerequisites
 Please make sure you have following tools installed on your computer:
@@ -32,27 +34,15 @@ Please make sure you have access of this github repo, run below git commands to 
 ```
 
 ## Config SDK Dependency
-To start Navigation SDK integration, add the SDK as a dependency of the project. Please replace the *USER_NAME* and *PASSWD* with the credentials provided by Telenav.
+To start Navigation SDK integration, add the SDK as a dependency of the project. 
 
-> Currently we're using version [1.4.13.1](https://docs.telenav.com/nav/release-notes.html#version-14131). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav/release-notes.html).
+> Currently we're using version [1.4.34.1](https://docs.telenav.com/nav/release-notes.html#version-14131). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav/release-notes.html).
 
 ```Gradle
-    repositories {
-        ...
-
-        maven {
-            url "https://telenav.jfrog.io/artifactory/telenav-maven-releases/"
-            credentials {
-                username '#USER_NAME#'
-                password '#PASSWD#'
-            }
-        }
-    }
-
-    dependencies {
-        implementation("com.telenav.sdk:telenav-android-drivesession:${version}")
-        implementation("com.telenav.sdk:telenav-android-mapview:${version}")
-    }
+dependencies {
+     implementation("com.telenav.sdk:telenav-android-drivesession:${telenavSdkVersion}")
+     implementation("com.telenav.sdk:telenav-android-mapview:${telenavSdkVersion}")
+}
 ```
 
 ## Initialize Navigation SDK 
@@ -133,3 +123,28 @@ To start navigation, click the "Start Navigation" button shows on middle-bottom 
 # Documentation
 To get more help on SDK integration and other features, please refer to below documentation website:
 [Vivid Navigation Android](https://docs.telenav.com/overview/nav.html)
+
+## **FAQs**
+
+### **1. How do I update the SDK?**
+
+Update the version number in your `gradle.properties` file:
+
+```
+telenavSdkVersion=1.4.34.1
+```
+
+### **2. What if dependencies fail to download?**
+
+Ensure your network can access Alibaba Cloud and that the repository URL is configured correctly. If issues persist, contact technical support.
+
+## **Supported Architectures**
+
+- ARMv7
+- ARM64 (ARMv8)
+- x86/x86_64
+
+## **Contact and Support**
+
+For further assistance, please contact the development team at huitang@telenav.cn.
+
