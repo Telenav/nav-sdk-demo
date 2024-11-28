@@ -12,11 +12,17 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.util.Range
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.telenav.map.api.Annotation
-import com.telenav.map.api.Annotation.Layer.RouteWayPoint
+import com.telenav.map.api.AutoZoomLevel
+import com.telenav.map.api.MapView
+import com.telenav.map.api.MapViewInitConfig
+import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
+import com.telenav.map.api.controllers.RouteRenderOptions
+import com.telenav.map.api.diagnosis.listener.MapViewStatusListener
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
@@ -27,46 +33,46 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
-import com.telenav.sdk.drivesession.model.drg.BetterRouteContext
-import com.telenav.sdk.drivesession.model.drg.RouteUpdateContext
+import com.telenav.sdk.guidance.audio.model.VerbosityLevel
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import com.telenav.sdk.map.model.AlongRouteTraffic
+import com.telenav.sdk.navigation.model.ChargingStationUnreachableEvent
+import com.telenav.sdk.navigation.model.TimedRestrictionEdge
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 /**
- * @author tang.hui on 2021/9/24
+ * @author tang.hui on 2024/11/26
  */
 class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEventListener {
+    private val LOG_TAG = "Nav SDK Demo"
     private val driveSession: DriveSession = DriveSession.Factory.createInstance()
     private var locationProvider = SimulationLocationProvider(this)
     private var navigationSession: NavigationSession? = null
     private var mapViewInitialized = false
     private var isNavigation = false    //  flag whether in active navigation state
     private var activeRouteId: String? = null
-    private val LOG_TAG = "Nav SDK Demo"
+    private var pickedRoute: Route? = null
 
     private var vehicleLocation: Location = Location("Demo").apply {
-        /*
         //  Telenav-US HQ:
         this.latitude = 37.3982607
         this.longitude = -121.9782241
-         */
-
-        this.latitude = 37.4194955
-        this.longitude = -122.13814
     }
 
     init {
+        driveSession.alertManager.enableLaneGuidanceDetection(true)
+        driveSession.audioGuidanceManager.setVerbosityLevel(VerbosityLevel.VERBOSE)
         driveSession.injectLocationProvider(locationProvider)
-        driveSession.eventHub?.let {
+        driveSession.eventHub.let {
             it.addNavigationEventListener(this)
             it.addPositionEventListener(this)
         }
+        //  inject customized location provider:
         locationProvider.setLocation(vehicleLocation)
-        locationProvider.start()
+        locationProvider.onStart()
     }
 
     companion object {
@@ -75,34 +81,71 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         }
     }
 
+    private fun configureMapView(mapView: MapView) {
+        // Enable all of the MapView features
+        val featuresController = mapView.getFeaturesController()
+        featuresController?.traffic()?.setEnabled()
+        featuresController?.freeFlowTraffic()?.setEnabled()
+        featuresController?.landmarks()?.setEnabled()
+        featuresController?.buildings()?.setEnabled()
+        featuresController?.flatTerrain()?.setDisabled()
+        featuresController?.globe()?.setEnabled()
+        featuresController?.terrain()?.setEnabled()
+        featuresController?.compass()?.setEnabled()
+        featuresController?.scaleBar()?.setEnabled()
+        featuresController?.roadBubbles()?.setEnabled()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //  inject customized location provider:
-        locationProvider.start()
-        driveSession.injectLocationProvider(locationProvider)
+        val readyListener = object : MapViewReadyListener<MapView> {
+            override fun onReady(view: MapView?) {
+                view?.setFPS(60)
+                //  set zoom level range(1 to 16):
+                map_view.getCameraController()?.zoomLevelRange = Range(1.0f, 16.0f)
+                // recenter to vehicle position
+                map_view.getCameraController()?.position =
+                    Camera.Position.Builder().setLocation(vehicleLocation).build()
+                map_view.getVehicleController()?.setIcon(R.drawable.cvp)
+                mapViewInitialized = true
+            }
 
-        map_view.initialize(savedInstanceState) {
-            mapViewInitialized = true
-            map_view.vehicleController().setIcon(R.drawable.cvp)
-
-            map_view.featuresController().traffic().setEnabled()
-            map_view.featuresController().landmarks().setEnabled()
-            map_view.featuresController().buildings().setEnabled()
-            map_view.featuresController().terrain().setDisabled()   //  disable terrain
-            map_view.featuresController().globe().setEnabled()
-            map_view.featuresController().compass().setDisabled()   //  disable compass
-            map_view.featuresController().scaleBar().setDisabled()  //  disable scale bar
-
-            //  set zoom level range(1 to 16):
-            map_view.cameraController().zoomLevelRange = Range(1.0f, 16.0f)
-
-            // recenter to vehicle position
-            map_view.cameraController().position =
-                Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).build()
+            // by default it will use the default interface method which returns eFeatureCategory_Vital
+            // it is not necessary to be implemented
+            override fun getReadyFeaturesMask(): Int {
+                return MapView.eFeatureCategory_Vital
+            }
         }
+
+        val mapViewConfig = MapViewInitConfig(
+            context = this.applicationContext,
+            lifecycleOwner = this,
+            dpi = map_view.defaultDpi,
+            defaultLocation = Location("").apply {
+                this.latitude = 37.3982607
+                this.longitude = -121.9782241
+            },
+            readyListener = readyListener,
+            createCvp = false,
+            autoZoomLevel = AutoZoomLevel.FAR
+        )
+        map_view.initialize(mapViewConfig)
+
+        val mapViewStatusListener = object : MapViewStatusListener {
+            override fun onDrawFirstFrame() {
+                Toast.makeText(this@MainActivity, "first frame has drawn", Toast.LENGTH_SHORT).show()
+                locationProvider.setLocation(locationProvider.getLastKnownLocation())
+                configureMapView(map_view)
+            }
+
+            override fun onMapSurfaceChanged() {
+            }
+
+        }
+        map_view.mapDiagnosis().addMapViewListener(mapViewStatusListener)
 
         map_view?.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
             when (touchType) {
@@ -119,28 +162,25 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                         data.geoLocation?.let {
                             runOnUiThread {
                                 // Set annotation at location
-                                val factory = map_view.annotationsController().factory()
-                                val annotation = factory.create(
+                                val factory = map_view.getAnnotationsController()?.factory()
+                                val annotation = factory?.create(
                                     this,
                                     R.drawable.map_pin_green_icon_unfocused,
                                     data.geoLocation!!
                                 )
-                                //  annotation.displayText = Annotation.TextDisplayInfo.Centered("Destination")
-
-                                //  Waypoint annotation layer:
-                                annotation.layer = Annotation.Layer(RouteWayPoint)
+                                  annotation?.displayText = Annotation.TextDisplayInfo.Centered("Destination")
 
                                 //  disable culling for this annotation(always visible):
-                                annotation.style = Annotation.Style.ScreenAnnotationFlagNoCulling
+                                annotation?.style = Annotation.Style.ScreenAnnotationFlagNoCulling
 
-                                map_view.annotationsController().clear()
-                                map_view.annotationsController().add(arrayListOf(annotation))
+                                map_view.getAnnotationsController()?.clear()
+                                map_view.getAnnotationsController()?.add(arrayListOf(annotation))
                             }
                         }
 
                         //  TODO("avoid route request while exists one is on the air")
                         val destinationLocation = Location("Demo")
-                        destinationLocation.set(data.geoLocation)
+                        destinationLocation.set(data.geoLocation!!)
                         requestDirection(vehicleLocation, destinationLocation)
                     }
                 }
@@ -150,16 +190,15 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         navButton.setOnClickListener {
             isNavigation = !isNavigation
             if (isNavigation) {
-                navigationSession?.stopNavigation()
+                driveSession.stopNavigation()
                 navigationSession = driveSession.startNavigation(pickedRoute!!, true, 45.0)
 
                 activeRouteId = pickedRoute!!.id
                 activeRouteId?.let {
-                    map_view.routesController().updateRouteProgress(it)
+                    map_view.getRoutesController()?.updateRouteProgress(it)
                 }
 
-                map_view.cameraController()
-                    .enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
+                map_view.getCameraController()?.enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
 
                 //  disable pan during following vehicle mode(just remind since we turned on auto-zoom, so sometimes even user
                 //  changed zoom level with gesture but will still back to the calculated zoom automatically):
@@ -183,16 +222,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             Log.i(LOG_TAG, "navigation stopped. reach destination")
         }
 
-        navigationSession?.stopNavigation()
-        map_view.annotationsController().clear()
-        map_view.routesController().clear()
+        driveSession.stopNavigation()
+        map_view.getAnnotationsController()?.clear()
+        map_view.getRoutesController()?.clear()
 
         //  disable following vehicle mode, allow user pan & zoom map:
-        map_view.cameraController().disableFollowVehicle()
+        map_view.getCameraController()?.disableFollowVehicle()
 
         //  back to vehicle location and reset to default zoom level(3):
-        map_view.cameraController().position =
-            Camera.Position.Builder().setLocation(locationProvider.lastKnownLocation).setZoomLevel(3F).build()
+        map_view.getCameraController()?.position =
+            Camera.Position.Builder().setLocation(locationProvider.getLastKnownLocation()).setZoomLevel(3F).build()
 
         runOnUiThread {
             navButton.isEnabled = false
@@ -204,7 +243,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         navigationSession = null
     }
 
-    var pickedRoute: Route? = null
 
     private fun requestDirection(
         begin: Location,
@@ -212,9 +250,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         wayPointList: MutableList<Location>? = null
     ) {
         Log.d(LOG_TAG, "requestDirection begin: $begin + end $end")
-        val wayPoints: ArrayList<GeoLocation> = arrayListOf()
+        val wayPoints: ArrayList<Waypoint> = arrayListOf()
         wayPointList?.forEach {
-            wayPoints.add(GeoLocation(LatLon(it.latitude, it.longitude)))
+            wayPoints.add(Waypoint(GeoLocation(LatLon(it.latitude, it.longitude))))
         }
         val request: RouteRequest = RouteRequest.Builder(
             GeoLocation(begin),
@@ -222,24 +260,26 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         ).contentLevel(ContentLevel.FULL)
             .routeCount(1)
             .stopPoints(wayPoints)
-            .startTime(Calendar.getInstance().timeInMillis / 1000)
             .build()
         val task = DirectionClient.Factory.hybridClient()
             .createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
-                map_view.routesController().clear()
+                map_view.getRoutesController()?.clear()
 
                 val routes = response.response.result
-                val routeIds = map_view.routesController().add(routes)
-                map_view.routesController().highlight(routeIds[0])
-                val region = map_view.routesController().region(routeIds)
-                map_view.cameraController().showRegion(region, Margins.Percentages(0.20, 0.20))
-                pickedRoute = routes[0]
-                runOnUiThread {
-                    navButton.isEnabled = true
-                    navButton.setText(R.string.start_navigation)
+                val routeIds = map_view.getRoutesController()?.add(routes)
+                if (routeIds?.isNotEmpty() == true) {
+                    map_view.getRoutesController()?.highlight(routeIds[0])
+                    val region = map_view.getRoutesController()?.region(routeIds)
+                    map_view.getCameraController()?.showRegion(region, Margins.Percentages(0.20, 0.20))
+                    pickedRoute = routes[0]
+                    activeRouteId = pickedRoute!!.id
+                    runOnUiThread {
+                        navButton.isEnabled = true
+                        navButton.setText(R.string.start_navigation)
+                    }
                 }
             } else {
                 Log.e(LOG_TAG, "requestDirection task failed! status: ${response.response.status}")
@@ -269,17 +309,28 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onDestroy() {
-        driveSession.eventHub?.removePositionEventListener(this)
-        driveSession.eventHub?.removeNavigationEventListener(this)
+        driveSession.eventHub.removePositionEventListener(this)
+        driveSession.eventHub.removeNavigationEventListener(this)
+        driveSession.injectLocationProvider(null)
         driveSession.dispose()
-        locationProvider.stop()
+        locationProvider.onStop()
         SDK.getInstance().dispose()
-
         Log.i(LOG_TAG, "Telenav SDK disposed")
         super.onDestroy()
     }
 
     override fun onNavigationEventUpdated(navEvent: NavigationEvent) {
+    }
+
+    override fun onNavigationRouteUpdating(progress: BetterRouteUpdateProgress) {
+        if (progress.newRoute != null && progress.status == BetterRouteUpdateProgress.Status.SUCCEEDED) {
+            if (progress.newRoute?.id != activeRouteId) {
+                pickedRoute?.id?.let { map_view.getRoutesController()?.remove(it) }
+                map_view.getRoutesController()?.refresh(progress.newRoute!!)
+                map_view.getRoutesController()?.updateRouteProgress(progress.newRoute!!.id)
+            }
+            activeRouteId = progress.newRoute?.id
+        }
     }
 
     override fun onJunctionViewUpdated(junctionViewInfo: JunctionViewInfo) {
@@ -288,7 +339,17 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     override fun onAlongRouteTrafficUpdated(alongRouteTraffic: AlongRouteTraffic) {
     }
 
-    override fun onLaneGuidanceUpdated(p0: LaneGuidanceEvent) {
+    override fun onBetterRouteDetected(proposal: BetterRouteProposal) {
+        Log.i(LOG_TAG, "onBetterRouteDetected: ${proposal.reason.name}")
+        if (proposal.status == BetterRouteProposal.Status.NEW_ROUTE_DETECTED) {
+            navigationSession?.acceptRouteProposal(proposal)
+        }
+    }
+
+    override fun onChargingStationUnreachableEventUpdated(unreachableEvent: ChargingStationUnreachableEvent) {
+    }
+
+    override fun onDepartWaypoint(departureWaypointInfo: DepartureWaypointInfo) {
     }
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
@@ -297,46 +358,20 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         }
     }
 
-    override fun onNavigationRouteUpdated(p0: Route, p1: BetterRouteContext?) {
+    override fun onTimedRestrictionEventUpdated(timedRestrictionEdges: List<TimedRestrictionEdge>) {
     }
 
-    override fun onNavigationRouteUpdated(route: Route, routeUpdateContext: RouteUpdateContext) {
-        activeRouteId?.let {
-            if (route.id != it) {
-                Log.i(LOG_TAG, "updated route. new route id: " + route.id + "reason: " + routeUpdateContext.reason)
-
-                map_view.routesController().remove(it)
-                map_view.routesController().refresh(route)
-                map_view.routesController().updateRouteProgress(route.id)
-            }
-        }
-
-        activeRouteId = route.id
+    override fun onTurnByTurnListUpdated(maneuverInfoList: List<ManeuverInfo>) {
     }
 
-    override fun onBetterRouteInfoUpdated(betterRouteInfo: BetterRouteInfo) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onBetterRouteDetected(status: NavigationEventListener.BetterRouteDetectionStatus,
-                                       betterRouteCandidate: BetterRouteCandidate?) {
-        //  TODO("one can decide accept or not according value of status")
-        //  ignore the recommended route
-        betterRouteCandidate?.accept(false)
-    }
-
-    override fun onLocationUpdated(vehicleLocation: Location) {
+    override fun onLocationUpdated(vehicleLocation: Location, positionInfo: PositionInfo) {
         if (mapViewInitialized) {
-            map_view.vehicleController().setLocation(vehicleLocation)
+            map_view.getVehicleController()?.setLocation(vehicleLocation)
         }
-    }
-
-    override fun onStreetUpdated(curStreetInfo: StreetInfo, drivingOffRoad: Boolean) {
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
 
-    override fun onMMFeedbackUpdated(feedback: MMFeedbackInfo) {
-    }
+
 }

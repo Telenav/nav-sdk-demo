@@ -122,7 +122,8 @@ class SplashActivity : AppCompatActivity() {
             .setLocale(Locale.EN_US)    //  if not specified, SDK will assume region EU
             .setUserId("AndroidDemoTest")
             .setDeviceGuid("AndroidDeviceGuid")
-            .setApplicationInfo(ApplicationInfo.builder("demo", "1").build())
+            .setApplicationInfo(ApplicationInfo.builder("demo", "2").build())
+            .setRegion("NA")
             .build()
         return initSDK(sdkOptions)
     }
@@ -133,7 +134,6 @@ class SplashActivity : AppCompatActivity() {
             val navSDKOptions = NavSDKOptions.builder(options)
                 .setTrafficRefreshTime(20)
                 .setTrafficExpireTime(20)
-                .enableTraffic(true)
                 .setTrafficFetchRange(3600)
                 .setMapStreamingSpaceLimit(1024 * 1024 * 1024)
                 .build()
@@ -141,6 +141,7 @@ class SplashActivity : AppCompatActivity() {
             if (success) {
                 //  by default: using DAY color theme:
                 SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
+                SDK.getInstance().enableTraffic(true)
             }
         }
 

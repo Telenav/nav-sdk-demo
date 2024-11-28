@@ -4,7 +4,7 @@ This is a sample app to demonstrate how to integrate Telenav navigation SDK with
 The SDK package is hosted on Alibaba Cloud, allowing seamless integration via Maven or Gradle.
 
 
-## Key Project Resources
+## Key Demo Resources
 | Resource     |     Description                                                    |
 |--------------|--------------------------------------------------------------------|
 |*Project Name*|nav-sdk-demo                                                        |
@@ -18,30 +18,37 @@ The SDK package is hosted on Alibaba Cloud, allowing seamless integration via Ma
 # Getting Started
 
 ## Prerequisites
-Please make sure you have following tools installed on your computer:
+Before running the demo, ensure you have the following:
+
+1. **Development Environment**:
 
 - Android Studio
-
 - Gradle
-
 - Git
+- JDK: Version 8 or higher
 
-## Download Project Source Code
+2. **Device Requirements**:
+
+- Android 6.0 (API Level 23) or higher.
+- GPS and internet access enabled on the device.
+
+## Clone or Download Project Source Code
 Please make sure you have access of this github repo, run below git commands to download the source code.
 ```git
-    git clone git@github.com:Telenav/nav-sdk-demo.git
-    git checkout easy
+git clone git@github.com:Telenav/nav-sdk-demo.git
+git checkout easy
 ```
 
 ## Config SDK Dependency
 To start Navigation SDK integration, add the SDK as a dependency of the project. 
 
-> Currently we're using version [1.4.34.1](https://docs.telenav.com/nav/release-notes.html#version-14131). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav/release-notes.html).
+> Currently we're using version [3.4.0-lts4-rc12.1](https://docs.telenav.com/nav-unified/release-notes.html). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav-unified/release-notes.html).
 
 ```Gradle
 dependencies {
-     implementation("com.telenav.sdk:telenav-android-drivesession:${telenavSdkVersion}")
-     implementation("com.telenav.sdk:telenav-android-mapview:${telenavSdkVersion}")
+	implementation "com.telenav.sdk:telenav-android-mapview-rc15:${telenavSdkVersion}"
+	implementation "com.telenav.sdk:telenav-android-drivesession-rc15:${telenavSdkVersion}"
+	implementation "com.telenav.sdk:telenav-android-ngx-rc15:${mapPluginVersion}"
 }
 ```
 
@@ -131,7 +138,8 @@ To get more help on SDK integration and other features, please refer to below do
 Update the version number in your `gradle.properties` file:
 
 ```
-telenavSdkVersion=1.4.34.1
+telenavSdkVersion=3.4.0-lts4-rc12.1
+mapPluginVersion=0.18.1-lts4-rc12.1
 ```
 
 ### **2. What if dependencies fail to download?**

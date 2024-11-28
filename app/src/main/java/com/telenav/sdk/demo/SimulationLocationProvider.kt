@@ -8,16 +8,14 @@ package com.telenav.sdk.demo
 
 import android.content.Context
 import android.location.Location
+import com.telenav.sdk.common.model.LocationExtrasInfo
 import com.telenav.sdk.common.model.LocationProvider
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * This location provider can used to change vehicle location
  */
-class SimulationLocationProvider(val context: Context) : LocationProvider {
-    private val listeners = ArrayList<LocationProvider.LocationUpdateListener>()
-    private var state = LocationProvider.Status.OUTOF_SERVICE
+class SimulationLocationProvider(val context: Context) : LocationProvider(NAME) {
     private var location: Location? = null
 
     companion object {
@@ -32,39 +30,22 @@ class SimulationLocationProvider(val context: Context) : LocationProvider {
         }
     }
 
-    fun start() {
-        state = LocationProvider.Status.NORMAL
+    override fun onStart() {
+        location?.let {
+            updateLocation(it)
+        }
     }
 
-    fun stop() {
-        state = LocationProvider.Status.OUTOF_SERVICE
+    override fun onStop() {
     }
 
-    fun setLocation(location: Location) {
+    fun setLocation(location: Location, extras: LocationExtrasInfo? = null) {
         if (location.latitude != this.location?.latitude || location.longitude != this.location?.longitude || location.bearing != this.location?.bearing) {
             this.location = location
-            notifyLocationChanged()
+            updateLocation(location, extras)
         }
     }
 
-    private fun notifyLocationChanged() {
-        listeners.forEach {
-            it.onLocationChanged(lastKnownLocation)
-        }
-    }
+    fun getLastKnownLocation(): Location = location ?: Location(NAME)
 
-    override fun getStatus(): LocationProvider.Status = state
-
-    override fun addLocationUpdateListener(listener: LocationProvider.LocationUpdateListener) {
-        listeners.add(listener)
-        listener.onLocationChanged(lastKnownLocation)
-    }
-
-    override fun getName(): String = NAME
-
-    override fun removeLocationUpdateListener(listener: LocationProvider.LocationUpdateListener) {
-        listeners.remove(listener)
-    }
-
-    override fun getLastKnownLocation(): Location = location ?: Location(NAME)
 }
