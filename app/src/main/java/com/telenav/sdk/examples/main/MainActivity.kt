@@ -43,7 +43,7 @@ open class MainActivity : AppCompatActivity() {
     private val permissionRequestCode = 12335
 
     private var initialized = false
-    private val region = Region.NA
+    private val region = Region.EU
     var is4WD = false
     var isTruck = false
     var isStreamingEnabled = true
@@ -53,7 +53,7 @@ open class MainActivity : AppCompatActivity() {
     companion object {
         const val API_KEY = SDK_KEY
         const val API_SECRET = SDK_SECRET
-        const val API_URL = SDK_ENDPOINT
+        const val API_URL = "https://apieustg.telenav.com"
     }
 
 
