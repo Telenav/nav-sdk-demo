@@ -9,13 +9,9 @@ Each scenario demonstrates different use cases and APIs.
 ## Getting Started
 The demo use the Gradle build system. Use the "gradlew build" command or use "Import Project" in Android Stuido.
 
-## Running locally
-Set parameters in gradle.properties
-```kotlin
-// please obtatin API key and secret from Telenav and set them here. (double quotes is needed here)
-API_KEY="Your API key"
-API_SECRET="Your API secret"
-```
+## API key/secret
+
+To delight all potential users, it's provide a set of trial API key/secret for the EU region for free use.It will expire in six months, after which users must check out the latest code from the repo to obtain a new trial API.
 
 Screenshots
 -----------
