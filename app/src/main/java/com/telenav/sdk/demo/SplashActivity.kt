@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import com.telenav.sdk.common.logging.TaLog
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.NavLogLevelType
+import com.telenav.sdk.common.model.Region
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
@@ -118,7 +119,7 @@ class SplashActivity : AppCompatActivity() {
             .setApiKey(SDK_KEY)
             .setApiSecret(SDK_SECRET)
             .setSdkCacheDataDir(sdkCacheDataDir)
-            .setCloudEndPoint("https://apinastg.telenav.com")
+            .setCloudEndPoint("https://apieustg.telenav.com")
             .setLocale(Locale.EN_US)    //  if not specified, SDK will assume region EU
             .setUserId("AndroidDemoTest")
             .setDeviceGuid("AndroidDeviceGuid")
@@ -136,6 +137,7 @@ class SplashActivity : AppCompatActivity() {
                 .enableTraffic(true)
                 .setTrafficFetchRange(3600)
                 .setMapStreamingSpaceLimit(1024 * 1024 * 1024)
+                .setRegion(Region.EU)
                 .build()
             success = SDK.getInstance().initialize(this@SplashActivity, navSDKOptions) == 0
             if (success) {

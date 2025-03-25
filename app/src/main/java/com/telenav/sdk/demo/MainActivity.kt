@@ -49,14 +49,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private val LOG_TAG = "Nav SDK Demo"
 
     private var vehicleLocation: Location = Location("Demo").apply {
-        /*
-        //  Telenav-US HQ:
-        this.latitude = 37.3982607
-        this.longitude = -121.9782241
-         */
-
-        this.latitude = 37.4194955
-        this.longitude = -122.13814
+        //  city center of "Frankfurt, Germany":
+        latitude = 50.10215257
+        longitude = 8.681829184
     }
 
     init {

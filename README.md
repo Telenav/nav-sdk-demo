@@ -1,4 +1,5 @@
 # Introduction
+
 This is a sample app to demonstrate how to integrate Telenav navigation SDK with basic features.
 
 The SDK package is hosted on Alibaba Cloud, allowing seamless integration via Maven or Gradle.
@@ -29,11 +30,16 @@ Please make sure you have following tools installed on your computer:
 ## Download Project Source Code
 Please make sure you have access of this github repo, run below git commands to download the source code.
 ```git
-    git clone git@github.com:Telenav/nav-sdk-demo.git
-    git checkout easy
+git clone git@github.com:Telenav/nav-sdk-demo.git
+git checkout easy
 ```
 
+## API key/secret
+
+To delight all potential users, it's provide a set of trial API key/secret for the EU region for free use.It will expire in six months, after which users must check out the latest code from the repo to obtain a new trial API.
+
 ## Config SDK Dependency
+
 To start Navigation SDK integration, add the SDK as a dependency of the project. 
 
 > Currently we're using version [1.4.34.1](https://docs.telenav.com/nav/release-notes.html#version-14131). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav/release-notes.html).

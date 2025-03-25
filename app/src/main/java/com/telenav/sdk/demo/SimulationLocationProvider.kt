@@ -26,8 +26,8 @@ class SimulationLocationProvider(val context: Context) : LocationProvider {
 
     init {
         location = Location(NAME).apply {
-            this.latitude = 37.3982607
-            this.longitude = -121.9782241
+            this.latitude = 50.10215257
+            this.longitude = 8.681829184
             this.time = Calendar.getInstance().timeInMillis
         }
     }
