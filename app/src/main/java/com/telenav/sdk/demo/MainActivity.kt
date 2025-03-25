@@ -22,6 +22,7 @@ import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.controllers.RouteRenderOptions
+import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.diagnosis.listener.MapViewStatusListener
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
@@ -57,9 +58,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var pickedRoute: Route? = null
 
     private var vehicleLocation: Location = Location("Demo").apply {
-        //  Telenav-US HQ:
-        this.latitude = 37.3982607
-        this.longitude = -121.9782241
+        //  city center of "Frankfurt, Germany":
+        latitude = 50.10215257
+        longitude = 8.681829184
     }
 
     init {
@@ -109,7 +110,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 // recenter to vehicle position
                 map_view.getCameraController()?.position =
                     Camera.Position.Builder().setLocation(vehicleLocation).build()
-                map_view.getVehicleController()?.setIcon(R.drawable.cvp)
                 mapViewInitialized = true
             }
 
@@ -125,11 +125,11 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             lifecycleOwner = this,
             dpi = map_view.defaultDpi,
             defaultLocation = Location("").apply {
-                this.latitude = 37.3982607
-                this.longitude = -121.9782241
+                this.latitude = 50.10215257
+                this.longitude = 8.681829184
             },
             readyListener = readyListener,
-            createCvp = false,
+            createCvp = true,
             autoZoomLevel = AutoZoomLevel.FAR
         )
         map_view.initialize(mapViewConfig)

@@ -39,7 +39,12 @@ git clone git@github.com:Telenav/nav-sdk-demo.git
 git checkout easy
 ```
 
+## API key/secret
+
+To delight all potential users, it's provide a set of trial API key/secret for the EU region for free use.It will expire in six months, after which users must check out the latest code from the repo to obtain a new trial API.
+
 ## Config SDK Dependency
+
 To start Navigation SDK integration, add the SDK as a dependency of the project. 
 
 > Currently we're using version [3.4.0-lts4-rc12.1](https://docs.telenav.com/nav-unified/release-notes.html). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav-unified/release-notes.html).
