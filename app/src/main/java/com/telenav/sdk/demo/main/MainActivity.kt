@@ -40,7 +40,7 @@ open class MainActivity : AppCompatActivity() {
     private val permissionRequestCode = 12335
 
     private var initialized = false
-    private val region = Region.NA
+    private val region = Region.EU
     var is4WD = false
     var isStreamingEnabled = true
     var isTrafficEnabled = true
@@ -132,19 +132,16 @@ open class MainActivity : AppCompatActivity() {
         TaLog.setLogLevel(NavLogLevelType.INFO)
         // TODO set your local embedded map data path
         val sdkDataDir = ""
-        val url = API_URL
-        val key = API_KEY
-        val secret = API_SECRET
         // TODO set your local writable path
         val sdkCacheDataDir = getCachedDataDir()
         // TODO set your local writable ota path
         val otaDataDir = "sdcard/test/"
-        RegionCachedHelper.saveSDKDataModel(this,InitSDKDataModel(region, "", key, secret, url, "stage"))
+        RegionCachedHelper.saveSDKDataModel(this,InitSDKDataModel(region, "", API_KEY, API_SECRET, API_URL, "stage"))
         val optionsBuilder = SDKOptions.builder()
             .setApiKey(API_KEY)
             .setApiSecret(API_SECRET)
             .setSdkCacheDataDir(sdkCacheDataDir)
-            .setCloudEndPoint(url)
+            .setCloudEndPoint(API_URL)
             .setLocale(getLocale(region))    //  if not specified, SDK will assume region EU
             .setUserId("AndroidSampleTest")
         if (!TextUtils.isEmpty(sdkDataDir)) {
