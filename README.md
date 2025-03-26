@@ -39,9 +39,12 @@ git clone git@github.com:Telenav/nav-sdk-demo.git
 git checkout easy
 ```
 
-## API key/secret
+## API key/secret and cloud end point
+You must set correct API key/secret, cloud endpoint and region name before compiling the application.
+To ease this process, we have made EU region as a default and pre-filled all necessary settings.
 
-To delight all potential users, it's provide a set of trial API key/secret for the EU region for free use.It will expire in six months, after which users must check out the latest code from the repo to obtain a new trial API.
+The API key/secret in this demo is for trial purpose only and will expire on September 30, 2025. 
+After it expires, please update the code to get the new key.
 
 ## Config SDK Dependency
 
