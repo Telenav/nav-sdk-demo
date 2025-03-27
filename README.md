@@ -36,7 +36,7 @@ Before running the demo, ensure you have the following:
 Please make sure you have access of this github repo, run below git commands to download the source code.
 ```git
 git clone git@github.com:Telenav/nav-sdk-demo.git
-git checkout easy
+git checkout easy-lts4
 ```
 
 ## API key/secret and cloud end point
