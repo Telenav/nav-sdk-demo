@@ -26,13 +26,17 @@ android {
     buildTypes {
         debug {
             //Reading system variables
+            buildConfigField("String", "Region", "${Region}")
             buildConfigField("String", "API_KEY", "${API_KEY}")
             buildConfigField("String", "API_SECRET", "${API_SECRET}")
+            buildConfigField("String", "CloudEndPoint", "${CloudEndPoint}")
         }
         release {
             //Reading system variables
+            buildConfigField("String", "Region", "${Region}")
             buildConfigField("String", "API_KEY", "${API_KEY}")
             buildConfigField("String", "API_SECRET", "${API_SECRET}")
+            buildConfigField("String", "CloudEndPoint", "${CloudEndPoint}")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

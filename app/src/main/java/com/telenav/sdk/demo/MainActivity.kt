@@ -34,6 +34,7 @@ import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
 import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.examples.BuildConfig
 import com.telenav.sdk.guidance.audio.model.VerbosityLevel
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
@@ -50,7 +51,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEventListener {
     private val LOG_TAG = "Nav SDK Demo"
     private val driveSession: DriveSession = DriveSession.Factory.createInstance()
-    private var locationProvider = SimulationLocationProvider(this)
+    private var locationProvider = SimulationLocationProvider(BuildConfig.Region)
     private var navigationSession: NavigationSession? = null
     private var mapViewInitialized = false
     private var isNavigation = false    //  flag whether in active navigation state
@@ -58,9 +59,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var pickedRoute: Route? = null
 
     private var vehicleLocation: Location = Location("Demo").apply {
-        //  city center of "Frankfurt, Germany":
-        latitude = 50.10215257
-        longitude = 8.681829184
+        latitude = locationProvider.getLastKnownLocation().latitude
+        longitude =locationProvider.getLastKnownLocation().longitude
     }
 
     init {
@@ -71,8 +71,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             it.addNavigationEventListener(this)
             it.addPositionEventListener(this)
         }
-        //  inject customized location provider:
-        locationProvider.setLocation(vehicleLocation)
         locationProvider.onStart()
     }
 
@@ -124,10 +122,6 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             context = this.applicationContext,
             lifecycleOwner = this,
             dpi = map_view.defaultDpi,
-            defaultLocation = Location("").apply {
-                this.latitude = 50.10215257
-                this.longitude = 8.681829184
-            },
             readyListener = readyListener,
             createCvp = true,
             autoZoomLevel = AutoZoomLevel.FAR

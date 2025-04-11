@@ -42,6 +42,7 @@ git checkout easy-lts4
 ## API key/secret and cloud end point
 You must set correct API key/secret, cloud endpoint and region name before compiling the application.
 To ease this process, we have made EU region as a default and pre-filled all necessary settings.
+SEA region config is also provided in the demo app. Please activate the SEA config in the gradle.properties(Disable the EU setting as well).
 
 The API key/secret in this demo is for trial purpose only and will expire on September 30, 2025. 
 After it expires, please update the code to get the new key.
