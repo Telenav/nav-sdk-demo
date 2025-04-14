@@ -18,6 +18,8 @@ import com.telenav.sdk.common.model.NavLogLevelType
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
+import com.telenav.sdk.entity.api.EntityService
+import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.map.SDK
@@ -143,8 +145,30 @@ class SplashActivity : AppCompatActivity() {
                 SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
                 SDK.getInstance().enableTraffic(true)
             }
+            initEntityService(options)
         }
 
         return success
     }
+
+    private suspend fun initEntityService(options: SDKOptions) {
+        withContext(Dispatchers.IO) {
+            try {
+                EntityService.initialize(options)
+            } catch (e: IllegalArgumentException) {
+                TaLog.e(
+                    "TAG",
+                    "SDK entity service init error, check your API key/secret, cloud endpoint and lib dependencies",
+                    e
+                )
+            } catch (e: EntityException) {
+                TaLog.e(
+                    "TAG",
+                    "SDK entity service init error, embedded data path: " + e.localizedMessage,
+                    e
+                )
+            }
+        }
+    }
+
 }

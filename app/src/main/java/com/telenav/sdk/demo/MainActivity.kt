@@ -8,12 +8,16 @@ package com.telenav.sdk.demo
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.util.Range
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.AutoZoomLevel
 import com.telenav.map.api.MapView
@@ -29,6 +33,8 @@ import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.common.model.LatLon
+import com.telenav.sdk.demo.search.SearchResultFragment
+import com.telenav.sdk.demo.search.SharedSearchLocationViewModel
 import com.telenav.sdk.drivesession.DriveSession
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
@@ -43,6 +49,7 @@ import com.telenav.sdk.map.model.AlongRouteTraffic
 import com.telenav.sdk.navigation.model.ChargingStationUnreachableEvent
 import com.telenav.sdk.navigation.model.TimedRestrictionEdge
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.searchBtn
 import java.util.*
 
 /**
@@ -62,6 +69,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         latitude = locationProvider.getLastKnownLocation().latitude
         longitude =locationProvider.getLastKnownLocation().longitude
     }
+
+    private val searchLocationViewModel: SharedSearchLocationViewModel by viewModels()
 
     init {
         driveSession.alertManager.enableLaneGuidanceDetection(true)
@@ -206,6 +215,35 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 map_view.setActiveGestures(activeGestures)
                 handleNavigationSessionEnd(true)
             }
+        }
+
+        searchBtn.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .add(android.R.id.content, SearchResultFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        searchLocationViewModel.mutableSelectedLocation.observe(this) {
+            if (isNavigation) {
+                val activeGestures = setOf(GestureType.Zoom, GestureType.Pan, GestureType.Rotate, GestureType.Tilt)
+                map_view.setActiveGestures(activeGestures)
+                handleNavigationSessionEnd(true)
+                isNavigation = false
+            }
+            val factory = map_view.getAnnotationsController()?.factory()
+            val destAnnotation = factory!!.create(
+                this,
+                R.drawable.map_pin_green_icon_unfocused,
+                it?.displayLocation!!)
+            destAnnotation.displayText =
+                Annotation.TextDisplayInfo.Centered(it.displayText)
+                    .apply {
+                        this.textColor = Color.BLACK
+                    }
+            destAnnotation.style = Annotation.Style.ScreenAnnotationPopup
+            map_view.getAnnotationsController()?.add(arrayListOf(destAnnotation))
+            requestDirection(vehicleLocation, it.navLocation!!)
         }
     }
 
