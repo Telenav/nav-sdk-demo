@@ -11,13 +11,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.util.Range
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.AutoZoomLevel
 import com.telenav.map.api.MapView
@@ -25,31 +23,35 @@ import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
-import com.telenav.map.api.controllers.RouteRenderOptions
-import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.diagnosis.listener.MapViewStatusListener
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
-import com.telenav.sdk.examples.R
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.demo.search.SearchResultFragment
 import com.telenav.sdk.demo.search.SharedSearchLocationViewModel
-import com.telenav.sdk.drivesession.DriveSession
-import com.telenav.sdk.drivesession.NavigationSession
-import com.telenav.sdk.drivesession.listener.NavigationEventListener
-import com.telenav.sdk.drivesession.listener.PositionEventListener
-import com.telenav.sdk.drivesession.model.*
+import com.telenav.sdk.drive.NavigationService
+import com.telenav.sdk.drive.NavigationSession
+import com.telenav.sdk.drive.listener.NavigationEventListener
+import com.telenav.sdk.drive.listener.PositionEventListener
+import com.telenav.sdk.drive.model.BetterRouteProposal
+import com.telenav.sdk.drive.model.BetterRouteUpdateProgress
+import com.telenav.sdk.drive.model.ChargingStationUnreachableEvent
+import com.telenav.sdk.drive.model.DepartureWaypointInfo
+import com.telenav.sdk.drive.model.JunctionViewInfo
+import com.telenav.sdk.drive.model.ManeuverInfo
+import com.telenav.sdk.drive.model.NavigationEvent
+import com.telenav.sdk.drive.model.PositionInfo
+import com.telenav.sdk.drive.model.RoadCalibrator
+import com.telenav.sdk.drive.model.TimedRestrictionEdge
 import com.telenav.sdk.examples.BuildConfig
+import com.telenav.sdk.examples.R
 import com.telenav.sdk.guidance.audio.model.VerbosityLevel
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
 import com.telenav.sdk.map.direction.model.*
 import com.telenav.sdk.map.model.AlongRouteTraffic
-import com.telenav.sdk.navigation.model.ChargingStationUnreachableEvent
-import com.telenav.sdk.navigation.model.TimedRestrictionEdge
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.searchBtn
 import java.util.*
 
 /**
@@ -57,7 +59,7 @@ import java.util.*
  */
 class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEventListener {
     private val LOG_TAG = "Nav SDK Demo"
-    private val driveSession: DriveSession = DriveSession.Factory.createInstance()
+    private val driveSession: NavigationService = NavigationService.Factory.createInstance()
     private var locationProvider = SimulationLocationProvider(BuildConfig.Region)
     private var navigationSession: NavigationSession? = null
     private var mapViewInitialized = false
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     init {
         driveSession.alertManager.enableLaneGuidanceDetection(true)
         driveSession.audioGuidanceManager.setVerbosityLevel(VerbosityLevel.VERBOSE)
-        driveSession.injectLocationProvider(locationProvider)
+        SDK.getInstance().injectLocationProvider(locationProvider)
         driveSession.eventHub.let {
             it.addNavigationEventListener(this)
             it.addPositionEventListener(this)
@@ -343,7 +345,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     override fun onDestroy() {
         driveSession.eventHub.removePositionEventListener(this)
         driveSession.eventHub.removeNavigationEventListener(this)
-        driveSession.injectLocationProvider(null)
+        SDK.getInstance().injectLocationProvider(null)
         driveSession.dispose()
         locationProvider.onStop()
         SDK.getInstance().dispose()

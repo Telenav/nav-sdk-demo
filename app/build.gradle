@@ -64,7 +64,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation "com.telenav.sdk:telenav-android-mapview-${ndkVersion}:${telenavSdkVersion}"
-    implementation "com.telenav.sdk:telenav-android-drivesession-${ndkVersion}:${telenavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-navigation-${ndkVersion}:${telenavSdkVersion}"
+    implementation "com.telenav.sdk:telenav-android-ehservice-${ndkVersion}:${telenavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-ngx-${ndkVersion}:${mapPluginVersion}"
     implementation "com.telenav.sdk:telenav-entity-cloud:${entityVersion}"
 }

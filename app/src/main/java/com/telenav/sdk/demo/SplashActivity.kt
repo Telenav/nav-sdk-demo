@@ -136,7 +136,7 @@ class SplashActivity : AppCompatActivity() {
             val navSDKOptions = NavSDKOptions.builder(options)
                 .setTrafficRefreshTime(20)
                 .setTrafficExpireTime(20)
-                .setTrafficFetchRange(3600)
+//                .setTrafficFetchRange(3600)
                 .setMapStreamingSpaceLimit(1024 * 1024 * 1024)
                 .build()
             success = SDK.getInstance().initialize(this@SplashActivity, navSDKOptions) == 0
