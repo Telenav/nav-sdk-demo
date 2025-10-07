@@ -59,8 +59,11 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
     private var vehicleLocation: Location = Location("Demo").apply {
         //  city center of "Frankfurt, Germany":
-        latitude = 50.10215257
-        longitude = 8.681829184
+//        latitude = 50.10215257
+//        longitude = 8.681829184
+
+        latitude = 37.3837
+        longitude = -121.9828
     }
 
     init {
@@ -125,8 +128,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             lifecycleOwner = this,
             dpi = map_view.defaultDpi,
             defaultLocation = Location("").apply {
-                this.latitude = 50.10215257
-                this.longitude = 8.681829184
+                this.latitude = 37.3837
+                this.longitude = -121.9828
             },
             readyListener = readyListener,
             createCvp = true,
@@ -262,7 +265,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             .stopPoints(wayPoints)
             .build()
         val task = DirectionClient.Factory.hybridClient()
-            .createRoutingTask(request, RequestMode.CLOUD_ONLY)
+        .createRoutingTask(request)
+        // This request will fail and reports error 108
+//            .createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
