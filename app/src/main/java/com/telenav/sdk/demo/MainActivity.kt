@@ -9,10 +9,12 @@ package com.telenav.sdk.demo
 import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Range
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.AutoZoomLevel
@@ -247,6 +249,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun requestDirection(
         begin: Location,
         end: Location,
@@ -257,16 +260,17 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         wayPointList?.forEach {
             wayPoints.add(Waypoint(GeoLocation(LatLon(it.latitude, it.longitude))))
         }
+        val routePref = RoutePreferences.Builder().enableRouteSafety(true).build()
         val request: RouteRequest = RouteRequest.Builder(
             GeoLocation(begin),
-            GeoLocation(LatLon(end.latitude, end.longitude))
+            GeoLocation(LatLon(end.latitude, end.longitude)),
+            routePref
         ).contentLevel(ContentLevel.FULL)
-            .routeCount(1)
+            .routeCount(3)
             .stopPoints(wayPoints)
             .build()
         val task = DirectionClient.Factory.hybridClient()
-        .createRoutingTask(request)
-        // This request will fail and reports error 108
+            .createRoutingTask(request)
 //            .createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
@@ -276,6 +280,21 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 val routes = response.response.result
                 val routeIds = map_view.getRoutesController()?.add(routes)
                 if (routeIds?.isNotEmpty() == true) {
+                    routes.forEach(){ route ->
+                        Log.d("RouteMeta", route.safetyScore.toString())
+                        route.routeMetaInfo?.diagnostics?.forEach() {
+                            it.payload?.forEach { key, value ->
+                                val length = value.size
+                                Log.d("RouteMeta", "payload size: $length")
+                                value.forEach() { result ->
+                                    Log.d("RouteMeta: ", "value entry: $result")
+                                }
+                                Log.d("RouteMeta: ", "Key: $key")
+                            }
+//                            Log.d("RouteMeta: ", it.toString())
+                        }
+                    }
+
                     map_view.getRoutesController()?.highlight(routeIds[0])
                     val region = map_view.getRoutesController()?.region(routeIds)
                     map_view.getCameraController()?.showRegion(region, Margins.Percentages(0.20, 0.20))
