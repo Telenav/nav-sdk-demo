@@ -8,14 +8,20 @@ package com.telenav.sdk.demo
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Range
+import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.AutoZoomLevel
 import com.telenav.map.api.MapView
@@ -23,8 +29,6 @@ import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.MapViewReadyListener
 import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
-import com.telenav.map.api.controllers.RouteRenderOptions
-import com.telenav.map.api.controllers.VehicleController
 import com.telenav.map.api.diagnosis.listener.MapViewStatusListener
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
@@ -59,26 +63,30 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var activeRouteId: String? = null
     private var pickedRoute: Route? = null
 
-    private var vehicleLocation: Location = Location("Demo").apply {
-        //  city center of "Frankfurt, Germany":
-//        latitude = 50.10215257
-//        longitude = 8.681829184
+    // record last known location and feed it into the first drawn frame;
+    private var lastKnownLocation: Location? = null
 
-        latitude = 37.3837
-        longitude = -121.9828
+    // Location to show if gps hasn't gain signal yet
+    private var defaultLocation: Location = Location("Demo").apply {
+        // 37.38910, -121.97184 TN HQ
+        latitude = 37.38910
+        longitude = -121.97184
     }
 
+    // TODO: make it real location instead of fake one.
     init {
         driveSession.alertManager.enableLaneGuidanceDetection(true)
         driveSession.audioGuidanceManager.setVerbosityLevel(VerbosityLevel.VERBOSE)
-        driveSession.injectLocationProvider(locationProvider)
+        // NOTE: bypass the gps simulation, use physical location instead;
+        driveSession.injectLocationProvider(null)
         driveSession.eventHub.let {
             it.addNavigationEventListener(this)
             it.addPositionEventListener(this)
         }
+
         //  inject customized location provider:
-        locationProvider.setLocation(vehicleLocation)
-        locationProvider.onStart()
+//        locationProvider.setLocation(vehicleLocation)
+//        locationProvider.onStart()
     }
 
     companion object {
@@ -102,11 +110,12 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         featuresController?.roadBubbles()?.setEnabled()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        // TODO: read from file for last known location;
         val readyListener = object : MapViewReadyListener<MapView> {
             override fun onReady(view: MapView?) {
                 view?.setFPS(60)
@@ -114,7 +123,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                 map_view.getCameraController()?.zoomLevelRange = Range(1.0f, 16.0f)
                 // recenter to vehicle position
                 map_view.getCameraController()?.position =
-                    Camera.Position.Builder().setLocation(vehicleLocation).build()
+                    Camera.Position.Builder().setLocation(defaultLocation).build()
                 mapViewInitialized = true
             }
 
@@ -129,20 +138,17 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             context = this.applicationContext,
             lifecycleOwner = this,
             dpi = map_view.defaultDpi,
-            defaultLocation = Location("").apply {
-                this.latitude = 37.3837
-                this.longitude = -121.9828
-            },
+            defaultLocation = this.defaultLocation,
             readyListener = readyListener,
             createCvp = true,
             autoZoomLevel = AutoZoomLevel.FAR
         )
+
         map_view.initialize(mapViewConfig)
 
         val mapViewStatusListener = object : MapViewStatusListener {
             override fun onDrawFirstFrame() {
                 Toast.makeText(this@MainActivity, "first frame has drawn", Toast.LENGTH_SHORT).show()
-                locationProvider.setLocation(locationProvider.getLastKnownLocation())
                 configureMapView(map_view)
             }
 
@@ -186,7 +192,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                         //  TODO("avoid route request while exists one is on the air")
                         val destinationLocation = Location("Demo")
                         destinationLocation.set(data.geoLocation!!)
-                        requestDirection(vehicleLocation, destinationLocation)
+
+                        val startLocation = lastKnownLocation ?: run {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Move to open area, use default location instead.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            defaultLocation
+                        }
+                        requestDirection(startLocation, destinationLocation)
                     }
                 }
             }
@@ -235,8 +250,17 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         map_view.getCameraController()?.disableFollowVehicle()
 
         //  back to vehicle location and reset to default zoom level(3):
+        val startLocation = lastKnownLocation ?: run {
+            Toast.makeText(
+                this@MainActivity,
+                "Move to open area, use default location instead.",
+                Toast.LENGTH_SHORT
+            ).show()
+            defaultLocation
+        }
+
         map_view.getCameraController()?.position =
-            Camera.Position.Builder().setLocation(locationProvider.getLastKnownLocation()).setZoomLevel(3F).build()
+            Camera.Position.Builder().setLocation(startLocation).setZoomLevel(3F).build()
 
         runOnUiThread {
             navButton.isEnabled = false
@@ -248,6 +272,47 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         navigationSession = null
     }
 
+    enum class WeatherType {
+        UNKNOWN,
+        AQUAPLANE,
+        LOW_VISIBILITY,
+        ICY;
+        companion object {
+            fun fromString(value: String?): WeatherType {
+                return when (value?.uppercase()) {
+                    "AQUAPLANE" -> AQUAPLANE
+                    "LOW_VISIBILITY" -> LOW_VISIBILITY
+                    "ICY" -> ICY
+                    else -> UNKNOWN // default fallback
+                }
+            }
+        }
+    }
+
+    enum class Severity {
+        MINOR,
+        MEDIUM,
+        MAJOR,
+        CRITICAL;
+        companion object {
+            fun fromString(value: String?): Severity {
+                return when (value?.uppercase()) {
+                    "MINOR" -> MINOR
+                    "MEDIUM" -> MEDIUM
+                    "MAJOR" -> MAJOR
+                    "CRITICAL" -> CRITICAL
+                    else -> MINOR // default fallback
+                }
+            }
+        }
+    }
+
+    data class WeatherEvent(
+        var latitude: Double = 0.0,
+        var longitude: Double = 0.0,
+        var type: WeatherType = WeatherType.UNKNOWN,
+        var severity: Severity = Severity.MINOR
+    )
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun requestDirection(
@@ -266,39 +331,99 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             GeoLocation(LatLon(end.latitude, end.longitude)),
             routePref
         ).contentLevel(ContentLevel.FULL)
-            .routeCount(3)
+            .routeCount(1)
             .stopPoints(wayPoints)
             .build()
-        val task = DirectionClient.Factory.hybridClient()
-            .createRoutingTask(request)
-//            .createRoutingTask(request, RequestMode.CLOUD_ONLY)
+
+        val task = DirectionClient.Factory.hybridClient().createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
                 map_view.getRoutesController()?.clear()
-
                 val routes = response.response.result
                 val routeIds = map_view.getRoutesController()?.add(routes)
                 if (routeIds?.isNotEmpty() == true) {
+                    // NOTE: select route -> routeid: weather events;
+                    var routeWeather = mutableMapOf<String, List<WeatherEvent>>()
+
                     routes.forEach(){ route ->
-                        Log.d("RouteMeta", route.safetyScore.toString())
+                        var events = mutableListOf<WeatherEvent>()
                         route.routeMetaInfo?.diagnostics?.forEach() {
-                            it.payload?.forEach { key, value ->
-                                val length = value.size
-                                Log.d("RouteMeta", "payload size: $length")
-                                value.forEach() { result ->
-                                    Log.d("RouteMeta: ", "value entry: $result")
+                            if (it.topic == "WEATHER_EVENT") {
+                                var event = WeatherEvent()
+                                it.payload?.forEach { key, value ->
+                                    // NOTE: key has multiple values
+                                    // Log.d("RouteMeta: ", "Key: $key")
+                                    value.forEach() { result ->
+                                        Log.d("RouteMeta: ", "value entry: $result")
+                                        if (key == "severity") {
+                                            event.severity = Severity.fromString(result)
+                                        }
+                                        if (key == "longitude") {
+                                            event.longitude = result.toDouble()
+                                        }
+
+                                        if (key == "latitude") {
+                                            event.latitude = result.toDouble()
+                                        }
+
+                                        if (key == "type") {
+                                            event.type = WeatherType.fromString(result)
+                                        }
+                                    }
                                 }
-                                Log.d("RouteMeta: ", "Key: $key")
+
+                                events.add(event)
                             }
-//                            Log.d("RouteMeta: ", it.toString())
+                        }
+
+                        if (events.size > 0) {
+                            routeWeather[route.id] = events
                         }
                     }
 
                     map_view.getRoutesController()?.highlight(routeIds[0])
                     val region = map_view.getRoutesController()?.region(routeIds)
                     map_view.getCameraController()?.showRegion(region, Margins.Percentages(0.20, 0.20))
+
                     pickedRoute = routes[0]
+                    // only show weather conditions on highlighted route
+                    if (routeWeather.isNotEmpty() && routeWeather[pickedRoute?.id]?.isEmpty() == false) {
+                        var events = routeWeather[pickedRoute?.id]
+                        var annotations = mutableListOf<com.telenav.map.api.Annotation>()
+                        events?.forEach() {
+                            val location = Location("weather").apply {
+                                this.latitude = it?.latitude
+                                this.longitude = it?.longitude
+                            }
+
+                            val drawable = getResourceBasedOnWeatherType(it.type)
+                            if (drawable != -1) {
+                                val sizeInPx = dpToPx(50f, this)  // e.g., 50dp target size
+                                val bitmap = BitmapFactory.decodeResource(resources, drawable)
+                                val originalWidth = bitmap.width
+                                val originalHeight = bitmap.height
+                                val aspectRatio = originalHeight.toFloat() / originalWidth.toFloat()
+                                val targetHeight = (sizeInPx * aspectRatio).toInt()
+                                val scaled = Bitmap.createScaledBitmap(
+                                    bitmap,
+                                    sizeInPx,
+                                    targetHeight,
+                                    true
+                                )
+                                val anno = map_view.getAnnotationsController()?.factory()?.create(this, Annotation.UserGraphic(scaled, false), location)
+                                Log.d("Weather", "type: ${it.type}, loc: ${location.latitude}, ${location.longitude}")
+
+                                if (anno != null) {
+                                    annotations.add(anno)
+                                }
+                            }
+                        }
+
+                        Log.d("Weather", "annotation size: ${annotations.size}")
+                        map_view.getAnnotationsController()?.add(annotations)
+                    }
+
                     activeRouteId = pickedRoute!!.id
                     runOnUiThread {
                         navButton.isEnabled = true
@@ -315,6 +440,22 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
             task.dispose()
         }
+    }
+
+    private fun getResourceBasedOnWeatherType(type: WeatherType): Int {
+        return when (type) {
+            WeatherType.AQUAPLANE -> R.drawable.flooding
+            WeatherType.ICY -> R.drawable.snow
+            WeatherType.LOW_VISIBILITY -> R.drawable.frog
+            // case we shouldn't be drawing anything
+            else -> -1
+        }
+    }
+
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
+        ).toInt()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -389,13 +530,20 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onLocationUpdated(vehicleLocation: Location, positionInfo: PositionInfo) {
+        Log.d("onLocationUpdated", "lat: ${vehicleLocation.latitude}, lon: ${vehicleLocation.longitude}")
         if (mapViewInitialized) {
             map_view.getVehicleController()?.setLocation(vehicleLocation)
+
+            // first drawn frame
+            if (lastKnownLocation == null) {
+                lastKnownLocation = vehicleLocation
+                map_view.getCameraController()?.position =
+                    Camera.Position.Builder().setLocation(vehicleLocation).build()
+            }
         }
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
-
 
 }

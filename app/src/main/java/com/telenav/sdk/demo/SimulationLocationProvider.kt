@@ -24,11 +24,10 @@ class SimulationLocationProvider(val context: Context) : LocationProvider(NAME) 
 
     init {
         location = Location(NAME).apply {
-//            this.latitude = 50.10215257
-//            this.longitude = 8.681829184
-
-            latitude = 37.3837
-            longitude = -121.9828
+            // 25.637738,-80.506670
+            // 37.38910, -121.97184
+            latitude = 37.38910
+            longitude = -121.97184
             this.time = Calendar.getInstance().timeInMillis
         }
     }
@@ -50,5 +49,4 @@ class SimulationLocationProvider(val context: Context) : LocationProvider(NAME) 
     }
 
     fun getLastKnownLocation(): Location = location ?: Location(NAME)
-
 }
