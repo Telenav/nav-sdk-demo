@@ -55,7 +55,9 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkUserPermission(): Boolean {
         val permissionsRequired = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            // NOTE: this property will cause the app unexpected exit from sumsang tablet running 11 and later;
+            // normally we shouldn't specify the external storage and the application has its own space;
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.INTERNET

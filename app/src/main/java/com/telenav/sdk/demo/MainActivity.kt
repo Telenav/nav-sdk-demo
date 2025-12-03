@@ -10,8 +10,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -21,7 +19,6 @@ import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.AutoZoomLevel
 import com.telenav.map.api.MapView
@@ -33,6 +30,7 @@ import com.telenav.map.api.diagnosis.listener.MapViewStatusListener
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
+import com.telenav.map.api.touch.listeners.RouteTouchListener
 import com.telenav.sdk.examples.R
 import com.telenav.sdk.common.model.LatLon
 import com.telenav.sdk.drivesession.DriveSession
@@ -48,7 +46,12 @@ import com.telenav.sdk.map.model.AlongRouteTraffic
 import com.telenav.sdk.navigation.model.ChargingStationUnreachableEvent
 import com.telenav.sdk.navigation.model.TimedRestrictionEdge
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * @author tang.hui on 2024/11/26
@@ -61,7 +64,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var mapViewInitialized = false
     private var isNavigation = false    //  flag whether in active navigation state
     private var activeRouteId: String? = null
-    private var pickedRoute: Route? = null
+//    private var pickedRoute: Route? = null
+    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private val jobList = CopyOnWriteArrayList<Job>()
+    // ideally the routeid used for rendering could be different from its intrinsic id;
+    // so the id returned from the addRoutes from the mapview's routecontroller, could be different;
+    // anyway it's crucial to get the route object from its routeid, when user select the route, so it could be used
+    // for navigation purpose;
+    private var routes:  MutableList<Route> = ArrayList()
+    // routeid: list<weather event>
+    private var routeWeather = mutableMapOf<String, List<WeatherEvent>>()
 
     // record last known location and feed it into the first drawn frame;
     private var lastKnownLocation: Location? = null
@@ -72,6 +84,51 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         latitude = 37.38910
         longitude = -121.97184
     }
+
+    private var highlightedRoute: String? = null
+
+    private fun runInMain(run: suspend CoroutineScope.() -> Unit): Job {
+        val job = mainScope.launch {
+            run()
+        }
+        jobList.add(job)
+        return job
+    }
+
+    private fun printInfoLog(msg: String) {
+        Log.i(LOG_TAG, "$msg | Thread name: ${Thread.currentThread().name}")
+    }
+
+    private fun showToast(msg: String) {
+        runInMain {
+            Toast.makeText(
+                this@MainActivity,
+                msg,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    val routeTouchListener =
+        RouteTouchListener { touchType: TouchType, data: TouchPosition, routeID: String ->
+            val geoLocation = data.geoLocation
+            printInfoLog(
+                "Getting click type ${touchType}, " +
+                        "data $data route id $routeID " +
+                        "geoLocation ${geoLocation?.latitude}, ${geoLocation?.longitude}"
+            )
+            showToast(
+                "Getting click type ${touchType}, " +
+                        "data $data route id $routeID " +
+                        "geoLocation ${geoLocation?.latitude}, ${geoLocation?.longitude}"
+            )
+
+            if (activeRouteId == routeID) return@RouteTouchListener
+            activeRouteId = routeID
+            map_view.routesController().highlight(activeRouteId!!)
+            // TODO: show all the weather events on map when tap on the route
+            showWeatherEventsOnSelectRoute(routeID)
+        }
 
     // TODO: make it real location instead of fake one.
     init {
@@ -119,6 +176,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         val readyListener = object : MapViewReadyListener<MapView> {
             override fun onReady(view: MapView?) {
                 view?.setFPS(60)
+
+                map_view.setOnRouteTouchListener(routeTouchListener)
+
                 //  set zoom level range(1 to 16):
                 map_view.getCameraController()?.zoomLevelRange = Range(1.0f, 16.0f)
                 // recenter to vehicle position
@@ -211,9 +271,15 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             isNavigation = !isNavigation
             if (isNavigation) {
                 driveSession.stopNavigation()
-                navigationSession = driveSession.startNavigation(pickedRoute!!, true, 45.0)
+                routes.forEach {
+                    if (it.id == activeRouteId) {
+                        navigationSession = driveSession.startNavigation(it, true, 45.0)
+                    } else {
+                        map_view.routesController().remove(it.id)
+                    }
+                }
 
-                activeRouteId = pickedRoute!!.id
+//                activeRouteId = pickedRoute!!.id
                 activeRouteId?.let {
                     map_view.getRoutesController()?.updateRouteProgress(it)
                 }
@@ -325,13 +391,15 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         wayPointList?.forEach {
             wayPoints.add(Waypoint(GeoLocation(LatLon(it.latitude, it.longitude))))
         }
-        val routePref = RoutePreferences.Builder().enableRouteSafety(true).build()
+        // default seasonal restriction default should be true.
+        val routePref = RoutePreferences.Builder().enableRouteSafety(true).avoidSeasonalRestrictions(true).build()
+
         val request: RouteRequest = RouteRequest.Builder(
             GeoLocation(begin),
             GeoLocation(LatLon(end.latitude, end.longitude)),
             routePref
         ).contentLevel(ContentLevel.FULL)
-            .routeCount(1)
+            .routeCount(3)
             .stopPoints(wayPoints)
             .build()
 
@@ -340,12 +408,12 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
                 map_view.getRoutesController()?.clear()
-                val routes = response.response.result
+//                val routes = response.response.result
+                routes = response.response.result
                 val routeIds = map_view.getRoutesController()?.add(routes)
                 if (routeIds?.isNotEmpty() == true) {
                     // NOTE: select route -> routeid: weather events;
-                    var routeWeather = mutableMapOf<String, List<WeatherEvent>>()
-
+                    routeWeather.clear()
                     routes.forEach(){ route ->
                         var events = mutableListOf<WeatherEvent>()
                         route.routeMetaInfo?.diagnostics?.forEach() {
@@ -385,46 +453,12 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                     map_view.getRoutesController()?.highlight(routeIds[0])
                     val region = map_view.getRoutesController()?.region(routeIds)
                     map_view.getCameraController()?.showRegion(region, Margins.Percentages(0.20, 0.20))
-
-                    pickedRoute = routes[0]
+                    // route default selection id.
+                    activeRouteId = routes[0].id
                     // only show weather conditions on highlighted route
-                    if (routeWeather.isNotEmpty() && routeWeather[pickedRoute?.id]?.isEmpty() == false) {
-                        var events = routeWeather[pickedRoute?.id]
-                        var annotations = mutableListOf<com.telenav.map.api.Annotation>()
-                        events?.forEach() {
-                            val location = Location("weather").apply {
-                                this.latitude = it?.latitude
-                                this.longitude = it?.longitude
-                            }
+                    // select route id to show weather events;
+                    showWeatherEventsOnSelectRoute(activeRouteId)
 
-                            val drawable = getResourceBasedOnWeatherType(it.type)
-                            if (drawable != -1) {
-                                val sizeInPx = dpToPx(50f, this)  // e.g., 50dp target size
-                                val bitmap = BitmapFactory.decodeResource(resources, drawable)
-                                val originalWidth = bitmap.width
-                                val originalHeight = bitmap.height
-                                val aspectRatio = originalHeight.toFloat() / originalWidth.toFloat()
-                                val targetHeight = (sizeInPx * aspectRatio).toInt()
-                                val scaled = Bitmap.createScaledBitmap(
-                                    bitmap,
-                                    sizeInPx,
-                                    targetHeight,
-                                    true
-                                )
-                                val anno = map_view.getAnnotationsController()?.factory()?.create(this, Annotation.UserGraphic(scaled, false), location)
-                                Log.d("Weather", "type: ${it.type}, loc: ${location.latitude}, ${location.longitude}")
-
-                                if (anno != null) {
-                                    annotations.add(anno)
-                                }
-                            }
-                        }
-
-                        Log.d("Weather", "annotation size: ${annotations.size}")
-                        map_view.getAnnotationsController()?.add(annotations)
-                    }
-
-                    activeRouteId = pickedRoute!!.id
                     runOnUiThread {
                         navButton.isEnabled = true
                         navButton.setText(R.string.start_navigation)
@@ -439,6 +473,51 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
             }
 
             task.dispose()
+        }
+    }
+
+    private fun showWeatherEventsOnSelectRoute(routeid: String?) {
+        if (routeWeather.isNotEmpty() && routeWeather[routeid]?.isEmpty() == false) {
+            var events = routeWeather[routeid]
+            var annotations = mutableListOf<com.telenav.map.api.Annotation>()
+            events?.forEach() {
+                val location = Location("weather").apply {
+                    this.latitude = it?.latitude
+                    this.longitude = it?.longitude
+                }
+
+                val drawable = getResourceBasedOnWeatherType(it.type)
+                if (drawable != -1) {
+                    val sizeInPx = dpToPx(50f, this)  // e.g., 50dp target size
+                    val bitmap = BitmapFactory.decodeResource(resources, drawable)
+                    val originalWidth = bitmap.width
+                    val originalHeight = bitmap.height
+                    val aspectRatio = originalHeight.toFloat() / originalWidth.toFloat()
+                    val targetHeight = (sizeInPx * aspectRatio).toInt()
+                    val scaled = Bitmap.createScaledBitmap(
+                        bitmap,
+                        sizeInPx,
+                        targetHeight,
+                        true
+                    )
+                    val anno = map_view.getAnnotationsController()?.factory()
+                        ?.create(this, Annotation.UserGraphic(scaled, false), location)
+                    // always display
+                    anno?.style = Annotation.Style.ScreenAnnotationPopup
+
+                    Log.d(
+                        "Weather",
+                        "type: ${it.type}, loc: ${location.latitude}, ${location.longitude}"
+                    )
+
+                    if (anno != null) {
+                        annotations.add(anno)
+                    }
+                }
+            }
+
+            Log.d("Weather", "annotation size: ${annotations.size}")
+            map_view.getAnnotationsController()?.add(annotations)
         }
     }
 
@@ -490,7 +569,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     override fun onNavigationRouteUpdating(progress: BetterRouteUpdateProgress) {
         if (progress.newRoute != null && progress.status == BetterRouteUpdateProgress.Status.SUCCEEDED) {
             if (progress.newRoute?.id != activeRouteId) {
-                pickedRoute?.id?.let { map_view.getRoutesController()?.remove(it) }
+                activeRouteId?.let { map_view.getRoutesController()?.remove(it) }
                 map_view.getRoutesController()?.refresh(progress.newRoute!!)
                 map_view.getRoutesController()?.updateRouteProgress(progress.newRoute!!.id)
             }
