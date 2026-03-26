@@ -22,6 +22,7 @@ import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.map.MapContentManager
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.model.NavSDKOptions
 import kotlinx.coroutines.CoroutineScope
@@ -143,7 +144,7 @@ class SplashActivity : AppCompatActivity() {
             if (success) {
                 //  by default: using DAY color theme:
                 SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
-                SDK.getInstance().enableTraffic(true)
+                MapContentManager.getInstance().enableTraffic(true)
             }
             initEntityService(options)
         }
