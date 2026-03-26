@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.telenav.sdk.demo"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
