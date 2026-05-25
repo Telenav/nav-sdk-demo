@@ -68,4 +68,5 @@ dependencies {
     implementation "com.telenav.sdk:telenav-android-ehservice-${ndkVersion}:${telenavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-ngx-${ndkVersion}:${mapPluginVersion}"
     implementation "com.telenav.sdk:telenav-entity-cloud:${entityVersion}"
+    implementation "com.telenav.sdk:telenav-sdk-base:${baseVersion}"
 }
