@@ -39,7 +39,7 @@ allprojects {
         }
 
         // telenav internal maven repo
-        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
+//        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
     }
 }
 
