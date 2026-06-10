@@ -98,12 +98,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         featuresController?.freeFlowTraffic()?.setEnabled()
         featuresController?.landmarks()?.setEnabled()
         featuresController?.buildings()?.setEnabled()
-        featuresController?.flatTerrain()?.setDisabled()
-        featuresController?.globe()?.setEnabled()
-        featuresController?.terrain()?.setDisabled()
         featuresController?.compass()?.setEnabled()
         featuresController?.scaleBar()?.setEnabled()
-        featuresController?.roadBubbles()?.setEnabled()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
