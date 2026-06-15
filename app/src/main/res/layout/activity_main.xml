@@ -1,50 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?><!--
+
   ~ Copyright © 2021 Telenav, Inc. All rights reserved. Telenav® is a registered trademark
+
   ~  of Telenav, Inc.,Sunnyvale, California in the United States and may be registered in
+
   ~  other countries. Other names may be trademarks of their respective owners.
+
   -->
 
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
+
+    android:background="@color/splash_background"
+
     tools:context="com.telenav.sdk.demo.MainActivity">
 
+
+
     <com.telenav.map.views.TnMapView
+
         android:id="@+id/map_view"
+
         android:layout_width="0dp"
+
         android:layout_height="0dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/navButton"
-        android:layout_width="wrap_content"
+
+
+    <include
+
+        android:id="@+id/searchOverlay"
+
+        layout="@layout/search_overlay"
+
+        android:layout_width="0dp"
+
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:enabled="false"
-        android:text="@string/start_navigation"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toStartOf="@id/categoryQuickButtons"
+
+        app:layout_constraintHorizontal_bias="0"
+
+        app:layout_constraintHorizontal_chainStyle="packed"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintWidth_percent="0.38" />
+
+
+
+    <include
+
+        android:id="@+id/categoryQuickButtons"
+
+        layout="@layout/category_quick_buttons"
+
+        android:layout_width="0dp"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="@dimen/dimens_5dp"
+
+        app:layout_constraintBottom_toBottomOf="@id/searchBarCard"
+
         app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toEndOf="@id/searchOverlay"
+
+        app:layout_constraintTop_toTopOf="@id/searchBarCard" />
+
+
+
+    <Button
+
+        android:id="@+id/navButton"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="20dp"
+
+        android:enabled="false"
+
+        android:text="@string/start_navigation"
+
+        android:textAllCaps="false"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent" />
 
 
+
     <Button
-        android:id="@+id/searchBtn"
+
+        android:id="@+id/rectSearchButton"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_dark_bg"
-        android:gravity="left|center_vertical"
-        android:hint="@string/search_for_a_dest"
-        android:padding="@dimen/dimens_10dp"
-        android:textColorHint="@color/hint_color"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+
+        android:layout_marginEnd="16dp"
+
+        android:layout_marginBottom="20dp"
+
+        android:text="@string/rect_search"
+
+        android:textAllCaps="false"
+
+        android:visibility="gone"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="search_category_labels">
+        <item>Food</item>
+        <item>EV charging</item>
+        <item>Parking</item>
+        <item>Restaurants</item>
+    </string-array>
+    <string-array name="search_category_ids">
+        <item>2040</item>
+        <item>771</item>
+        <item>600</item>
+        <item>226</item>
+    </string-array>
+</resources>
