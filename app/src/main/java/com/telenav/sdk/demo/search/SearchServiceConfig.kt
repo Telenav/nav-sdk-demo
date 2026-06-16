@@ -44,8 +44,7 @@ object SearchServiceConfig {
 
         return SearchServiceInitOptions(
             sdkOptions = sdkOptions,
-            searchSettings = searchSettings,
-            region = SdkCredentials.region
+            searchSettings = searchSettings
         )
     }
 
