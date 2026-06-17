@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimens_10dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchBarCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/search_overlay_surface"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="@dimen/dimens_5dp"
+                android:drawableTint="@color/search_overlay_text_secondary"
+                android:hint="@string/search_for_a_dest"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingStart="@dimen/dimens_10dp"
+                android:paddingTop="@dimen/dimens_10dp"
+                android:paddingEnd="48dp"
+                android:paddingBottom="@dimen/dimens_10dp"
+                android:singleLine="true"
+                android:textColor="@color/search_overlay_text_primary"
+                android:textColorHint="@color/search_overlay_text_hint" />
+
+            <ImageView
+                android:id="@+id/googleSearchBadge"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/dimens_10dp"
+                android:contentDescription="@string/google_search_available"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_google_maps_pin"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchPanelCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimens_5dp"
+        app:cardBackgroundColor="@color/search_overlay_surface"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
+
+        <FrameLayout
+            android:id="@+id/searchPanelContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/searchPanelBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dimens_5dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/wordSuggestionRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:listitem="@layout/word_suggestion_chip" />
+
+            <LinearLayout
+                android:id="@+id/searchLoadingPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/dimens_10dp"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/progressBarStyleSmall" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimens_10dp"
+                    android:text="@string/autocomplete_searching"
+                    android:textColor="@color/search_overlay_text_secondary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <include
+                android:id="@+id/autocompleteProviderLabel"
+                layout="@layout/search_google_provider_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/autocompleteRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                tools:listitem="@layout/autocomplete_row" />
+
+            <TextView
+                android:id="@+id/autocompleteEmptyView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="80dp"
+                android:padding="@dimen/dimens_10dp"
+                android:text="@string/search_no_results_found"
+                android:textColor="@color/search_overlay_text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/searchResultsPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <include
+                    android:id="@+id/searchResultsProviderLabel"
+                    layout="@layout/search_google_provider_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <FrameLayout
+                    android:id="@+id/searchListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/searchRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxHeight="240dp"
+                        android:nestedScrollingEnabled="true"
+                        tools:listitem="@layout/search_row" />
+
+                    <TextView
+                        android:id="@+id/searchEmptyView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="120dp"
+                        android:padding="@dimen/dimens_10dp"
+                        android:text="@string/search_no_results_found"
+                        android:textColor="@color/search_overlay_text_secondary"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <include
+                        android:id="@+id/searchDetailOverlay"
+                        layout="@layout/search_detail_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/suggestionDetailOverlay"
+            layout="@layout/search_detail_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

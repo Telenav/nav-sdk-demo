@@ -1,6 +1,31 @@
 <resources>
-    <string name="app_name">Telenav-nav-sdk-demo</string>
     <string name="start_navigation">Start Navigation</string>
+    <string name="end_navigation">End Navigation</string>
     <string name="stop_navigation">Stop Navigation</string>
     <string name="search_for_a_dest">Search for a Destination</string>
+    <string name="word_suggestion_title">Word Suggestion</string>
+    <string name="autocomplete_title">Autocomplete</string>
+    <string name="autocomplete_searching">Searching…</string>
+    <string name="google_search_available">Google search available</string>
+    <string name="search_category_title">Search Category</string>
+    <string name="search_results_title">Search Results</string>
+    <string name="search_results_from_google">results from google</string>
+    <string name="search_no_results_found">No results found!</string>
+    <string name="rect_search">Rect Search</string>
+    <string name="rect_search_no_context">Run a text or category search first</string>
+    <string name="rect_search_map_bounds_unavailable">Could not read map visible area</string>
+    <string name="search_service_not_ready">Search service is not initialized</string>
+    <string name="search_detail_close">Close</string>
+    <string name="search_detail_navigate">Navigate</string>
+    <string name="search_detail_reviews">Reviews</string>
+    <string name="search_detail_overview">Overview</string>
+    <string name="search_detail_distance_mi">%.2f mi</string>
+    <string name="search_detail_label_distance">Distance</string>
+    <string name="search_detail_label_address">Address</string>
+    <string name="search_detail_label_phone">Phone</string>
+    <string name="search_detail_label_hours">Hours</string>
+    <string name="search_detail_label_price">Price</string>
+    <string name="search_detail_no_reviews">No reviews yet</string>
+    <string name="search_detail_dismiss">Dismiss</string>
+    <string name="search_detail_destination_reached">You have reached your destination</string>
 </resources>

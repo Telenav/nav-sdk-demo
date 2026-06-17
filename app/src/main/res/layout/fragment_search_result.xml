@@ -11,8 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@color/navigation_time_black"
         android:layout_height="match_parent"
+        android:background="@color/navigation_time_black"
         tools:context=".SearchResultFragment">
 
         <ImageView
@@ -34,27 +34,91 @@
             android:drawableEnd="@android:drawable/ic_menu_search"
             android:hint="@string/search_for_a_dest"
             android:imeOptions="actionSearch"
+            android:inputType="text"
             android:padding="@dimen/dimens_10dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:singleLine="true"
             android:textColorHint="@color/hint_color"
-            app:flow_verticalBias="0.0"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/btnBack"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_recycler_view"
+        <ProgressBar
+            android:id="@+id/searchProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchEditText" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/searchScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/dimens_5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchEditText" />
+            app:layout_constraintTop_toBottomOf="@id/searchEditText">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/wordSuggestionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dimens_5dp"
+                    android:paddingBottom="@dimen/dimens_5dp"
+                    android:text="@string/word_suggestion_title"
+                    android:textColor="@color/color_white"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/wordSuggestionRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/word_suggestion_row" />
+
+                <TextView
+                    android:id="@+id/autocompleteTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dimens_10dp"
+                    android:paddingBottom="@dimen/dimens_5dp"
+                    android:text="@string/autocomplete_title"
+                    android:textColor="@color/color_white"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/autocompleteRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/autocomplete_row" />
+
+                <TextView
+                    android:id="@+id/searchResultsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dimens_10dp"
+                    android:paddingBottom="@dimen/dimens_5dp"
+                    android:text="@string/search_results_title"
+                    android:textColor="@color/color_white"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searchRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/search_row" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,7 @@
 package com.telenav.sdk.demo.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.sdk.examples.SearchResultItemDao
@@ -43,6 +44,53 @@ class CustomViewHolder(private val binding: SearchRowBinding) :
 
     fun bind(searchResultItemDao: SearchResultItemDao) {
         binding.searchItemDao = searchResultItemDao
+        val title = searchResultItemDao.name.ifBlank { searchResultItemDao.addressLine }
+        binding.txtName.text = title
+        binding.txtName.visibility = if (title.isNotBlank()) View.VISIBLE else View.GONE
+
+        val showAddress = searchResultItemDao.name.isNotBlank() &&
+            searchResultItemDao.addressLine.isNotBlank()
+        binding.txtAddress.text = searchResultItemDao.addressLine
+        binding.txtAddress.visibility = if (showAddress) View.VISIBLE else View.GONE
+
+        val rating = searchResultItemDao.rating
+        if (rating != null && rating > 0) {
+            binding.txtRatingScore.text = RatingDisplay.formatScore(rating)
+            RatingDisplay.applyStars(binding.txtRatingStars, rating)
+            binding.txtRatingRow.visibility = View.VISIBLE
+        } else {
+            binding.txtRatingRow.visibility = View.GONE
+        }
+
+        SearchResultMetaBinder.bindCategoryPriceLine(
+            binding.txtCategoryLine,
+            searchResultItemDao.category,
+            searchResultItemDao.priceLevel
+        )
+        SearchResultMetaBinder.bindOpenHoursRow(
+            binding.txtOpenHoursRow,
+            binding.txtOpenStatus,
+            binding.txtClosingTime,
+            searchResultItemDao.openStatusLabel,
+            searchResultItemDao.isOpenNow,
+            searchResultItemDao.closingTimeLabel
+        )
+
+        EvConnectorRowBinder.bind(binding.evConnectorsContainer, searchResultItemDao.evConnectors)
+
+        binding.txtDetail.text = searchResultItemDao.detailLine
+        binding.txtDetail.visibility =
+            if (searchResultItemDao.detailLine.isNotBlank()) View.VISIBLE else View.GONE
+
+        if (searchResultItemDao.distance > 0) {
+            binding.txtDistance.text = "%.2f mi".format(searchResultItemDao.distance)
+            binding.txtDistance.visibility = View.VISIBLE
+        } else {
+            binding.txtDistance.visibility = View.GONE
+        }
+
+        binding.executePendingBindings()
+        SearchProviderIcon.apply(binding.imgSearch, searchResultItemDao.fromGoogle)
     }
 
 }

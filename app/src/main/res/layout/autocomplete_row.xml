@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_overlay_list_item_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dimens_10dp">
+
+        <ImageView
+            android:id="@+id/autocompleteIcon"
+            android:layout_width="22dp"
+            android:layout_height="32dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_tn_place_pin" />
+
+        <TextView
+            android:id="@+id/autocompleteLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_weight="1"
+            android:textColor="@color/search_overlay_text_primary"
+            android:textSize="14sp" />
+    </LinearLayout>
+</layout>
