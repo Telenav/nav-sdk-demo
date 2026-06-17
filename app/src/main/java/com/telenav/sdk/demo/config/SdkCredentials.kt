@@ -8,12 +8,8 @@ object SdkCredentials {
 
     private const val TAG = "SdkCredentials"
 
-    /**
-     * Google UI Kit / search-service project key ([ApplicationInfo] first arg).
-     * Must match server resourcerepo folder name — no spaces (URL path segment, not display name).
-     * UI label: [R.string.app_name] ("Nanjing Ford Demo").
-     */
-    const val PROJECT_KEY = "NanjingFordDemo"
+    /** App label and SDK identity: project key, userId, deviceGuid. */
+    val appName: String get() = BuildConfig.APP_NAME
 
     const val APP_VERSION = "1.0"
 

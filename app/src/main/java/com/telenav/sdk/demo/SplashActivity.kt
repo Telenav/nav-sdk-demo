@@ -123,10 +123,10 @@ class SplashActivity : AppCompatActivity() {
             .setSdkCacheDataDir(sdkCacheDataDir)
             .setCloudEndPoint(SdkCredentials.cloudEndpoint)
             .setLocale(Locale.EN_US)
-            .setUserId("nanjing-ford-demo")
-            .setDeviceGuid("nanjing-ford-demo-device")
+            .setUserId(SdkCredentials.appName)
+            .setDeviceGuid(SdkCredentials.appName)
             .setApplicationInfo(
-                ApplicationInfo.builder(SdkCredentials.PROJECT_KEY, SdkCredentials.APP_VERSION).build()
+                ApplicationInfo.builder(SdkCredentials.appName, SdkCredentials.APP_VERSION).build()
             )
             .setRegion(SdkCredentials.region)
             .build()

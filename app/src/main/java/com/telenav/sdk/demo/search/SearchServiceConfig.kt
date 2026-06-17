@@ -25,10 +25,10 @@ object SearchServiceConfig {
             .setCloudEndPoint(SdkCredentials.cloudEndpoint)
             .setRegion(SdkCredentials.region)
             .setCurrentLocation(latitude, longitude)
-            .setUserId("nanjing-ford-demo")
-            .setDeviceGuid("nanjing-ford-demo-device")
+            .setUserId(SdkCredentials.appName)
+            .setDeviceGuid(SdkCredentials.appName)
             .setApplicationInfo(
-                ApplicationInfo.builder(SdkCredentials.PROJECT_KEY, SdkCredentials.APP_VERSION).build()
+                ApplicationInfo.builder(SdkCredentials.appName, SdkCredentials.APP_VERSION).build()
             )
             .setSdkDataDir(sdkDataDir.absolutePath)
             .setSdkCacheDataDir(sdkCacheDir.absolutePath)

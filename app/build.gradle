@@ -15,6 +15,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        resValue "string", "app_name", "${APP_NAME}"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,6 +31,7 @@ android {
             buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
             buildConfigField("String", "API_SECRET", "\"${API_SECRET}\"")
             buildConfigField("String", "CloudEndPoint", "\"${CloudEndPoint}\"")
+            buildConfigField("String", "APP_NAME", "\"${APP_NAME}\"")
             buildConfigField("String", "API_KEY_AES_KEY", "\"TNGoogleUiKitAar\"")
         }
         release {
@@ -36,6 +39,7 @@ android {
             buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
             buildConfigField("String", "API_SECRET", "\"${API_SECRET}\"")
             buildConfigField("String", "CloudEndPoint", "\"${CloudEndPoint}\"")
+            buildConfigField("String", "APP_NAME", "\"${APP_NAME}\"")
             buildConfigField("String", "API_KEY_AES_KEY", "\"TNGoogleUiKitAar\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
