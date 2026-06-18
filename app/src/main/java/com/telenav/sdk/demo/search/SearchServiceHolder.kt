@@ -3,6 +3,7 @@ package com.telenav.sdk.demo.search
 import android.content.Context
 import android.os.SystemClock
 import android.util.Log
+import com.telenav.sdk.core.SDKOptions
 import com.telenav.searchservice.SearchService
 import com.telenav.searchservice.api.GoogleSearchAvailabilityListener
 import com.telenav.searchservice.api.NetworkMode
@@ -54,7 +55,7 @@ object SearchServiceHolder {
         notifyGoogleAvailabilityIfNeeded()
     }
 
-    fun initialize(context: Context, latitude: Double, longitude: Double): Boolean {
+    fun initialize(context: Context, sdkOptions: SDKOptions): Boolean {
         if (initialized) return true
         initStartElapsedMs = SystemClock.elapsedRealtime()
         webViewReadyLogged = false
@@ -63,19 +64,15 @@ object SearchServiceHolder {
             val appContext = context.applicationContext
             val provider = AndroidNetworkConnectivityProvider(appContext)
             networkProvider = provider
-            val options = SearchServiceConfig.buildInitOptions(appContext, latitude, longitude)
+            val options = SearchServiceConfig.buildInitOptions(appContext, sdkOptions)
             val ok = SearchService.initialize(appContext, options)
             if (ok) {
                 initialized = true
                 val syncInitMs = SystemClock.elapsedRealtime() - initStartElapsedMs
                 registerNetworkModeObserver(provider)
-                SearchService.refreshGoogleAvailability(latitude, longitude)
                 GoogleSearchBridge.registerWebViewReadyCallback(webViewReadyCallback)
                 SearchService.setGoogleSearchAvailabilityListener(createDelegatingListener())
-                Log.i(
-                    TAG,
-                    "SearchService initialized at ($latitude, $longitude), sync init took ${syncInitMs}ms"
-                )
+                Log.i(TAG, "SearchService initialized, sync init took ${syncInitMs}ms")
                 if (GoogleSearchBridge.isWebViewReady()) {
                     logWebViewReadyTiming()
                 }

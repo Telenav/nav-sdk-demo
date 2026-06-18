@@ -1,38 +1,20 @@
 package com.telenav.sdk.demo.search
 
 import android.content.Context
-import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.SDKOptions
-import com.telenav.sdk.demo.config.SdkCredentials
 import com.telenav.searchservice.api.SearchServiceInitOptions
 import com.telenav.searchservice.api.SearchSettings
 import java.io.File
 
 object SearchServiceConfig {
 
-    fun buildInitOptions(
-        context: Context,
-        latitude: Double,
-        longitude: Double
-    ): SearchServiceInitOptions {
-        val appContext = context.applicationContext
-        val sdkDataDir = File(appContext.filesDir, "tn_sdk_data").apply { mkdirs() }
-        val sdkCacheDir = File(appContext.cacheDir, "tn_sdk_cache").apply { mkdirs() }
-
-        val sdkOptions = SDKOptions.builder()
-            .setApiKey(SdkCredentials.apiKey)
-            .setApiSecret(SdkCredentials.apiSecret)
-            .setCloudEndPoint(SdkCredentials.cloudEndpoint)
-            .setRegion(SdkCredentials.region)
-            .setCurrentLocation(latitude, longitude)
-            .setUserId(SdkCredentials.appName)
-            .setDeviceGuid(SdkCredentials.appName)
-            .setApplicationInfo(
-                ApplicationInfo.builder(SdkCredentials.appName, SdkCredentials.APP_VERSION).build()
-            )
-            .setSdkDataDir(sdkDataDir.absolutePath)
-            .setSdkCacheDataDir(sdkCacheDir.absolutePath)
-            .build()
+    /**
+     * Map SDK and SearchService use different data roots: Map streams without onboard
+     * data under [sdkDataDir]; SearchService needs its own [sdkDataDir] for Entity layer.
+     */
+    fun buildInitOptions(context: Context, sdkOptions: SDKOptions): SearchServiceInitOptions {
+        val sdkDataDir = File(context.applicationContext.filesDir, "tn_sdk_data").apply { mkdirs() }
+        val searchSdkOptions = sdkOptionsForSearch(sdkOptions, sdkDataDir.absolutePath)
 
         val searchSettings = SearchSettings(
             timeout = 5_000,
@@ -43,9 +25,32 @@ object SearchServiceConfig {
         )
 
         return SearchServiceInitOptions(
-            sdkOptions = sdkOptions,
+            sdkOptions = searchSdkOptions,
             searchSettings = searchSettings
         )
+    }
+
+    private fun sdkOptionsForSearch(base: SDKOptions, sdkDataDir: String): SDKOptions {
+        val builder = SDKOptions.builder()
+            .setApiKey(base.apiKey)
+            .setApiSecret(base.apiSecret)
+            .setCloudEndPoint(base.cloudEndPoint)
+            .setRegion(base.region)
+            .setUserId(base.userId)
+            .setDeviceGuid(base.deviceGuid)
+            .setSdkDataDir(sdkDataDir)
+            .setSdkCacheDataDir(base.sdkCacheDataDir)
+
+        base.locale?.let { builder.setLocale(it) }
+        base.applicationInfo?.let { builder.setApplicationInfo(it) }
+        base.customContext?.let { builder.setCustomContext(it) }
+
+        val location = base.currentLocation
+        if (location != null) {
+            builder.setCurrentLocation(location.latitude, location.longitude)
+        }
+
+        return builder.build()
     }
 
     fun defaultLocationForRegion(region: String): Pair<Double, Double> =

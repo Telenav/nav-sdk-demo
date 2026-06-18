@@ -116,6 +116,8 @@ class SplashActivity : AppCompatActivity() {
         //  TaLog.enableWriteLogsToFile(true)
         //  TaLog.setLogPath("/sdcard/Download/telenav_sdk_demo.log")
 
+        val locationProvider = SimulationLocationProvider(BuildConfig.Region)
+        val loc = locationProvider.getLastKnownLocation()
         val sdkCacheDataDir = "$cacheDir/nav-cached/"
         val sdkOptions = SDKOptions.builder()
             .setApiKey(SdkCredentials.apiKey)
@@ -123,6 +125,7 @@ class SplashActivity : AppCompatActivity() {
             .setSdkCacheDataDir(sdkCacheDataDir)
             .setCloudEndPoint(SdkCredentials.cloudEndpoint)
             .setLocale(Locale.EN_US)
+            .setCurrentLocation(loc.latitude, loc.longitude)
             .setUserId(SdkCredentials.appName)
             .setDeviceGuid(SdkCredentials.appName)
             .setApplicationInfo(
@@ -148,28 +151,32 @@ class SplashActivity : AppCompatActivity() {
                 SDK.getInstance().updateDayNightMode(DayNightMode.DAY)
                 MapContentManager.getInstance().enableTraffic(true)
             }
-            initEntityService(options)
-            initSearchService()
+        }
+
+        if (success) {
+            // SearchService init can block on network/WebView; do not hold Splash.
+            CoroutineScope(Dispatchers.Main).launch {
+                initSearchService(options)
+            }
         }
 
         return success
     }
 
-    private suspend fun initSearchService() {
+    private suspend fun initSearchService(options: SDKOptions) {
         withContext(Dispatchers.IO) {
-            val locationProvider = SimulationLocationProvider(BuildConfig.Region)
-            val loc = locationProvider.getLastKnownLocation()
-            val searchOk = SearchServiceHolder.initialize(
-                this@SplashActivity,
-                loc.latitude,
-                loc.longitude
-            )
+            val searchOk = SearchServiceHolder.initialize(this@SplashActivity, options)
             if (!searchOk) {
                 TaLog.w("SplashActivity", "SearchService init failed; search demo may not work")
             }
         }
     }
 
+    /**
+     * Standalone EntityService init example — do not call together with [initSearchService]:
+     * SearchService initializes EntityService internally via [EntitySearchBackend].
+     */
+    @Suppress("unused")
     private suspend fun initEntityService(options: SDKOptions) {
         withContext(Dispatchers.IO) {
             try {
