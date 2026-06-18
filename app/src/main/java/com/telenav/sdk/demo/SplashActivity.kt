@@ -154,10 +154,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         if (success) {
-            // SearchService init can block on network/WebView; do not hold Splash.
-            CoroutineScope(Dispatchers.Main).launch {
                 initSearchService(options)
-            }
         }
 
         return success
