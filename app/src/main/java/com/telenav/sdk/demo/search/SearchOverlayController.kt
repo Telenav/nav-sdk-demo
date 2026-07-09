@@ -30,6 +30,8 @@ class SearchOverlayController(
 ) {
     private val searchEditText: EditText = root.findViewById(R.id.searchEditText)
     private val googleSearchBadge: ImageView = root.findViewById(R.id.googleSearchBadge)
+    private val googleSearchStatusText: android.widget.TextView =
+        root.findViewById(R.id.googleSearchStatusText)
     private val searchPanelCard: View = root.findViewById(R.id.searchPanelCard)
     private val wordSuggestionRecyclerView: RecyclerView =
         root.findViewById(R.id.wordSuggestionRecyclerView)
@@ -129,8 +131,8 @@ class SearchOverlayController(
     }
 
     private fun observeGoogleAvailability() {
-        val listener = com.telenav.searchservice.api.GoogleSearchAvailabilityListener { available ->
-            updateGoogleSearchBadge(available)
+        val listener = com.telenav.searchservice.api.GoogleSearchAvailabilityListener { available, state ->
+            updateGoogleSearchUi(available, state)
         }
         SearchServiceHolder.setGoogleAvailabilityListener(listener)
         lifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -138,11 +140,28 @@ class SearchOverlayController(
                 SearchServiceHolder.setGoogleAvailabilityListener(null)
             }
         })
-        updateGoogleSearchBadge(SearchServiceHolder.isGoogleSearchAvailable())
+        refreshGoogleSearchUi()
     }
 
-    private fun updateGoogleSearchBadge(available: Boolean) {
+    private fun refreshGoogleSearchUi() {
+        val state = SearchServiceHolder.getGoogleSearchAvailabilityState()
+        updateGoogleSearchUi(state.available, state)
+    }
+
+    private fun updateGoogleSearchUi(
+        available: Boolean,
+        state: com.telenav.searchservice.api.GoogleSearchAvailabilityState
+    ) {
         googleSearchBadge.visibility = if (available) View.VISIBLE else View.GONE
+        if (available) {
+            googleSearchStatusText.visibility = View.GONE
+            googleSearchBadge.contentDescription =
+                root.context.getString(R.string.google_search_available)
+        } else {
+            googleSearchStatusText.text = GoogleSearchAvailabilityDisplay.formatStatus(root.context, state)
+            googleSearchStatusText.visibility = View.VISIBLE
+            googleSearchBadge.contentDescription = googleSearchStatusText.text
+        }
     }
 
     private fun setupSearchInput() {
@@ -346,7 +365,7 @@ class SearchOverlayController(
 
     private fun withFreshSearchCenter(block: () -> Unit) {
         refreshSearchCenter?.invoke()
-        updateGoogleSearchBadge(SearchServiceHolder.isGoogleSearchAvailable())
+        refreshGoogleSearchUi()
         block()
     }
 

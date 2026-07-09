@@ -52,6 +52,19 @@
         </FrameLayout>
     </androidx.cardview.widget.CardView>
 
+    <TextView
+        android:id="@+id/googleSearchStatusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:paddingStart="@dimen/dimens_10dp"
+        android:paddingEnd="@dimen/dimens_10dp"
+        android:textColor="@color/search_overlay_text_secondary"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="Google search unavailable: WebView version too low"
+        tools:visibility="visible" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/searchPanelCard"
         android:layout_width="match_parent"

@@ -6,6 +6,8 @@ import android.util.Log
 import com.telenav.sdk.core.SDKOptions
 import com.telenav.searchservice.SearchService
 import com.telenav.searchservice.api.GoogleSearchAvailabilityListener
+import com.telenav.searchservice.api.GoogleSearchAvailabilityState
+import com.telenav.searchservice.api.GoogleSearchUnavailabilityReason
 import com.telenav.searchservice.api.NetworkMode
 import com.telenav.searchservice.google.GoogleSearchBridge
 
@@ -19,11 +21,14 @@ object SearchServiceHolder {
     @Volatile
     private var initialized = false
 
+    private var lastKnownLatitude: Double? = null
+    private var lastKnownLongitude: Double? = null
     private var lastRefreshLatitude: Double? = null
     private var lastRefreshLongitude: Double? = null
 
     private var networkProvider: AndroidNetworkConnectivityProvider? = null
     private var networkModeObserver: ((Boolean) -> Unit)? = null
+    private var lastNetworkConnected: Boolean? = null
     private var googleAvailabilityListener: GoogleSearchAvailabilityListener? = null
 
     private var initStartElapsedMs: Long = 0L
@@ -33,18 +38,23 @@ object SearchServiceHolder {
     private val webViewReadyCallback: (Boolean) -> Unit = { ready ->
         if (ready) {
             logWebViewReadyTiming()
+            if (needsAvailabilityRefresh()) {
+                refreshGoogleAvailabilityAtLastLocation(force = false)
+            }
         }
     }
 
     fun isInitialized(): Boolean = initialized
 
-    fun isGoogleSearchAvailable(): Boolean {
-        if (!initialized) return false
+    fun isGoogleSearchAvailable(): Boolean = getGoogleSearchAvailabilityState().available
+
+    fun getGoogleSearchAvailabilityState(): GoogleSearchAvailabilityState {
+        if (!initialized) return GoogleSearchAvailabilityState.UNKNOWN
         return try {
-            SearchService.isGoogleSearchAvailable()
+            SearchService.getGoogleSearchAvailabilityState()
         } catch (e: Exception) {
-            Log.w(TAG, "isGoogleSearchAvailable failed", e)
-            false
+            Log.w(TAG, "getGoogleSearchAvailabilityState failed", e)
+            GoogleSearchAvailabilityState.UNKNOWN
         }
     }
 
@@ -75,6 +85,7 @@ object SearchServiceHolder {
                 Log.i(TAG, "SearchService initialized, sync init took ${syncInitMs}ms")
                 if (GoogleSearchBridge.isWebViewReady()) {
                     logWebViewReadyTiming()
+                    refreshGoogleAvailabilityAtLastLocation(force = false)
                 }
                 logGoogleAvailableTiming(isGoogleSearchAvailable())
                 notifyGoogleAvailabilityIfNeeded()
@@ -102,8 +113,11 @@ object SearchServiceHolder {
         networkProvider?.release()
         networkProvider = null
         initialized = false
+        lastKnownLatitude = null
+        lastKnownLongitude = null
         lastRefreshLatitude = null
         lastRefreshLongitude = null
+        lastNetworkConnected = null
         resetInitTiming()
         Log.i(TAG, "SearchService released")
     }
@@ -113,19 +127,38 @@ object SearchServiceHolder {
      * [SearchViewModel.setSearchCenter]; this refreshes Google availability when location shifts.
      */
     fun updateLocation(latitude: Double, longitude: Double) {
+        lastKnownLatitude = latitude
+        lastKnownLongitude = longitude
+        refreshGoogleAvailabilityAtLastLocation(force = false)
+    }
+
+    private fun refreshGoogleAvailabilityAtLastLocation(force: Boolean) {
+        val lat = lastKnownLatitude ?: return
+        val lon = lastKnownLongitude ?: return
         if (!initialized) return
+
+        val countryMissing = getGoogleSearchAvailabilityState().reason ==
+            GoogleSearchUnavailabilityReason.COUNTRY_UNKNOWN
+
         val lastLat = lastRefreshLatitude
         val lastLon = lastRefreshLongitude
-        if (lastLat != null && lastLon != null &&
-            distanceMeters(lastLat, lastLon, latitude, longitude) < 1_000.0
-        ) {
+        val movedEnough = lastLat == null || lastLon == null ||
+            distanceMeters(lastLat, lastLon, lat, lon) >= 1_000.0
+
+        if (!force && !countryMissing && !movedEnough) {
             return
         }
-        lastRefreshLatitude = latitude
-        lastRefreshLongitude = longitude
+
+        lastRefreshLatitude = lat
+        lastRefreshLongitude = lon
         try {
-            SearchService.refreshGoogleAvailability(latitude, longitude)
-            Log.d(TAG, "SearchService location refreshed at ($latitude, $longitude)")
+            SearchService.refreshGoogleAvailability(lat, lon)
+            Log.d(
+                TAG,
+                "SearchService location refreshed at ($lat, $lon) " +
+                    "force=$force countryMissing=$countryMissing"
+            )
+            notifyGoogleAvailabilityIfNeeded()
         } catch (e: Exception) {
             Log.w(TAG, "SearchService location refresh failed", e)
         }
@@ -148,10 +181,12 @@ object SearchServiceHolder {
 
     private fun registerNetworkModeObserver(provider: AndroidNetworkConnectivityProvider) {
         val observer: (Boolean) -> Unit = { connected ->
-            if (initialized) {
+            if (initialized && lastNetworkConnected != connected) {
+                lastNetworkConnected = connected
                 SearchService.getClient().setNetworkMode(
                     if (connected) NetworkMode.CONNECTED else NetworkMode.DISCONNECTED
                 )
+                notifyGoogleAvailabilityIfNeeded()
             }
         }
         provider.observeNetworkState(observer)
@@ -165,17 +200,25 @@ object SearchServiceHolder {
             provider.removeNetworkObserver(observer)
         }
         networkModeObserver = null
+        lastNetworkConnected = null
     }
 
     private fun createDelegatingListener(): GoogleSearchAvailabilityListener {
-        return GoogleSearchAvailabilityListener { available ->
+        return GoogleSearchAvailabilityListener { available, state ->
             logGoogleAvailableTiming(available)
-            googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(available)
+            googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(available, state)
         }
     }
 
+    private fun needsAvailabilityRefresh(): Boolean {
+        if (!initialized) return false
+        return getGoogleSearchAvailabilityState().reason ==
+            GoogleSearchUnavailabilityReason.COUNTRY_UNKNOWN
+    }
+
     private fun notifyGoogleAvailabilityIfNeeded() {
-        googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(isGoogleSearchAvailable())
+        val state = getGoogleSearchAvailabilityState()
+        googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(state.available, state)
     }
 
     private fun logWebViewReadyTiming() {
