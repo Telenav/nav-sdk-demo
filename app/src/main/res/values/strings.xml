@@ -3,6 +3,8 @@
     <string name="end_navigation">End Navigation</string>
     <string name="stop_navigation">Stop Navigation</string>
     <string name="search_for_a_dest">Search for a Destination</string>
+    <string name="storage_permission_required">All files access is required for map cache and SDK data.</string>
+    <string name="location_permission_required">Location permission is required for navigation demo.</string>
     <string name="word_suggestion_title">Word Suggestion</string>
     <string name="autocomplete_title">Autocomplete</string>
     <string name="autocomplete_searching">Searching…</string>
