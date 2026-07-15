@@ -16,27 +16,32 @@ android {
         versionCode 1
         versionName "1.0"
 
+        resValue "string", "app_name", "${APP_NAME}"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
         dataBinding true
+        buildConfig true
     }
 
     buildTypes {
         debug {
-            //Reading system variables
-            buildConfigField("String", "Region", "${Region}")
-            buildConfigField("String", "API_KEY", "${API_KEY}")
-            buildConfigField("String", "API_SECRET", "${API_SECRET}")
-            buildConfigField("String", "CloudEndPoint", "${CloudEndPoint}")
+            buildConfigField("String", "Region", "\"${Region}\"")
+            buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
+            buildConfigField("String", "API_SECRET", "\"${API_SECRET}\"")
+            buildConfigField("String", "CloudEndPoint", "\"${CloudEndPoint}\"")
+            buildConfigField("String", "APP_NAME", "\"${APP_NAME}\"")
+            buildConfigField("String", "API_KEY_AES_KEY", "\"TNGoogleUiKitAar\"")
         }
         release {
-            //Reading system variables
-            buildConfigField("String", "Region", "${Region}")
-            buildConfigField("String", "API_KEY", "${API_KEY}")
-            buildConfigField("String", "API_SECRET", "${API_SECRET}")
-            buildConfigField("String", "CloudEndPoint", "${CloudEndPoint}")
+            buildConfigField("String", "Region", "\"${Region}\"")
+            buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
+            buildConfigField("String", "API_SECRET", "\"${API_SECRET}\"")
+            buildConfigField("String", "CloudEndPoint", "\"${CloudEndPoint}\"")
+            buildConfigField("String", "APP_NAME", "\"${APP_NAME}\"")
+            buildConfigField("String", "API_KEY_AES_KEY", "\"TNGoogleUiKitAar\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -55,6 +60,12 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "nav-sdk-demo-${variant.buildType.name}.apk"
+        }
+    }
+
 }
 
 dependencies {
@@ -62,6 +73,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
@@ -73,6 +85,20 @@ dependencies {
     implementation "com.telenav.sdk:telenav-android-navigation-${ndkVersion}:${telenavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-ehservice-${ndkVersion}:${telenavSdkVersion}"
     implementation "com.telenav.sdk:telenav-android-ngx-${ndkVersion}:${mapPluginVersion}"
-    implementation "com.telenav.sdk:telenav-entity-cloud:${entityVersion}"
+    // Use hybrid (not cloud) to avoid duplicate classes with search-service transitive entity-hybrid
+    implementation "com.telenav.sdk:telenav-entity-hybrid:${entityVersion}"
     implementation "com.telenav.sdk:telenav-sdk-base:${baseVersion}"
+
+    if (findProperty('useLocalSearchService')?.toString()?.toBoolean() == true) {
+        // Local AAR from google-ui-kit-aar (:search-service:assembleRelease) — no Maven POM, declare api deps explicitly.
+        implementation files('libs/SearchService-release.aar')
+        implementation 'com.telenav.googleuikit:google-ui-kit:1.1.48.ded5b2e'
+    } else {
+        implementation "com.telenav.search:search-service:${search_service_version}"
+    }
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 }

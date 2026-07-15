@@ -1,54 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="searchItemDao"
             type="com.telenav.sdk.examples.SearchResultItemDao" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
+        android:background="@drawable/search_overlay_list_item_bg"
         android:padding="@dimen/dimens_10dp">
 
         <ImageView
             android:id="@+id/imgSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dimens_5dp"
-            android:src="@drawable/ic_map_place_search"
+            android:layout_width="22dp"
+            android:layout_height="32dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_tn_place_pin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txtAddress"
+            android:id="@+id/txtName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimens_10dp"
-            android:layout_marginRight="@dimen/dimens_10dp"
-            android:gravity="center_vertical"
-            android:text="@{searchItemDao.displayText}"
-            android:textColor="@color/color_white"
-            app:layout_constraintBottom_toBottomOf="@id/imgSearch"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintEnd_toStartOf="@+id/txtDistance"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/search_overlay_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/txtDistance"
             app:layout_constraintStart_toEndOf="@id/imgSearch"
-            app:layout_constraintTop_toTopOf="@+id/imgSearch" />
+            app:layout_constraintTop_toTopOf="@id/imgSearch"
+            tools:text="Mogk's Bierstubb" />
 
         <TextView
             android:id="@+id/txtDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dimens_10dp"
-            android:text="@{searchItemDao.distance+` mi`}"
-            android:textColor="@color/color_white"
-            app:layout_constraintBottom_toBottomOf="@id/imgSearch"
+            android:text="@{String.valueOf(searchItemDao.distance) + ` mi`}"
+            android:textColor="@color/search_overlay_text_secondary"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtAddress"
-            app:layout_constraintTop_toTopOf="@id/imgSearch" />
+            app:layout_constraintTop_toTopOf="@id/txtName"
+            tools:text="0.03 mi" />
+
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:textColor="@color/search_overlay_text_secondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSearch"
+            app:layout_constraintTop_toBottomOf="@id/txtName"
+            tools:text="Gutzkowstraße 81, Frankfurt am Main" />
+
+        <LinearLayout
+            android:id="@+id/txtRatingRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSearch"
+            app:layout_constraintTop_toBottomOf="@id/txtAddress"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/txtRatingScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/search_overlay_text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="4.5" />
+
+            <TextView
+                android:id="@+id/txtRatingStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:letterSpacing="0.05"
+                android:textSize="12sp"
+                tools:text="★★★★☆" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtCategoryLine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:textColor="@color/search_overlay_text_secondary"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSearch"
+            app:layout_constraintTop_toBottomOf="@id/txtRatingRow"
+            tools:text="Wholesaler · $$"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/txtOpenHoursRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSearch"
+            app:layout_constraintTop_toBottomOf="@id/txtCategoryLine"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/txtOpenStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Open"
+                tools:textColor="@color/search_detail_open" />
+
+            <TextView
+                android:id="@+id/txtClosingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/search_overlay_text_secondary"
+                android:textSize="12sp"
+                tools:text="· Closes 8:30 PM" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/evConnectorsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSearch"
+            app:layout_constraintTop_toBottomOf="@id/txtOpenHoursRow"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/txtDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimens_10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/dimens_5dp"
+            android:textColor="@color/search_overlay_text_hint"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgSearch"
+            app:layout_constraintTop_toBottomOf="@id/evConnectorsContainer"
+            tools:text="+49 123 456" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

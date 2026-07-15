@@ -9,27 +9,34 @@ package com.telenav.sdk.demo
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Looper
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.util.Range
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.telenav.map.views.TnMapView
 import com.telenav.map.api.Annotation
 import com.telenav.map.api.AutoZoomLevel
 import com.telenav.map.api.MapView
 import com.telenav.map.api.MapViewInitConfig
 import com.telenav.map.api.MapViewReadyListener
-import com.telenav.map.api.Margins
 import com.telenav.map.api.controllers.Camera
 import com.telenav.map.api.diagnosis.listener.MapViewStatusListener
 import com.telenav.map.api.touch.GestureType
 import com.telenav.map.api.touch.TouchPosition
 import com.telenav.map.api.touch.TouchType
 import com.telenav.sdk.common.model.LatLon
-import com.telenav.sdk.demo.search.SearchResultFragment
-import com.telenav.sdk.demo.search.SharedSearchLocationViewModel
+import com.telenav.sdk.demo.search.CategoryQuickButtonsController
+import com.telenav.sdk.demo.search.MapRouteCameraHelper
+import com.telenav.sdk.demo.search.SearchOverlayController
+import com.telenav.sdk.demo.search.SearchServiceHolder
+import com.telenav.sdk.demo.search.SearchViewModel
 import com.telenav.sdk.drivesession.NavigationSession
 import com.telenav.sdk.drivesession.listener.NavigationEventListener
 import com.telenav.sdk.drivesession.listener.PositionEventListener
@@ -43,6 +50,7 @@ import com.telenav.sdk.drivesession.model.PositionInfo
 import com.telenav.sdk.drivesession.model.RoadCalibrator
 import com.telenav.sdk.examples.BuildConfig
 import com.telenav.sdk.examples.R
+import com.telenav.sdk.examples.SearchResultItemDao
 import com.telenav.sdk.guidance.audio.model.VerbosityLevel
 import com.telenav.sdk.map.SDK
 import com.telenav.sdk.map.direction.DirectionClient
@@ -51,7 +59,6 @@ import com.telenav.sdk.map.model.AlongRouteTraffic
 import com.telenav.sdk.navigation.NavigationService
 import com.telenav.sdk.navigation.model.ChargingStationUnreachableEvent
 import com.telenav.sdk.navigation.model.TimedRestrictionEdge
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 /**
@@ -66,26 +73,43 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     private var isNavigation = false    //  flag whether in active navigation state
     private var activeRouteId: String? = null
     private var pickedRoute: Route? = null
+    private var pendingStartNavigation = false
+    private var lastNavigationStartRequest = 0L
+    private var lastNavigationEndRequest = 0L
+    private var routeRequestGeneration = 0
 
     private var vehicleLocation: Location = Location("Demo").apply {
         latitude = locationProvider.getLastKnownLocation().latitude
         longitude =locationProvider.getLastKnownLocation().longitude
     }
 
-    private val searchLocationViewModel: SharedSearchLocationViewModel by viewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
+
+    private lateinit var mapView: TnMapView
+    private lateinit var navButton: Button
+    private lateinit var rectSearchButton: Button
+    private lateinit var searchOverlay: View
+    private var lastDisplayedRouteIds: List<String>? = null
+
+    private val searchOverlayLayoutListener =
+        View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            refitRouteCameraIfNeeded()
+        }
 
     init {
         driveSession.alertManager.enableLaneGuidanceDetection(true)
         driveSession.audioGuidanceManager.setVerbosityLevel(VerbosityLevel.VERBOSE)
         SDK.getInstance().injectLocationProvider(locationProvider)
-        driveSession.eventHub.let {
-            it.addNavigationEventListener(this)
-            it.addPositionEventListener(this)
-        }
-        locationProvider.onStart()
     }
 
     companion object {
+        private val DEFAULT_MAP_GESTURES = setOf(
+            GestureType.Zoom,
+            GestureType.Pan,
+            GestureType.Rotate,
+            GestureType.Tilt,
+        )
+
         fun start(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
@@ -98,12 +122,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         featuresController?.freeFlowTraffic()?.setEnabled()
         featuresController?.landmarks()?.setEnabled()
         featuresController?.buildings()?.setEnabled()
-        featuresController?.flatTerrain()?.setDisabled()
-        featuresController?.globe()?.setEnabled()
-        featuresController?.terrain()?.setDisabled()
         featuresController?.compass()?.setEnabled()
         featuresController?.scaleBar()?.setEnabled()
-        featuresController?.roadBubbles()?.setEnabled()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,13 +131,40 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         setContentView(R.layout.activity_main)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        mapView = findViewById(R.id.map_view)
+        navButton = findViewById(R.id.navButton)
+        rectSearchButton = findViewById(R.id.rectSearchButton)
+        searchOverlay = findViewById(R.id.searchOverlay)
+
+        val lastLoc = locationProvider.getLastKnownLocation()
+        searchViewModel.setSearchCenter(lastLoc.latitude, lastLoc.longitude)
+        SearchServiceHolder.updateLocation(lastLoc.latitude, lastLoc.longitude)
+        val refreshSearchCenter: () -> Unit = {
+            searchViewModel.setSearchCenter(vehicleLocation.latitude, vehicleLocation.longitude)
+            SearchServiceHolder.updateLocation(vehicleLocation.latitude, vehicleLocation.longitude)
+        }
+        SearchOverlayController(findViewById(R.id.searchOverlay), searchViewModel, this).apply {
+            this.refreshSearchCenter = refreshSearchCenter
+            bind()
+        }
+        CategoryQuickButtonsController(findViewById(R.id.categoryQuickButtons), searchViewModel, this)
+            .apply {
+                this.refreshSearchCenter = refreshSearchCenter
+                bind()
+            }
+
+        searchViewModel.showSuggestionPanel.observe(this) { showSuggestions ->
+            updateNavButtonPosition(showSuggestions == true)
+            updateMapOverlayButtons()
+        }
+
         val readyListener = object : MapViewReadyListener<MapView> {
             override fun onReady(view: MapView?) {
                 view?.setFPS(60)
                 //  set zoom level range(1 to 16):
-                map_view.getCameraController()?.zoomLevelRange = Range(1.0f, 16.0f)
+                mapView.getCameraController()?.zoomLevelRange = Range(1.0f, 16.0f)
                 // recenter to vehicle position
-                map_view.getCameraController()?.position =
+                mapView.getCameraController()?.position =
                     Camera.Position.Builder().setLocation(vehicleLocation).build()
                 mapViewInitialized = true
             }
@@ -132,27 +179,27 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         val mapViewConfig = MapViewInitConfig(
             context = this.applicationContext,
             lifecycleOwner = this,
-            dpi = map_view.defaultDpi,
+            dpi = mapView.defaultDpi,
             readyListener = readyListener,
             createCvp = true,
             autoZoomLevel = AutoZoomLevel.FAR
         )
-        map_view.initialize(mapViewConfig)
+        mapView.initialize(mapViewConfig)
 
         val mapViewStatusListener = object : MapViewStatusListener {
             override fun onDrawFirstFrame() {
                 Toast.makeText(this@MainActivity, "first frame has drawn", Toast.LENGTH_SHORT).show()
                 locationProvider.setLocation(locationProvider.getLastKnownLocation())
-                configureMapView(map_view)
+                configureMapView(mapView)
             }
 
             override fun onMapSurfaceChanged() {
             }
 
         }
-        map_view.mapDiagnosis().addMapViewListener(mapViewStatusListener)
+        mapView.mapDiagnosis().addMapViewListener(mapViewStatusListener)
 
-        map_view?.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
+        mapView?.setOnTouchListener { touchType: TouchType, data: TouchPosition ->
             when (touchType) {
                 TouchType.Down, TouchType.Up, TouchType.Click, TouchType.Move, TouchType.Cancel -> {
                     Log.v(
@@ -167,7 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                         data.geoLocation?.let {
                             runOnUiThread {
                                 // Set annotation at location
-                                val factory = map_view.getAnnotationsController()?.factory()
+                                val factory = mapView.getAnnotationsController()?.factory()
                                 val annotation = factory?.create(
                                     this,
                                     R.drawable.map_pin_green_icon_unfocused,
@@ -178,8 +225,8 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                                 //  disable culling for this annotation(always visible):
                                 annotation?.style = Annotation.Style.ScreenAnnotationFlagNoCulling
 
-                                map_view.getAnnotationsController()?.clear()
-                                map_view.getAnnotationsController()?.add(arrayListOf(annotation))
+                                mapView.getAnnotationsController()?.clear()
+                                mapView.getAnnotationsController()?.add(arrayListOf(annotation))
                             }
                         }
 
@@ -189,63 +236,189 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
                         requestDirection(vehicleLocation, destinationLocation)
                     }
                 }
+
+                else -> Unit
             }
         }
 
         navButton.setOnClickListener {
-            isNavigation = !isNavigation
             if (isNavigation) {
-                driveSession.stopNavigation()
-                navigationSession = driveSession.startNavigation(pickedRoute!!, true, 45.0)
-
-                activeRouteId = pickedRoute!!.id
-                activeRouteId?.let {
-                    map_view.getRoutesController()?.updateRouteProgress(it)
-                }
-
-                map_view.getCameraController()?.enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
-
-                //  disable pan during following vehicle mode(just remind since we turned on auto-zoom, so sometimes even user
-                //  changed zoom level with gesture but will still back to the calculated zoom automatically):
-                val activeGestures = setOf(GestureType.Zoom, GestureType.Tilt)
-                map_view.setActiveGestures(activeGestures)
-
-                navButton.setText(R.string.stop_navigation)
+                endNavigationSession(userInitiated = true)
             } else {
-                //  reset default map gestures:
-                val activeGestures = setOf(GestureType.Zoom, GestureType.Pan, GestureType.Rotate, GestureType.Tilt)
-                map_view.setActiveGestures(activeGestures)
-                handleNavigationSessionEnd(true)
+                pendingStartNavigation = false
+                startNavigationSession()
             }
         }
 
-        searchBtn.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .add(android.R.id.content, SearchResultFragment())
-                .addToBackStack(null)
-                .commit()
+        rectSearchButton.setOnClickListener {
+            searchViewModel.setSearchCenter(vehicleLocation.latitude, vehicleLocation.longitude)
+            SearchServiceHolder.updateLocation(vehicleLocation.latitude, vehicleLocation.longitude)
+            val padding = resources.getDimensionPixelSize(R.dimen.dimens_10dp)
+            val bounds = MapRouteCameraHelper.computeVisibleGeoBounds(
+                mapView,
+                searchOverlay,
+                navButton,
+                rectSearchButton,
+                padding
+            )
+            if (bounds == null) {
+                Toast.makeText(this, R.string.rect_search_map_bounds_unavailable, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            searchViewModel.onRectSearch(bounds.bottomLeft, bounds.topRight)
         }
 
-        searchLocationViewModel.mutableSelectedLocation.observe(this) {
+        searchViewModel.selectedLocation.observe(this) { item ->
+            item?.let { showDestinationAndRequestRoute(it) }
+        }
+
+        searchViewModel.routePreview.observe(this) { item ->
+            showDestinationAndRequestRoute(item)
+        }
+
+        searchViewModel.navigationStartRequest.observe(this) { trigger ->
+            if (trigger == 0L || trigger == lastNavigationStartRequest) return@observe
+            lastNavigationStartRequest = trigger
+            pendingStartNavigation = true
+            tryStartNavigation()
+        }
+
+        searchViewModel.navigationEndRequest.observe(this) { trigger ->
+            if (trigger == 0L || trigger == lastNavigationEndRequest) return@observe
+            lastNavigationEndRequest = trigger
             if (isNavigation) {
-                val activeGestures = setOf(GestureType.Zoom, GestureType.Pan, GestureType.Rotate, GestureType.Tilt)
-                map_view.setActiveGestures(activeGestures)
-                handleNavigationSessionEnd(true)
-                isNavigation = false
+                endNavigationSession(userInitiated = true)
             }
-            val factory = map_view.getAnnotationsController()?.factory()
-            val destAnnotation = factory!!.create(
-                this,
-                R.drawable.map_pin_green_icon_unfocused,
-                it?.displayLocation!!)
-            destAnnotation.displayText =
-                Annotation.TextDisplayInfo.Centered(it.displayText)
-                    .apply {
-                        this.textColor = Color.BLACK
-                    }
-            destAnnotation.style = Annotation.Style.ScreenAnnotationPopup
-            map_view.getAnnotationsController()?.add(arrayListOf(destAnnotation))
-            requestDirection(vehicleLocation, it.navLocation!!)
+        }
+
+        searchViewModel.showDetailPanel.observe(this) { showDetail ->
+            updateMapOverlayButtons()
+            if (showDetail == true) {
+                searchOverlay.addOnLayoutChangeListener(searchOverlayLayoutListener)
+                searchOverlay.post { refitRouteCameraIfNeeded() }
+            } else {
+                searchOverlay.removeOnLayoutChangeListener(searchOverlayLayoutListener)
+            }
+        }
+
+        searchViewModel.clearRoutePreview.observe(this) { trigger ->
+            if (trigger == 0L || isNavigation) return@observe
+            cancelRoutePreview()
+        }
+
+        driveSession.eventHub.let {
+            it.addNavigationEventListener(this)
+            it.addPositionEventListener(this)
+        }
+        locationProvider.onStart()
+    }
+
+    private fun updateMapOverlayButtons() {
+        val inResultsMode = searchViewModel.showSuggestionPanel.value != true
+        val detailOpen = searchViewModel.showDetailPanel.value == true
+        rectSearchButton.visibility =
+            if (inResultsMode && !detailOpen && !isNavigation) View.VISIBLE else View.GONE
+        val showNavButton = when {
+            detailOpen -> false
+            inResultsMode && !isNavigation -> false
+            else -> true
+        }
+        navButton.visibility = if (showNavButton) View.VISIBLE else View.GONE
+    }
+
+    private fun cancelRoutePreview() {
+        routeRequestGeneration++
+        pendingStartNavigation = false
+        pickedRoute = null
+        activeRouteId = null
+        lastDisplayedRouteIds = null
+        mapView.getRoutesController()?.clear()
+        mapView.getAnnotationsController()?.clear()
+        navButton.isEnabled = false
+        navButton.setText(R.string.start_navigation)
+        updateMapOverlayButtons()
+    }
+
+    private fun showDestinationAndRequestRoute(item: SearchResultItemDao) {
+        if (isNavigation) {
+            endNavigationSession(userInitiated = true)
+        }
+        mapView.getAnnotationsController()?.clear()
+        val factory = mapView.getAnnotationsController()?.factory()
+        val destAnnotation = factory!!.create(
+            this,
+            R.drawable.map_pin_green_icon_unfocused,
+            item.displayLocation
+        )
+        destAnnotation.displayText =
+            Annotation.TextDisplayInfo.Centered(item.displayText)
+                .apply {
+                    this.textColor = Color.BLACK
+                }
+        destAnnotation.style = Annotation.Style.ScreenAnnotationPopup
+        mapView.getAnnotationsController()?.add(arrayListOf(destAnnotation))
+        val destination = item.navLocation ?: item.displayLocation
+        val generation = ++routeRequestGeneration
+        requestDirection(vehicleLocation, destination, generation = generation)
+    }
+
+    private fun tryStartNavigation() {
+        if (pickedRoute == null) return
+        pendingStartNavigation = false
+        startNavigationSession()
+    }
+
+    private fun startNavigationSession() {
+        val route = pickedRoute ?: return
+        isNavigation = true
+        driveSession.stopNavigation()
+        navigationSession = driveSession.startNavigation(route, true, 45.0)
+
+        activeRouteId = route.id
+        activeRouteId?.let {
+            mapView.getRoutesController()?.updateRouteProgress(it)
+        }
+
+        mapView.getCameraController()?.enableFollowVehicleMode(Camera.FollowVehicleMode.HeadingUp, true)
+
+        mapView.setActiveGestures(DEFAULT_MAP_GESTURES)
+
+        navButton.isEnabled = true
+        navButton.setText(R.string.stop_navigation)
+        updateMapOverlayButtons()
+        if (searchViewModel.showDetailPanel.value == true) {
+            searchViewModel.setDetailNavigationActive(true)
+        }
+    }
+
+    private fun endNavigationSession(userInitiated: Boolean) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            runOnUiThread { endNavigationSession(userInitiated) }
+            return
+        }
+        if (!isNavigation) {
+            searchViewModel.setDetailNavigationActive(false)
+            return
+        }
+        val detailOpen = searchViewModel.showDetailPanel.value == true
+        handleNavigationSessionEnd(userInitiated)
+        if (detailOpen) {
+            if (userInitiated) {
+                searchViewModel.setDetailNavigationActive(false)
+                restoreRoutePreviewIfDetailOpen()
+            } else {
+                cancelRoutePreview()
+                searchViewModel.onNavigationDestinationReached()
+            }
+        } else {
+            searchViewModel.setDetailNavigationActive(false)
+        }
+    }
+
+    private fun restoreRoutePreviewIfDetailOpen() {
+        if (searchViewModel.showDetailPanel.value != true) return
+        searchViewModel.detailItem.value?.navigationItem?.let { item ->
+            showDestinationAndRequestRoute(item)
         }
     }
 
@@ -257,14 +430,16 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         }
 
         driveSession.stopNavigation()
-        map_view.getAnnotationsController()?.clear()
-        map_view.getRoutesController()?.clear()
+        mapView.getAnnotationsController()?.clear()
+        mapView.getRoutesController()?.clear()
 
         //  disable following vehicle mode, allow user pan & zoom map:
-        map_view.getCameraController()?.disableFollowVehicle()
+        mapView.getCameraController()?.disableFollowVehicle()
+
+        restoreMapGestures()
 
         //  back to vehicle location and reset to default zoom level(3):
-        map_view.getCameraController()?.position =
+        mapView.getCameraController()?.position =
             Camera.Position.Builder().setLocation(locationProvider.getLastKnownLocation()).setZoomLevel(3F).build()
 
         runOnUiThread {
@@ -275,13 +450,19 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         isNavigation = false
         activeRouteId = null
         navigationSession = null
+        updateMapOverlayButtons()
+    }
+
+    private fun restoreMapGestures() {
+        mapView.setActiveGestures(DEFAULT_MAP_GESTURES)
     }
 
 
     private fun requestDirection(
         begin: Location,
         end: Location,
-        wayPointList: MutableList<Location>? = null
+        wayPointList: MutableList<Location>? = null,
+        generation: Int = routeRequestGeneration
     ) {
         Log.d(LOG_TAG, "requestDirection begin: $begin + end $end")
         val wayPoints: ArrayList<Waypoint> = arrayListOf()
@@ -298,28 +479,41 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         val task = DirectionClient.Factory.hybridClient()
             .createRoutingTask(request, RequestMode.CLOUD_ONLY)
         task.runAsync { response ->
+            if (generation != routeRequestGeneration) {
+                task.dispose()
+                return@runAsync
+            }
             Log.d(LOG_TAG, "requestDirection task status: ${response.response.status}")
             if (response.response.status == DirectionErrorCode.OK && response.response.result.isNotEmpty()) {
-                map_view.getRoutesController()?.clear()
+                mapView.getRoutesController()?.clear()
 
                 val routes = response.response.result
-                val routeIds = map_view.getRoutesController()?.add(routes)
+                val routeIds = mapView.getRoutesController()?.add(routes)
                 if (routeIds?.isNotEmpty() == true) {
-                    map_view.getRoutesController()?.highlight(routeIds[0])
-                    val region = map_view.getRoutesController()?.region(routeIds)
-                    map_view.getCameraController()?.showRegion(region, Margins.Percentages(0.20, 0.20))
+                    mapView.getRoutesController()?.highlight(routeIds[0])
                     pickedRoute = routes[0]
                     activeRouteId = pickedRoute!!.id
+                    lastDisplayedRouteIds = routeIds
                     runOnUiThread {
-                        navButton.isEnabled = true
-                        navButton.setText(R.string.start_navigation)
+                        if (generation != routeRequestGeneration) return@runOnUiThread
+                        searchOverlay.post {
+                            if (generation != routeRequestGeneration) return@post
+                            refitRouteCameraIfNeeded()
+                        }
+                        applyRouteReadyUi()
+                        if (pendingStartNavigation) {
+                            tryStartNavigation()
+                        }
                     }
                 }
             } else {
                 Log.e(LOG_TAG, "requestDirection task failed! status: ${response.response.status}")
 
                 runOnUiThread {
+                    if (generation != routeRequestGeneration) return@runOnUiThread
                     navButton.isEnabled = false
+                    pendingStartNavigation = false
+                    updateMapOverlayButtons()
                 }
             }
 
@@ -334,12 +528,12 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
     override fun onResume() {
         super.onResume()
-        map_view.onResume()
+        mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        map_view.onPause()
+        mapView.onPause()
     }
 
     override fun onDestroy() {
@@ -348,6 +542,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
         SDK.getInstance().injectLocationProvider(null)
         driveSession.dispose()
         locationProvider.onStop()
+        SearchServiceHolder.release()
         SDK.getInstance().dispose()
         Log.i(LOG_TAG, "Telenav SDK disposed")
         super.onDestroy()
@@ -359,9 +554,9 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     override fun onNavigationRouteUpdating(progress: BetterRouteUpdateProgress) {
         if (progress.newRoute != null && progress.status == BetterRouteUpdateProgress.Status.SUCCEEDED) {
             if (progress.newRoute?.id != activeRouteId) {
-                pickedRoute?.id?.let { map_view.getRoutesController()?.remove(it) }
-                map_view.getRoutesController()?.refresh(progress.newRoute!!)
-                map_view.getRoutesController()?.updateRouteProgress(progress.newRoute!!.id)
+                pickedRoute?.id?.let { mapView.getRoutesController()?.remove(it) }
+                mapView.getRoutesController()?.refresh(progress.newRoute!!)
+                mapView.getRoutesController()?.updateRouteProgress(progress.newRoute!!.id)
             }
             activeRouteId = progress.newRoute?.id
         }
@@ -388,7 +583,7 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
 
     override fun onNavigationStopReached(stopIndex: Int, stopLocation: Int) {
         if (stopIndex == -1) {// -1 means reach destination
-            handleNavigationSessionEnd(false)
+            endNavigationSession(userInitiated = false)
         }
     }
 
@@ -399,13 +594,58 @@ class MainActivity : AppCompatActivity(), NavigationEventListener, PositionEvent
     }
 
     override fun onLocationUpdated(vehicleLocation: Location, positionInfo: PositionInfo) {
-        if (mapViewInitialized) {
-            map_view.getVehicleController()?.setLocation(vehicleLocation)
+        this.vehicleLocation.set(vehicleLocation)
+        runOnUiThread {
+            if (isDestroyed) return@runOnUiThread
+            searchViewModel.setSearchCenter(vehicleLocation.latitude, vehicleLocation.longitude)
+            SearchServiceHolder.updateLocation(vehicleLocation.latitude, vehicleLocation.longitude)
+            if (mapViewInitialized) {
+                mapView.getVehicleController()?.setLocation(vehicleLocation)
+            }
         }
     }
 
     override fun onCandidateRoadDetected(roadCalibrator: RoadCalibrator) {
     }
 
+    private fun refitRouteCameraIfNeeded() {
+        val routeIds = lastDisplayedRouteIds ?: return
+        if (searchViewModel.showDetailPanel.value != true && !isNavigation) {
+            return
+        }
+        val padding = resources.getDimensionPixelSize(R.dimen.dimens_10dp)
+        val visibleRect = MapRouteCameraHelper.computeVisibleRect(
+            mapView,
+            searchOverlay,
+            navButton,
+            padding,
+            rectSearchButton,
+        )
+        MapRouteCameraHelper.showRoutesInVisibleRegion(mapView, routeIds, visibleRect)
+    }
+
+    private fun applyRouteReadyUi() {
+        navButton.isEnabled = true
+        navButton.setText(
+            if (isNavigation) R.string.stop_navigation else R.string.start_navigation
+        )
+        updateMapOverlayButtons()
+    }
+
+    private fun updateNavButtonPosition(centered: Boolean) {
+        val params = navButton.layoutParams as ConstraintLayout.LayoutParams
+        if (centered) {
+            params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            params.horizontalBias = 0.5f
+            params.marginEnd = 0
+        } else {
+            params.startToStart = ConstraintLayout.LayoutParams.UNSET
+            params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            params.horizontalBias = 1f
+            params.marginEnd = resources.getDimensionPixelSize(R.dimen.dimens_10dp)
+        }
+        navButton.layoutParams = params
+    }
 
 }

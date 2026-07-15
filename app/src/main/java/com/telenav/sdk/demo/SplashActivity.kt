@@ -19,6 +19,8 @@ import com.telenav.sdk.common.model.NavLogLevelType
 import com.telenav.sdk.core.ApplicationInfo
 import com.telenav.sdk.core.Locale
 import com.telenav.sdk.core.SDKOptions
+import com.telenav.sdk.demo.config.SdkCredentials
+import com.telenav.sdk.demo.search.SearchServiceHolder
 import com.telenav.sdk.entity.api.EntityService
 import com.telenav.sdk.entity.api.error.EntityException
 import com.telenav.sdk.examples.BuildConfig
@@ -35,8 +37,6 @@ import kotlinx.coroutines.withContext
  * @author tang.hui on 2021/9/24
  */
 class SplashActivity : AppCompatActivity() {
-    val SDK_KEY = BuildConfig.API_KEY
-    val SDK_SECRET = BuildConfig.API_SECRET
 
     private val storagePermissionRequestCode = 12335
     private val locationPermissionRequestCode = 12336
@@ -156,15 +156,17 @@ class SplashActivity : AppCompatActivity() {
 
         val sdkCacheDataDir = "$cacheDir/nav-cached/"
         val sdkOptions = SDKOptions.builder()
-            .setApiKey(SDK_KEY)
-            .setApiSecret(SDK_SECRET)
+            .setApiKey(SdkCredentials.apiKey)
+            .setApiSecret(SdkCredentials.apiSecret)
             .setSdkCacheDataDir(sdkCacheDataDir)
-            .setCloudEndPoint(BuildConfig.CloudEndPoint)
-            .setLocale(Locale.EN_US)    //  if not specified, SDK will assume region EU
-            .setUserId("AndroidDemoTest")
-            .setDeviceGuid("AndroidDeviceGuid")
-            .setApplicationInfo(ApplicationInfo.builder("demo", "2").build())
-            .setRegion(BuildConfig.Region)
+            .setCloudEndPoint(SdkCredentials.cloudEndpoint)
+            .setLocale(Locale.EN_US)
+            .setUserId(SdkCredentials.appName)
+            .setDeviceGuid(SdkCredentials.appName)
+            .setApplicationInfo(
+                ApplicationInfo.builder(SdkCredentials.appName, SdkCredentials.APP_VERSION).build()
+            )
+            .setRegion(SdkCredentials.region)
             .build()
         return initSDK(sdkOptions)
     }
@@ -185,9 +187,25 @@ class SplashActivity : AppCompatActivity() {
                 MapContentManager.getInstance().enableTraffic(true)
             }
             initEntityService(options)
+            initSearchService()
         }
 
         return success
+    }
+
+    private suspend fun initSearchService() {
+        withContext(Dispatchers.IO) {
+            val locationProvider = SimulationLocationProvider(BuildConfig.Region)
+            val loc = locationProvider.getLastKnownLocation()
+            val searchOk = SearchServiceHolder.initialize(
+                this@SplashActivity,
+                loc.latitude,
+                loc.longitude
+            )
+            if (!searchOk) {
+                TaLog.w("SplashActivity", "SearchService init failed; search demo may not work")
+            }
+        }
     }
 
     private suspend fun initEntityService(options: SDKOptions) {

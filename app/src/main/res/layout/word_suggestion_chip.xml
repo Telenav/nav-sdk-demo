@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/wordSuggestionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimens_5dp"
+        android:background="@drawable/edit_text_light_bg"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/dimens_10dp"
+        android:paddingVertical="@dimen/dimens_5dp"
+        android:textColor="@color/search_overlay_text_primary"
+        android:textSize="13sp" />
+</layout>
