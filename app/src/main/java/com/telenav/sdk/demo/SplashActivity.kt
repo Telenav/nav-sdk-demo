@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.telenav.sdk.demo.utils.StoragePermissionHelper
 import com.telenav.sdk.common.logging.TaLog
 import com.telenav.sdk.common.model.DayNightMode
 import com.telenav.sdk.common.model.NavLogLevelType
@@ -37,17 +38,20 @@ class SplashActivity : AppCompatActivity() {
     val SDK_KEY = BuildConfig.API_KEY
     val SDK_SECRET = BuildConfig.API_SECRET
 
-    private val permissionRequestCode = 12335
+    private val storagePermissionRequestCode = 12335
+    private val locationPermissionRequestCode = 12336
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if (checkUserPermission()) {
-            initNavSDKAsync {
-                MainActivity.start(this)
-                finish()
-            }
+        ensurePermissionsAndStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!sdkInitStarted) {
+            ensurePermissionsAndStart()
         }
     }
 
@@ -56,24 +60,36 @@ class SplashActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    private fun checkUserPermission(): Boolean {
-        val permissionsRequired = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_NETWORK_STATE,
-            Manifest.permission.INTERNET
-        )
-        permissionsRequired.forEach { permission ->
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) == PackageManager.PERMISSION_DENIED
-            ) {
-                ActivityCompat.requestPermissions(this, permissionsRequired, permissionRequestCode)
-                return false
-            }
+    private var sdkInitStarted = false
+
+    private fun ensurePermissionsAndStart() {
+        if (sdkInitStarted) {
+            return
         }
-        return true
+        if (!StoragePermissionHelper.hasStoragePermission(this)) {
+            StoragePermissionHelper.requestStoragePermission(this, storagePermissionRequestCode)
+            return
+        }
+        if (!hasLocationPermission()) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                locationPermissionRequestCode
+            )
+            return
+        }
+        sdkInitStarted = true
+        initNavSDKAsync {
+            MainActivity.start(this)
+            finish()
+        }
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(
@@ -82,16 +98,38 @@ class SplashActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == permissionRequestCode) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED)) {
-                Toast.makeText(this, "We need all Permission to proceed", Toast.LENGTH_SHORT)
-                    .show()
-                this.finishAffinity()
-            } else {
-                initNavSDKAsync {
-                    MainActivity.start(this)
-                    finish()
+        when (requestCode) {
+            storagePermissionRequestCode -> {
+                if (StoragePermissionHelper.hasStoragePermission(this)) {
+                    ensurePermissionsAndStart()
+                } else {
+                    Toast.makeText(this, R.string.storage_permission_required, Toast.LENGTH_SHORT)
+                        .show()
+                    finishAffinity()
                 }
+            }
+            locationPermissionRequestCode -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    ensurePermissionsAndStart()
+                } else {
+                    Toast.makeText(this, R.string.location_permission_required, Toast.LENGTH_SHORT)
+                        .show()
+                    finishAffinity()
+                }
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == storagePermissionRequestCode) {
+            if (StoragePermissionHelper.hasStoragePermission(this)) {
+                ensurePermissionsAndStart()
+            } else {
+                Toast.makeText(this, R.string.storage_permission_required, Toast.LENGTH_SHORT)
+                    .show()
+                finishAffinity()
             }
         }
     }

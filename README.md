@@ -1,167 +1,250 @@
-# Introduction
-This is a sample app to demonstrate how to integrate Telenav navigation SDK with basic features.
+# Telenav Android Navigation SDK Demo
 
-The SDK package is hosted on Alibaba Cloud, allowing seamless integration via Maven or Gradle.
+A reference Android application demonstrating how to integrate the **Telenav Android Navigation SDK (TASDK)** with map display, route planning, turn-by-turn navigation, and entity search.
 
+SDK artifacts are distributed via **Alibaba Cloud Maven** and can be consumed with Gradle.
 
-## Key Demo Resources
-| Resource     |     Description                                                    |
-|--------------|--------------------------------------------------------------------|
-|*Project Name*|nav-sdk-demo                                                        |
-|*Summary*     |Basic sample app demonstrating integrate Telenav navigation SDK |
-|*README.md*    |This README document                                                 |
-|*[app/build.gradle](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/build.gradle)* |Application gradle file. SDK dependency configuration          |
-|*[app/src/main/res/layout/activity_main.xml](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/res/layout/activity_main.xml)* | Main activity layout definition file. Declaring Mapview |
-|*[app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/java/com/telenav/sdk/demo/SplashActivity.kt)* | Navigation SDK initialization |
-|*[app/src/main/java/com/telenav/sdk/demo/MainActivity.kt.kt](https://github.com/Telenav/nav-sdk-demo/blob/easy/app/src/main/java/com/telenav/sdk/demo/MainActivity.kt)* | Majority part of logic on showing map, route request, start and stop navigation |
+| Item | Value |
+|------|-------|
+| Application ID | `com.telenav.sdk.demo` |
+| Min SDK | 26 (Android 8.0) |
+| Target SDK | 33 |
+| Current TASDK | `4.26.0-rc.2` |
+| NDK flavor | `r15c` |
 
-# Getting Started
+## Features
 
-## Prerequisites
-Before running the demo, ensure you have the following:
+This demo showcases the following integration scenarios:
 
-1. **Development Environment**:
+- **SDK initialization** — configure API credentials, cloud endpoint, region, and cache directory
+- **Map rendering** — `TnMapView` with traffic, landmarks, buildings, and camera control
+- **Route planning** — request routes via long-press on the map or entity search
+- **Turn-by-turn navigation** — start/stop navigation with guidance and position events
+- **Entity search** — POI search powered by `telenav-entity-cloud`
+- **Simulated location** — demo location provider for navigation without real GPS movement
+- **Storage permission handling** — scoped storage adaptation including `MANAGE_EXTERNAL_STORAGE` on Android 11+
 
-- Android Studio
-- Gradle
-- Git
-- JDK: Version 8 or higher
+## Project Structure
 
-2. **Device Requirements**:
-
-- Android 6.0 (API Level 23) or higher.
-- GPS and internet access enabled on the device.
-
-## Clone or Download Project Source Code
-Please make sure you have access of this github repo, run below git commands to download the source code.
-```git
-git clone git@github.com:Telenav/nav-sdk-demo.git
-git checkout easy-lts4
+```
+nav-sdk-demo/
+├── app/
+│   ├── build.gradle                 # App module & SDK dependencies
+│   └── src/main/
+│       ├── AndroidManifest.xml
+│       ├── java/com/telenav/sdk/demo/
+│       │   ├── SplashActivity.kt    # Permissions & SDK initialization
+│       │   ├── MainActivity.kt      # Map, routing & navigation
+│       │   ├── SimulationLocationProvider.kt
+│       │   ├── search/              # Entity search UI & logic
+│       │   └── utils/
+│       │       └── StoragePermissionHelper.kt
+│       └── res/
+├── build.gradle                     # Root build & Maven repositories
+├── gradle.properties                # SDK versions & API configuration
+└── settings.gradle
 ```
 
-## API key/secret and cloud end point
-You must set correct API key/secret, cloud endpoint and region name before compiling the application.
-To ease this process, we have made EU region as a default and pre-filled all necessary settings.
-SEA region config is also provided in the demo app. Please activate the SEA config in the gradle.properties(Disable the EU setting as well).
+## Prerequisites
 
-The API key/secret in this demo is for trial purpose only and will expire on September 30, 2025. 
-After it expires, please update the code to get the new key.
+| Requirement | Version / Notes |
+|-------------|-----------------|
+| Android Studio | Arctic Fox or newer recommended |
+| JDK | 8+ |
+| Gradle | Wrapper included (`./gradlew`) |
+| Device / Emulator | API 26+, GPS & network enabled |
+| Maven access | Alibaba Cloud private repository credentials |
 
-## Config SDK Dependency
+## Quick Start
 
-To start Navigation SDK integration, add the SDK as a dependency of the project. 
+### 1. Clone the repository
 
-> Currently we're using version [3.4.0-lts4-rc12.1](https://docs.telenav.com/nav-unified/release-notes.html). SDK release history can be found at [Navigation SDK release page](https://docs.telenav.com/nav-unified/release-notes.html).
+```bash
+git clone https://github.com/Telenav/nav-sdk-demo.git
+cd nav-sdk-demo
+```
 
-```Gradle
-dependencies {
-	implementation "com.telenav.sdk:telenav-android-mapview-rc15:${telenavSdkVersion}"
-	implementation "com.telenav.sdk:telenav-android-drivesession-rc15:${telenavSdkVersion}"
-	implementation "com.telenav.sdk:telenav-android-ngx-rc15:${mapPluginVersion}"
+### 2. Configure API credentials
+
+Edit `gradle.properties` and set your Telenav API key, secret, region, and cloud endpoint:
+
+```properties
+Region="EU"
+API_KEY="<your-api-key>"
+API_SECRET="<your-api-secret>"
+CloudEndPoint="https://apieustg.telenav.com"
+
+# SEA region example (uncomment and disable EU block):
+# Region="SEA"
+# API_KEY="<your-api-key>"
+# API_SECRET="<your-api-secret>"
+# CloudEndPoint="https://apiseastg.telenav.com"
+```
+
+> Trial API keys may be bundled in the repository for evaluation. They expire periodically — pull the latest code or contact Telenav for renewed credentials.
+
+### 3. Configure Maven repositories
+
+Ensure `build.gradle` includes the Alibaba Cloud Maven repositories with valid credentials. The project uses:
+
+- `https://maven.aliyun.com/repository/public`
+- Telenav private release & snapshot repositories on `packages.aliyun.com`
+
+### 4. Build and run
+
+```bash
+./gradlew clean :app:assembleDebug
+./gradlew :app:installDebug
+```
+
+Or open the project in Android Studio and run the `app` module on a connected device.
+
+On first launch, grant **location** and **all-files access** (Android 11+) when prompted.
+
+## SDK Dependency Configuration
+
+SDK versions are centralized in `gradle.properties`:
+
+```properties
+ndkVersion=r15c
+telenavSdkVersion=4.26.0-rc.2
+mapPluginVersion=0.56.0-rc.2
+entityVersion=2.4.7
+baseVersion=2.1.9
+```
+
+Dependencies in `app/build.gradle`:
+
+```gradle
+implementation "com.telenav.sdk:telenav-android-mapview-${ndkVersion}:${telenavSdkVersion}"
+implementation "com.telenav.sdk:telenav-android-navigation-${ndkVersion}:${telenavSdkVersion}"
+implementation "com.telenav.sdk:telenav-android-ehservice-${ndkVersion}:${telenavSdkVersion}"
+implementation "com.telenav.sdk:telenav-android-ngx-${ndkVersion}:${mapPluginVersion}"
+implementation "com.telenav.sdk:telenav-entity-cloud:${entityVersion}"
+implementation "com.telenav.sdk:telenav-sdk-base:${baseVersion}"
+```
+
+Release history: [TA SDK Android Releases](https://spaces.telenav.com:8443/spaces/map/pages/276092951/TA+SDK+Android+Releases)
+
+## Integration Guide
+
+### Initialize the SDK
+
+SDK initialization is performed in `SplashActivity`. The demo runs in **streaming mode**, which requires:
+
+1. A valid **cloud endpoint**
+2. A **writable cache directory** for map data
+
+```kotlin
+val sdkCacheDataDir = "$cacheDir/nav-cached/"
+val sdkOptions = SDKOptions.builder()
+    .setApiKey(BuildConfig.API_KEY)
+    .setApiSecret(BuildConfig.API_SECRET)
+    .setSdkCacheDataDir(sdkCacheDataDir)
+    .setCloudEndPoint(BuildConfig.CloudEndPoint)
+    .setLocale(Locale.EN_US)
+    .setRegion(BuildConfig.Region)
+    .setUserId("AndroidDemoTest")
+    .build()
+
+val navSDKOptions = NavSDKOptions.builder(sdkOptions)
+    .setMapStreamingSpaceLimit(1024 * 1024 * 1024)
+    .build()
+
+SDK.getInstance().initialize(context, navSDKOptions)
+EntityService.initialize(sdkOptions)
+```
+
+See `SplashActivity.initNavSDK()` for the full implementation.
+
+### Display the map
+
+**Layout** — declare `TnMapView` in your activity layout:
+
+```xml
+<com.telenav.map.views.TnMapView
+    android:id="@+id/map_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+```
+
+**Initialize** — call `initialize()` after the view is created:
+
+```kotlin
+map_view.initialize(savedInstanceState) {
+    // Map is ready — configure camera, features, listeners
 }
 ```
 
-## Initialize Navigation SDK 
-To initialize Navigation SDK, you need to create an instance of *NavSDKOptions*, please see below code snippet. For more detailed implement, please refer to function *SplashActivity.initNavSDK* from the project source file *SplashActivity.kt*. <br/>Please don't forget to replace *'SDK_KEY'* and *'SDK_SECRET'* with correct API key and secret strings respectively which you need to get from Telenav first. 
+See `MainActivity.configureMapView()` for feature toggles and camera setup.
 
-> ***In this demo application works in pure streaming mode, thus the cloud endpoint is mandatory. And *sdkCacheDataDir* needs to be a writable folder.***
+### Navigation session
 
 ```kotlin
-    val sdkCacheDataDir = "$cacheDir/nav-cached/"           //  specific any writable data folder
-    val cloudEndPoint = "https://restapistage.telenav.com"  //  specific correct cloud endpoint
-    val apiKey = "SDK_KEY"                                  //  TODO("replace with correct API key")
-    val apiSecret = "SDK_SECRET"                            //  TODO("replace with correct API secret")
-    val sdkOptions = SDKOptions.builder()
-        .setApiKey(apiKey)
-        .setApiSecret(apiSecret)
-        .setSdkCacheDataDir(sdkCacheDataDir)
-        .setCloudEndPoint(cloudEndPoint)
-        .setLocale(Locale.EN_US)
-        .build()
-    
-    val navSDKOptions = NavSDKOptions.builder(sdkOptions)
-        //  add some other navigation related options here
-        //  ...
-        .enableTraffic(true)
-        .build()
-    SDK.getInstance().initialize(this@SplashActivity, navSDKOptions)
+val navigationService = NavigationService.Factory.createInstance()
+navigationService.eventHub.addNavigationEventListener(listener)
+navigationService.eventHub.addPositionEventListener(listener)
+SDK.getInstance().injectLocationProvider(locationProvider)
 ```
 
-## Showing Map
-- Step 1, Declare Mapview on the target layout.
-```Layout
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.telenav.sdk.demo.MainActivity">
+Route request, navigation start/stop, and event handling are implemented in `MainActivity.kt`.
 
-        <com.telenav.map.views.TnMapView
-            android:id="@+id/map_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+## Usage
 
-       ...
+1. Launch the app and wait for SDK initialization.
+2. Interact with the map (pan, pinch-zoom, tilt).
+3. **Long-press** on the map to set a destination and request a route.
+4. Or tap **Search for a Destination** to find a POI via entity search.
+5. Tap **Start Navigation** to begin guidance; tap again to stop.
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+## Permissions
+
+| Permission | Purpose |
+|------------|---------|
+| `ACCESS_FINE_LOCATION` | Navigation and map positioning |
+| `INTERNET` | Cloud map data & routing services |
+| `ACCESS_NETWORK_STATE` | Network connectivity checks |
+| `WRITE_EXTERNAL_STORAGE` | Legacy storage (API ≤ 29) |
+| `MANAGE_EXTERNAL_STORAGE` | Map cache & SDK data (API 30+) |
+
+Storage permission logic is handled by `StoragePermissionHelper` and requested in `SplashActivity`.
+
+## Troubleshooting
+
+### Dependency resolution fails
+
+- Verify Alibaba Maven repository URL and credentials in `build.gradle`.
+- Confirm the SDK version exists in the release repository.
+- Run `./gradlew :app:dependencies --configuration debugCompileClasspath` to inspect the dependency tree.
+
+### `packageDebug` / `manifestOutputs is null`
+
+Run a clean build:
+
+```bash
+./gradlew clean :app:assembleDebug
 ```
 
-- Step 2, Initalize MapView after it has been created.
-In the demo app, you call function *map_view.initialize* for map view initialization(hereby the instance of *map_view* is the instance declared in layout from *Step 1*): 
-```kotlin
-    class MainActivity : AppCompatActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            map_view.initialize(savedInstanceState) {
-                //  you can add more logic here to control the initial zoom level, set initial camera position etc.
-                //  ...
-            }
-        }
-    }
-```
+The project enables `packagingOptions.jniLibs.useLegacyPackaging` to match `android:extractNativeLibs="true"`.
 
-For more detailed implementation, please find from the project source file *MainActivity.kt*. Also, please find detail Map View related document from [Show MapView](https://docs.telenav.com/nav/show-map.html)
+### SDK initialization fails
 
-## Working with DriveSession
-Call function *DriveSession.Factory.createInstance* to obtain an instance of DriveSession. The application layer needs to register drive session event listeners to receive different types of notifications. <br/>For more information, please refer the document [Work with DriveSession](https://docs.telenav.com/nav/start-navigation.html). To make the demo application simple, only a few events are processed. Most events are ignored and marked as *TODO*.
+- Check `API_KEY`, `API_SECRET`, `CloudEndPoint`, and `Region` in `gradle.properties`.
+- Ensure the device has network access and required permissions are granted.
+- Review logcat output filtered by `TaLog` or `Nav SDK Demo`.
 
-# Compilation and Running
-Build the demo project, connect target Android device. If everything OK, the demo application will be able to be installed and launched on the target device.
-You will see a map after application is launched. The map supports gestures like panning, pinch zooming, tilting etc.
-Long press on map display area to set a destination, application will trigger route requesting with that destination.
-To start navigation, click the "Start Navigation" button shows on middle-bottom of screen. click this button again will stop navigation and go back to the original state.
+## Supported ABIs
 
-# Documentation
-To get more help on SDK integration and other features, please refer to below documentation website:
-[Vivid Navigation Android](https://docs.telenav.com/overview/nav.html)
+- `armeabi-v7a`
+- `arm64-v8a`
+- `x86` / `x86_64`
 
-## **FAQs**
+## Documentation
 
-### **1. How do I update the SDK?**
+- [Vivid Navigation Android Overview](https://docs.telenav.com/overview/nav.html)
+- [Show MapView](https://docs.telenav.com/nav/show-map.html)
+- [Start Navigation](https://docs.telenav.com/nav/start-navigation.html)
 
-Update the version number in your `gradle.properties` file:
+## License & Support
 
-```
-telenavSdkVersion=3.4.0-lts4-rc12.1
-mapPluginVersion=0.18.1-lts4-rc12.1
-```
-
-### **2. What if dependencies fail to download?**
-
-Ensure your network can access Alibaba Cloud and that the repository URL is configured correctly. If issues persist, contact technical support.
-
-## **Supported Architectures**
-
-- ARMv7
-- ARM64 (ARMv8)
-- x86/x86_64
-
-## **Contact and Support**
-
-For further assistance, please contact the development team at huitang@telenav.cn.
-
+This project is provided as an integration sample. For API credentials, SDK updates, or technical support, contact the Telenav development team.
