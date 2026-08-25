@@ -45,8 +45,9 @@ allprojects {
             url 'https://packages.aliyun.com/65e59b67db165442182da926/maven/2457159-snapshot-wnmjt6'
         }
 
-        // telenav internal maven repo
-//        maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
+        // Telenav Maven releases (search-service / google-ui-kit)
+        //maven { url "https://artifactory.telenav.com/telenav-maven-releases" }
+        //maven { url "https://artifactory.telenav.com/telenav-maven-public/" }
     }
 }
 

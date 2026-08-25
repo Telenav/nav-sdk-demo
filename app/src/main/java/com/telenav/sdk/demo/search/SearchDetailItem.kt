@@ -28,5 +28,6 @@ data class SearchDetailItem(
     val photoUrls: List<String>,
     val reviews: List<SearchDetailReview>,
     val evConnectors: List<EvConnectorItem> = emptyList(),
+    val fuelPrices: List<FuelPriceItem> = emptyList(),
     val navigationItem: SearchResultItemDao
 )

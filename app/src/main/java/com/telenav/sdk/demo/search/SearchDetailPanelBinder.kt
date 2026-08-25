@@ -201,6 +201,12 @@ class SearchDetailPanelBinder(
         if (item.phone.isNotBlank()) {
             addInfoRow(context.getString(R.string.search_detail_label_phone), item.phone)
         }
+        if (item.fuelPrices.isNotEmpty()) {
+            addInfoRow(
+                context.getString(R.string.search_detail_label_fuel_prices),
+                item.fuelPrices.joinToString("\n") { it.displayLine }
+            )
+        }
         val schedule = item.hoursSchedule.ifBlank { item.hours }
         if (schedule.isNotBlank() &&
             item.openStatusLabel.isBlank() &&

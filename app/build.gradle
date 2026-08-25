@@ -83,9 +83,11 @@ dependencies {
     implementation "com.telenav.sdk:telenav-sdk-base:${baseVersion}"
 
     if (findProperty('useLocalSearchService')?.toString()?.toBoolean() == true) {
-        // Local AAR from google-ui-kit-aar (:search-service:assembleRelease) — no Maven POM, declare api deps explicitly.
-        implementation files('libs/SearchService-release.aar')
-        implementation 'com.telenav.googleuikit:google-ui-kit:1.1.48.ded5b2e'
+        // Local AARs from google-ui-kit-aar — no Maven POM, declare both library + search-service explicitly.
+        implementation files(
+            'libs/GooglePlaceUIKit-release.aar',
+            'libs/SearchService-release.aar'
+        )
     } else {
         implementation "com.telenav.search:search-service:${search_service_version}"
     }

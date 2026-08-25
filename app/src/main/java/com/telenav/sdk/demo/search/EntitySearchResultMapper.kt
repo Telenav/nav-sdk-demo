@@ -176,6 +176,7 @@ object EntitySearchResultMapper {
             photoUrls = EntityFacetExtractor.photoUrls(entity),
             reviews = EntityFacetExtractor.reviews(entity),
             evConnectors = navigationItem.evConnectors,
+            fuelPrices = FuelPriceExtractor.fuelPrices(entity),
             navigationItem = navigationItem
         )
     }
