@@ -129,7 +129,7 @@ class SearchOverlayController(
     }
 
     private fun observeGoogleAvailability() {
-        val listener = com.telenav.searchservice.api.GoogleSearchAvailabilityListener { available ->
+        val listener = com.telenav.searchservice.api.GoogleSearchAvailabilityListener { available, _ ->
             updateGoogleSearchBadge(available)
         }
         SearchServiceHolder.setGoogleAvailabilityListener(listener)

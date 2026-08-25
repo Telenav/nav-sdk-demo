@@ -27,6 +27,7 @@
     <string name="search_detail_label_phone">Phone</string>
     <string name="search_detail_label_hours">Hours</string>
     <string name="search_detail_label_price">Price</string>
+    <string name="search_detail_label_fuel_prices">Fuel prices</string>
     <string name="search_detail_no_reviews">No reviews yet</string>
     <string name="search_detail_dismiss">Dismiss</string>
     <string name="search_detail_destination_reached">You have reached your destination</string>

@@ -671,8 +671,13 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
             Log.i(
                 TAG,
                 "detail panel: photos=${detail.photoUrls.size} reviews=${detail.reviews.size} " +
-                    "provider=$provider"
+                    "fuelPrices=${detail.fuelPrices.size} provider=$provider"
             )
+            if (detail.fuelPrices.isNotEmpty()) {
+                detail.fuelPrices.forEach { price ->
+                    Log.i(TAG, "detail fuel price: ${price.displayLine}")
+                }
+            }
         } else {
             _errorMessage.value = "Could not load place details"
         }

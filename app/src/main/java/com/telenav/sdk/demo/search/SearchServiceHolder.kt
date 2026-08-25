@@ -5,6 +5,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.telenav.searchservice.SearchService
 import com.telenav.searchservice.api.GoogleSearchAvailabilityListener
+import com.telenav.searchservice.api.GoogleSearchAvailabilityState
 import com.telenav.searchservice.api.NetworkMode
 import com.telenav.searchservice.google.GoogleSearchBridge
 
@@ -171,14 +172,22 @@ object SearchServiceHolder {
     }
 
     private fun createDelegatingListener(): GoogleSearchAvailabilityListener {
-        return GoogleSearchAvailabilityListener { available ->
+        return GoogleSearchAvailabilityListener { available, state ->
             logGoogleAvailableTiming(available)
-            googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(available)
+            googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(available, state)
         }
     }
 
     private fun notifyGoogleAvailabilityIfNeeded() {
-        googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(isGoogleSearchAvailable())
+        val state = try {
+            SearchService.getGoogleSearchAvailabilityState()
+        } catch (e: Exception) {
+            GoogleSearchAvailabilityState.UNKNOWN
+        }
+        googleAvailabilityListener?.onGoogleSearchAvailabilityChanged(
+            isGoogleSearchAvailable(),
+            state
+        )
     }
 
     private fun logWebViewReadyTiming() {
