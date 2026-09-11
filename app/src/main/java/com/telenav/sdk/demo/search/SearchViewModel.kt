@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.telenav.sdk.entity.model.base.EvFilter
 import com.telenav.sdk.entity.model.base.GeoPoint
 import com.telenav.sdk.entity.model.base.SortType
 import com.telenav.sdk.entity.model.lookup.GetDetailOptions
@@ -108,6 +109,12 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _selectedCategoryId = MutableLiveData<String?>(null)
     val selectedCategoryId: LiveData<String?> = _selectedCategoryId
+
+    private val _evChargingFilter = MutableLiveData(EvChargingSearchFilter())
+    val evChargingFilter: LiveData<EvChargingSearchFilter> = _evChargingFilter
+
+    private val _showEvChargingFilters = MutableLiveData(false)
+    val showEvChargingFilters: LiveData<Boolean> = _showEvChargingFilters
 
     private var debounceJob: Job? = null
     private var detailJob: Job? = null
@@ -234,14 +241,25 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
         if (activeCategoryId == categoryId) {
             clearCategorySelection()
             clearCategorySearchResults()
+            updateEvFilterPanelVisibility()
             return
         }
         activeCategoryId = categoryId
         activeSearchQuery = null
         _selectedCategoryId.value = categoryId
+        updateEvFilterPanelVisibility()
         beginFullSearch()
         viewModelScope.launch {
             runCategorySearch(categoryId)
+        }
+    }
+
+    fun onEvChargingFilterChanged(filter: EvChargingSearchFilter) {
+        _evChargingFilter.value = filter
+        if (activeCategoryId != EvChargingCategory.CATEGORY_ID) return
+        beginFullSearch()
+        viewModelScope.launch {
+            runCategorySearch(EvChargingCategory.CATEGORY_ID)
         }
     }
 
@@ -358,6 +376,20 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
         _selectedCategoryId.value = null
     }
 
+    private fun updateEvFilterPanelVisibility() {
+        _showEvChargingFilters.value = activeCategoryId == EvChargingCategory.CATEGORY_ID
+    }
+
+    private fun evFilterForCategory(categoryId: String?): EvFilter? {
+        if (categoryId != EvChargingCategory.CATEGORY_ID) return null
+        return _evChargingFilter.value?.toEvFilterOrNull()
+    }
+
+    private fun SearchFilters.Builder.applyEvFilterForCategory(categoryId: String?): SearchFilters.Builder {
+        evFilterForCategory(categoryId)?.let { setEvFilter(it) }
+        return this
+    }
+
     private fun clearCategorySearchResults() {
         cancelDebounce()
         queryGeneration++
@@ -458,7 +490,12 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
             val suggestions = response.autocompleteOrNull()?.results.orEmpty().filterNotNull()
             val responseFromGoogle = response.provider.equals("google", ignoreCase = true)
             val items = suggestions.mapNotNull {
-                EntitySearchResultMapper.toAutocompleteItem(it, responseFromGoogle)
+                EntitySearchResultMapper.toAutocompleteItem(
+                    it,
+                    searchLatitude,
+                    searchLongitude,
+                    responseFromGoogle
+                )
             }
             Log.i(
                 TAG,
@@ -547,6 +584,7 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
                 val filters = SearchFilters.builder()
                     .setCategoryFilter(categoryFilter)
                     .setGeoFilter(geoFilter)
+                    .applyEvFilterForCategory(categoryId)
                     .build()
                 requestBuilder.setFilters(filters).setSort(SortType.DISTANCE)
                 operation = "categoryBoundingBoxSearch"
@@ -587,6 +625,7 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
             val filters = SearchFilters.builder()
                 .setCategoryFilter(categoryFilter)
                 .setGeoFilter(geoFilter)
+                .applyEvFilterForCategory(categoryId)
                 .build()
             val response = withContext(Dispatchers.IO) {
                 SearchService.getClient().searchRequest()

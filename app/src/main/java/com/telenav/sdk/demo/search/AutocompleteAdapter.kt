@@ -1,6 +1,7 @@
 package com.telenav.sdk.demo.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.telenav.sdk.examples.databinding.AutocompleteRowBinding
@@ -36,6 +37,12 @@ class AutocompleteAdapter(
 
         fun bind(item: AutocompleteItem) {
             binding.autocompleteLabel.text = item.label
+            if (item.distanceMeters > 0) {
+                binding.autocompleteDistance.text = "%.0f m".format(item.distanceMeters)
+                binding.autocompleteDistance.visibility = View.VISIBLE
+            } else {
+                binding.autocompleteDistance.visibility = View.GONE
+            }
             SearchProviderIcon.apply(binding.autocompleteIcon, item.fromGoogle)
             binding.root.setOnClickListener { onItemClick(item) }
         }

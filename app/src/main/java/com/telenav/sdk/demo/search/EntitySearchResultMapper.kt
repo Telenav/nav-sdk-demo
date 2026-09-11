@@ -24,6 +24,8 @@ object EntitySearchResultMapper {
 
     fun toAutocompleteItem(
         suggestion: Suggestion,
+        originLat: Double,
+        originLon: Double,
         responseFromGoogle: Boolean = false
     ): AutocompleteItem? {
         val label = suggestion.formattedLabel?.trim()?.takeIf { it.isNotEmpty() }
@@ -38,7 +40,13 @@ object EntitySearchResultMapper {
             SearchProviderIcon.isGoogleId(entityId) ||
             SearchProviderIcon.isGoogleId(suggestion.id) ||
             SearchProviderIcon.isGoogleEntity(suggestion.entity)
-        return AutocompleteItem(entityId = entityId, label = label, fromGoogle = fromGoogle)
+        val distanceMeters = resolveAutocompleteDistanceMeters(suggestion, originLat, originLon)
+        return AutocompleteItem(
+            entityId = entityId,
+            label = label,
+            fromGoogle = fromGoogle,
+            distanceMeters = distanceMeters
+        )
     }
 
     /** Google UI-kit may return internal metadata in `query`, e.g. `source=ui;position=1;`. */
@@ -211,6 +219,28 @@ object EntitySearchResultMapper {
      * API [Entity.distance] is not used because Google detail responses do not receive the
      * vehicle location (distance is often 0 or based on a stale center).
      */
+    private fun resolveAutocompleteDistanceMeters(
+        suggestion: Suggestion,
+        originLat: Double,
+        originLon: Double
+    ): Double {
+        val entity = suggestion.entity
+        val apiMeters = entity?.distance?.takeIf { it > 0 }
+        if (apiMeters != null) return apiMeters
+        val dest = entity?.let { entityDisplayCoordinates(it) } ?: return 0.0
+        return resolveDistanceMeters(originLat, originLon, dest.first, dest.second)
+    }
+
+    private fun entityDisplayCoordinates(entity: Entity): Pair<Double, Double>? {
+        val geo = entity.address?.geoCoordinates
+            ?: entity.place?.address?.geoCoordinates
+        if (geo == null) return null
+        val lat = geo.latitude
+        val lon = geo.longitude
+        if (!isPlausibleCoordinate(lat, lon)) return null
+        return lat to lon
+    }
+
     private fun resolveDistanceMeters(
         originLat: Double,
         originLon: Double,

@@ -5,6 +5,22 @@ package com.telenav.sdk.demo.search
  */
 object SearchRegionDefaults {
 
+    /** ISO 3166-1 alpha-3 — aligned with [defaultLocation] city centers. */
+    fun defaultCountryCode(region: String): String = when (region) {
+        "EU" -> "DEU"
+        "CN" -> "CHN"
+        "TW" -> "TWN"
+        "KR" -> "KOR"
+        "SEA" -> "IDN"
+        "MEA" -> "ARE"
+        "ANZ" -> "AUS"
+        "SA" -> "BRA"
+        "PAK" -> "PAK"
+        "ISC" -> "NPL"
+        "ISR" -> "ISR"
+        else -> "USA"
+    }
+
     fun defaultLocation(region: String): Pair<Double, Double> = when (region) {
         "EU" -> 50.10215257 to 8.681829184          // Frankfurt
         "CN" -> 31.2059238 to 121.3985708
