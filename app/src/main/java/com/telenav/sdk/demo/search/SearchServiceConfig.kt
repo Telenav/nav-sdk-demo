@@ -10,6 +10,10 @@ import java.io.File
 
 object SearchServiceConfig {
 
+    val defaultProhibitedCountryCodes = listOf(
+        "CHN", "VNM", "SYR", "PRK", "IRN", "CUB", "RUS", "UKR"
+    )
+
     fun buildInitOptions(
         context: Context,
         latitude: Double,

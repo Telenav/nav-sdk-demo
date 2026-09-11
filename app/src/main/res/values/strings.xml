@@ -10,6 +10,9 @@
     <string name="autocomplete_searching">Searching…</string>
     <string name="google_search_available">Google search available</string>
     <string name="search_category_title">Search Category</string>
+    <string name="ev_filter_any">Any</string>
+    <string name="ev_filter_connector_type">Connector type (multi-select)</string>
+    <string name="ev_filter_min_power">Min power</string>
     <string name="search_results_title">Search Results</string>
     <string name="search_results_from_google">results from google</string>
     <string name="search_no_results_found">No results found!</string>

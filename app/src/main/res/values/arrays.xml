@@ -12,4 +12,30 @@
         <item>600</item>
         <item>226</item>
     </string-array>
+
+    <!-- EV category filter: parallel labels / values (empty value = no filter). -->
+    <string-array name="ev_filter_connector_labels">
+        <item>J1772</item>
+        <item>SAE Combo (CCS)</item>
+        <item>CHAdeMO</item>
+        <item>Type 2</item>
+        <item>Tesla</item>
+    </string-array>
+    <string-array name="ev_filter_connector_ids">
+        <item>30001</item>
+        <item>30002</item>
+        <item>30003</item>
+        <item>30004</item>
+        <item>30006</item>
+    </string-array>
+    <string-array name="ev_filter_power_labels">
+        <item>Any</item>
+        <item>≥ 50 kW</item>
+        <item>≥ 150 kW</item>
+    </string-array>
+    <string-array name="ev_filter_power_min_kw">
+        <item></item>
+        <item>50</item>
+        <item>150</item>
+    </string-array>
 </resources>

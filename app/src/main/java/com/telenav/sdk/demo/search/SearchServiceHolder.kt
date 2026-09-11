@@ -3,6 +3,7 @@ package com.telenav.sdk.demo.search
 import android.content.Context
 import android.os.SystemClock
 import android.util.Log
+import com.telenav.sdk.demo.config.SdkCredentials
 import com.telenav.searchservice.SearchService
 import com.telenav.searchservice.api.GoogleSearchAvailabilityListener
 import com.telenav.searchservice.api.GoogleSearchAvailabilityState
@@ -21,6 +22,7 @@ object SearchServiceHolder {
 
     private var lastRefreshLatitude: Double? = null
     private var lastRefreshLongitude: Double? = null
+    private var lastRefreshCountryCode: String? = null
 
     private var networkProvider: AndroidNetworkConnectivityProvider? = null
     private var networkModeObserver: ((Boolean) -> Unit)? = null
@@ -70,12 +72,13 @@ object SearchServiceHolder {
                 initialized = true
                 val syncInitMs = SystemClock.elapsedRealtime() - initStartElapsedMs
                 registerNetworkModeObserver(provider)
-                SearchService.refreshGoogleAvailability(latitude, longitude)
+                val countryCode = refreshGoogleAvailabilityByCountry(force = true)
                 GoogleSearchBridge.registerWebViewReadyCallback(webViewReadyCallback)
                 SearchService.setGoogleSearchAvailabilityListener(createDelegatingListener())
                 Log.i(
                     TAG,
-                    "SearchService initialized at ($latitude, $longitude), sync init took ${syncInitMs}ms"
+                    "SearchService initialized at ($latitude, $longitude), country=$countryCode, " +
+                        "sync init took ${syncInitMs}ms"
                 )
                 if (GoogleSearchBridge.isWebViewReady()) {
                     logWebViewReadyTiming()
@@ -108,6 +111,7 @@ object SearchServiceHolder {
         initialized = false
         lastRefreshLatitude = null
         lastRefreshLongitude = null
+        lastRefreshCountryCode = null
         resetInitTiming()
         Log.i(TAG, "SearchService released")
     }
@@ -128,11 +132,29 @@ object SearchServiceHolder {
         lastRefreshLatitude = latitude
         lastRefreshLongitude = longitude
         try {
-            SearchService.refreshGoogleAvailability(latitude, longitude)
+            refreshGoogleAvailabilityByCountry()
             Log.d(TAG, "SearchService location refreshed at ($latitude, $longitude)")
         } catch (e: Exception) {
             Log.w(TAG, "SearchService location refresh failed", e)
         }
+    }
+
+    private fun refreshGoogleAvailabilityByCountry(force: Boolean = false): String {
+        val countryCode = SearchRegionDefaults.defaultCountryCode(SdkCredentials.region)
+        if (!force && countryCode == lastRefreshCountryCode) {
+            return countryCode
+        }
+        lastRefreshCountryCode = countryCode
+        SearchService.refreshGoogleAvailability(
+            countryCode,
+            SearchServiceConfig.defaultProhibitedCountryCodes
+        )
+        Log.i(
+            TAG,
+            "SearchService Google availability refreshed for country=$countryCode " +
+                "(region=${SdkCredentials.region}, no RGC)"
+        )
+        return countryCode
     }
 
     private fun distanceMeters(
